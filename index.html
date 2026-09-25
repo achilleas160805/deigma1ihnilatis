@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300..900;1,300..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
 /* ============================================
    SWISS DESIGN SYSTEM
@@ -187,7 +188,7 @@ nav.main a::after{
 }
 nav.main a:hover::after{transform:scaleX(1);}
 
-/* CTA — squared, monospace, hard hover wipe (not AI-ish) */
+/* CTA — squared, monospace, hard hover wipe */
 .cta{
   display:inline-flex;align-items:center;gap:10px;
   border:1px solid var(--ink);
@@ -256,9 +257,9 @@ nav.main a:hover::after{transform:scaleX(1);}
 .hero-canvas{
   position:absolute;inset:0;z-index:0;
   background:
-    radial-gradient(120% 80% at 78% 12%, rgba(230,57,70,.30), transparent 58%),
-    radial-gradient(90% 70% at 8% 92%, rgba(10,10,10,.22), transparent 60%),
-    linear-gradient(168deg,#0E0E0E 0%,#171717 42%,#201d1b 100%);
+    radial-gradient(120% 80% at 78% 12%, rgba(230,57,70,.28), transparent 58%),
+    linear-gradient(180deg, rgba(14,14,14,0.65) 0%, rgba(14,14,14,0.92) 100%),
+    url('https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=1920&q=85') center/cover no-repeat;
 }
 .hero-canvas::after{
   content:"";position:absolute;inset:0;
@@ -381,14 +382,15 @@ section{position:relative;}
 .cine-layer{position:absolute;inset:0;will-change:transform,opacity;}
 .cine-bg{
   background-image:
-    linear-gradient(105deg, rgba(230,57,70,.55), transparent 46%),
-    linear-gradient(0deg, rgba(0,0,0,.86), rgba(0,0,0,.32)),
-    repeating-linear-gradient(115deg, #131313 0 22px, #171717 22px 44px);
+    linear-gradient(105deg, rgba(230,57,70,.45), transparent 50%),
+    linear-gradient(0deg, rgba(0,0,0,.88), rgba(0,0,0,.55)),
+    url('https://images.unsplash.com/photo-1598974357801-cbca100e65d3?auto=format&fit=crop&w=1920&q=85');
   background-size:cover;
+  background-position:center;
 }
 .cine h2{position:relative;z-index:2;text-align:center;color:#fff;max-width:20ch;}
 .cine h2 .em{font-style:italic;font-weight:300;color:var(--red);}
-.cine-sub{position:relative;z-index:2;color:rgba(255,255,255,.66);max-width:48ch;text-align:center;margin-top:22px;}
+.cine-sub{position:relative;z-index:2;color:rgba(255,255,255,.76);max-width:48ch;text-align:center;margin-top:22px;}
 
 /* horizontal scroll reel */
 .reel-wrap{background:#0A0A0A;padding-block:clamp(40px,7vh,80px) 0;}
@@ -403,13 +405,23 @@ section{position:relative;}
 }
 .reel-card .ph{
   aspect-ratio:4/5;position:relative;overflow:hidden;
-  background:linear-gradient(150deg,#1c1a18,#262220 60%,#1a1917);
+  background:#1a1917;
+}
+.reel-card .ph img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  transition:transform 0.9s var(--ease), filter 0.6s ease;
+  filter:grayscale(18%) contrast(105%);
+}
+.reel-card:hover .ph img{
+  transform:scale(1.08);
+  filter:grayscale(0%) contrast(100%);
 }
 .reel-card .ph::after{
   content:"";position:absolute;inset:0;
   background:
-    radial-gradient(60% 45% at 30% 22%, rgba(230,57,70,.5), transparent 62%),
-    linear-gradient(180deg,transparent 45%, rgba(0,0,0,.7));
+    radial-gradient(60% 45% at 30% 22%, rgba(230,57,70,.25), transparent 62%),
+    linear-gradient(180deg,transparent 45%, rgba(0,0,0,.85));
+  z-index:1;
 }
 .reel-card .ph span{
   position:absolute;left:14px;bottom:12px;z-index:3;color:#fff;
@@ -420,11 +432,20 @@ section{position:relative;}
 .reel-card .tx p{margin:0;font-size:.86rem;line-height:1.45;}
 
 /* ============================================
-   GALLERY MASONRY (clip reveals)
+   GALLERY MASONRY (clip reveals & image scale)
    ============================================ */
 .gal{background:var(--paper);}
 .gal-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--gut);}
 .gcell{position:relative;overflow:hidden;background:#15130f;}
+.gcell img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  transition:transform 1.2s var(--ease), filter 0.6s ease;
+  filter:grayscale(22%) contrast(108%);
+}
+.gcell:hover img{
+  transform:scale(1.07);
+  filter:grayscale(0%) contrast(100%);
+}
 .g-1{grid-column:1 / span 7;aspect-ratio:16/10;}
 .g-2{grid-column:8 / span 5;aspect-ratio:4/5;}
 .g-3{grid-column:1 / span 4;aspect-ratio:1/1;}
@@ -435,23 +456,15 @@ section{position:relative;}
   .g-1,.g-2,.g-3,.g-4,.g-5{grid-column:1 / -1;aspect-ratio:4/3;}
   .g-6{aspect-ratio:16/10;}
 }
-.gcell .fill{position:absolute;inset:0;}
+.gcell .fill{position:absolute;inset:0;z-index:1;pointer-events:none;}
 .gcell .fill::after{
   content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,transparent 50%, rgba(0,0,0,.62));
+  background:linear-gradient(180deg,transparent 40%, rgba(0,0,0,.75));
 }
 .gcell .cap{
   position:absolute;left:14px;bottom:12px;z-index:3;color:#fff;
   font-family:var(--f-mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;
 }
-.gcell:nth-child(1) .fill{background:linear-gradient(140deg,#2a2320,#3a2c24 55%,#1d1916);}
-.gcell:nth-child(2) .fill{background:linear-gradient(200deg,#1f2933,#3d3128 60%,#14110f);}
-.gcell:nth-child(3) .fill{background:linear-gradient(60deg,#33221f,#4a2b25 55%,#191413);}
-.gcell:nth-child(4) .fill{background:linear-gradient(120deg,#232b26,#40382a 55%,#16140f);}
-.gcell:nth-child(5) .fill{background:linear-gradient(300deg,#2b2233,#33241f 55%,#131010);}
-.gcell:nth-child(6) .fill{background:linear-gradient(100deg,#1a1a1a,#3c2a22 45%,#221a17);}
-
-/* inner accent shapes to break "flat AI gradient" look */
 .gcell .fill::before{
   content:"";position:absolute;inset:0;
   background-image:repeating-linear-gradient(125deg, rgba(255,255,255,.05) 0 1px, transparent 1px 16px);
@@ -777,12 +790,55 @@ footer{background:var(--black);color:rgba(255,255,255,.72);padding-block:clamp(4
   </div>
   <div class="reel-track-outer">
     <div class="reel-track" id="reel">
-      <article class="reel-card"><div class="ph"><span>Πρώτη επαφή</span></div><div class="tx"><b>Γνωριμία με το άλογο</b><p>Άγγιγμα, ανάσα, ήχος. Ο χρόνος πριν την καβάλα.</p></div></article>
-      <article class="reel-card"><div class="ph"><span>Φροντίδα</span></div><div class="tx"><b>Βούρτσισμα &amp; ταΐσμα</b><p>Η ευθύνη ξεκινά από τα βασικά.</p></div></article>
-      <article class="reel-card"><div class="ph"><span>Ισορροπία</span></div><div class="tx"><b>Πάνω στη σέλα</b><p>Στάση, βάρος, ρυθμός — βήμα βήμα.</p></div></article>
-      <article class="reel-card"><div class="ph"><span>Κτήμα</span></div><div class="tx"><b>Βόλτα στη Βόλβη</b><p>Διαδρομές μέσα στη φύση του κτήματος.</p></div></article>
-      <article class="reel-card"><div class="ph"><span>Οικογένεια</span></div><div class="tx"><b>Ημέρες για όλους</b><p>Δράσεις που κρατούν μια ολόκληρη μέρα.</p></div></article>
-      <article class="reel-card"><div class="ph"><span>Εμπιστοσύνη</span></div><div class="tx"><b>Θεραπευτική σχέση</b><p>Σταθερότητα, επανάληψη, πρόοδος.</p></div></article>
+      
+      <article class="reel-card">
+        <div class="ph">
+          <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80" alt="Γνωριμία με το άλογο">
+          <span>Πρώτη επαφή</span>
+        </div>
+        <div class="tx"><b>Γνωριμία με το άλογο</b><p>Άγγιγμα, ανάσα, ήχος. Ο χρόνος πριν την καβάλα.</p></div>
+      </article>
+      
+      <article class="reel-card">
+        <div class="ph">
+          <img src="https://images.unsplash.com/photo-1551884170-09fb70a3a2ed?auto=format&fit=crop&w=800&q=80" alt="Βούρτσισμα και ταΐσμα">
+          <span>Φροντίδα</span>
+        </div>
+        <div class="tx"><b>Βούρτσισμα &amp; ταΐσμα</b><p>Η ευθύνη ξεκινά από τα βασικά.</p></div>
+      </article>
+
+      <article class="reel-card">
+        <div class="ph">
+          <img src="https://images.unsplash.com/photo-1598974357801-cbca100e65d3?auto=format&fit=crop&w=800&q=80" alt="Πάνω στη σέλα">
+          <span>Ισορροπία</span>
+        </div>
+        <div class="tx"><b>Πάνω στη σέλα</b><p>Στάση, βάρος, ρυθμός — βήμα βήμα.</p></div>
+      </article>
+
+      <article class="reel-card">
+        <div class="ph">
+          <img src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=800&q=80" alt="Βόλτα στη Βόλβη">
+          <span>Κτήμα</span>
+        </div>
+        <div class="tx"><b>Βόλτα στη Βόλβη</b><p>Διαδρομές μέσα στη φύση του κτήματος.</p></div>
+      </article>
+
+      <article class="reel-card">
+        <div class="ph">
+          <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=800&q=80" alt="Ημέρες για όλους">
+          <span>Οικογένεια</span>
+        </div>
+        <div class="tx"><b>Ημέρες για όλους</b><p>Δράσεις που κρατούν μια ολόκληρη μέρα.</p></div>
+      </article>
+
+      <article class="reel-card">
+        <div class="ph">
+          <img src="https://images.unsplash.com/photo-1527153857715-3908f2bae5e8?auto=format&fit=crop&w=800&q=80" alt="Θεραπευτική σχέση">
+          <span>Εμπιστοσύνη</span>
+        </div>
+        <div class="tx"><b>Θεραπευτική σχέση</b><p>Σταθερότητα, επανάληψη, πρόοδος.</p></div>
+      </article>
+
     </div>
   </div>
 </div>
@@ -797,12 +853,43 @@ footer{background:var(--black);color:rgba(255,255,255,.72);padding-block:clamp(4
     </div>
 
     <div class="gal-grid">
-      <figure class="gcell g-1 clip rv"><div class="fill"></div><figcaption class="cap">Πεδίο ιππασίας</figcaption></figure>
-      <figure class="gcell g-2 clip rv" style="--d:80ms"><div class="fill"></div><figcaption class="cap">Στάβλοι</figcaption></figure>
-      <figure class="gcell g-3 clip rv" style="--d:120ms"><div class="fill"></div><figcaption class="cap">Εξοπλισμός</figcaption></figure>
-      <figure class="gcell g-4 clip rv" style="--d:180ms"><div class="fill"></div><figcaption class="cap">Φύση &amp; μονοπάτια</figcaption></figure>
-      <figure class="gcell g-5 clip rv" style="--d:240ms"><div class="fill"></div><figcaption class="cap">Χώρος δράσεων</figcaption></figure>
-      <figure class="gcell g-6 clip rv" style="--d:300ms"><div class="fill"></div><figcaption class="cap">Κτήμα Κλημεντίνη · Βόλβη</figcaption></figure>
+      
+      <figure class="gcell g-1 clip rv">
+        <img src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=1200&q=80" alt="Πεδίο ιππασίας">
+        <div class="fill"></div>
+        <figcaption class="cap">Πεδίο ιππασίας</figcaption>
+      </figure>
+
+      <figure class="gcell g-2 clip rv" style="--d:80ms">
+        <img src="https://images.unsplash.com/photo-1508873696983-2df5077227d3?auto=format&fit=crop&w=800&q=80" alt="Στάβλοι">
+        <div class="fill"></div>
+        <figcaption class="cap">Στάβλοι</figcaption>
+      </figure>
+
+      <figure class="gcell g-3 clip rv" style="--d:120ms">
+        <img src="https://images.unsplash.com/photo-1516715094483-75da7dee9758?auto=format&fit=crop&w=800&q=80" alt="Εξοπλισμός">
+        <div class="fill"></div>
+        <figcaption class="cap">Εξοπλισμός</figcaption>
+      </figure>
+
+      <figure class="gcell g-4 clip rv" style="--d:180ms">
+        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80" alt="Φύση & μονοπάτια">
+        <div class="fill"></div>
+        <figcaption class="cap">Φύση &amp; μονοπάτια</figcaption>
+      </figure>
+
+      <figure class="gcell g-5 clip rv" style="--d:240ms">
+        <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=800&q=80" alt="Χώρος δράσεων">
+        <div class="fill"></div>
+        <figcaption class="cap">Χώρος δράσεων</figcaption>
+      </figure>
+
+      <figure class="gcell g-6 clip rv" style="--d:300ms">
+        <img src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=1600&q=80" alt="Κτήμα Κλημεντίνη · Βόλβη">
+        <div class="fill"></div>
+        <figcaption class="cap">Κτήμα Κλημεντίνη · Βόλβη</figcaption>
+      </figure>
+
     </div>
   </div>
 </section>
@@ -1104,7 +1191,7 @@ footer{background:var(--black);color:rgba(255,255,255,.72);padding-block:clamp(4
       requestAnimationFrame(draw);
     }
     sizeCanvas();
-    if (!reduce) draw(); else { /* static single frame */ draw(); }
+    if (!reduce) draw(); else { draw(); }
     var rt;
     window.addEventListener('resize', function(){
       clearTimeout(rt); rt = setTimeout(sizeCanvas, 180);
