@@ -9,29 +9,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* Medical clinical palette — clean, trustworthy, warm */
-    --paper:#f7f6f2;         /* clinical off-white */
-    --paper-2:#edebe4;       /* warm beige */
-    --paper-3:#e3e0d6;       /* deeper sand */
-    --ink:#0e1b2c;           /* deep clinical navy */
+    --paper:#f7f6f2;
+    --paper-2:#edebe4;
+    --ink:#0e1b2c;
     --ink-2:#2c3a4f;
     --ink-3:#6a7488;
-    --ink-4:#9aa2b1;
     --line:#dcd9d0;
     --line-2:#c7c3b7;
-    --petrol:#1f4d5c;        /* medical petrol blue */
+    --petrol:#1f4d5c;
     --petrol-2:#0e3540;
-    --sage:#7d9682;          /* calm medical sage */
-    --coral:#c9755a;         /* warm accent, human */
-    --paper-blue:#e8eef0;
-
+    --sage:#7d9682;
+    --coral:#c9755a;
     --ease:cubic-bezier(.22,1,.36,1);
     --ease-io:cubic-bezier(.65,.05,.36,1);
-    --ease-soft:cubic-bezier(.4,0,.2,1);
   }
 
   *{margin:0;padding:0;box-sizing:border-box}
-
   html{scroll-behavior:smooth}
   html,body{overflow-x:hidden}
 
@@ -43,13 +36,37 @@
     line-height:1.55;
     -webkit-font-smoothing:antialiased;
     cursor:none;
-    font-feature-settings:"ss01","cv11";
   }
-
   @media(hover:none){body{cursor:auto}}
 
   /* ============================================================
-     CURSOR
+     CINEMATIC CANVAS LAYER
+     ============================================================ */
+  #cinema{
+    position:fixed;
+    inset:0;
+    width:100%;height:100%;
+    z-index:500;
+    pointer-events:none;
+    mix-blend-mode:multiply;
+  }
+
+  /* Letterbox bars — cinematic aspect */
+  .letterbox{
+    position:fixed;
+    left:0;right:0;
+    height:0;
+    background:#050810;
+    z-index:800;
+    pointer-events:none;
+    transition:height .6s var(--ease);
+  }
+  .letterbox.top{top:0}
+  .letterbox.bottom{bottom:0}
+  .letterbox.active{height:6vh}
+
+  /* ============================================================
+     CUSTOM CURSOR
      ============================================================ */
   .cursor{
     position:fixed;top:0;left:0;
@@ -67,7 +84,7 @@
     border-radius:50%;
     pointer-events:none;z-index:9998;
     transform:translate(-50%,-50%);
-    transition:width .5s var(--ease), height .5s var(--ease), border-color .3s ease, opacity .3s ease;
+    transition:width .5s var(--ease), height .5s var(--ease), border-color .3s ease;
     mix-blend-mode:multiply;
   }
   .cursor.hover{width:0;height:0}
@@ -75,12 +92,12 @@
   @media(hover:none){.cursor,.cursor-ring{display:none}}
 
   /* ============================================================
-     TEXTURE + GRID
+     PROGRESS + GRID
      ============================================================ */
-  .grain{
-    position:fixed;inset:0;pointer-events:none;z-index:900;
-    opacity:.2;mix-blend-mode:multiply;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  .progress{
+    position:fixed;top:0;left:0;height:2px;
+    background:linear-gradient(90deg, var(--petrol), var(--sage));
+    z-index:1000;width:0;
   }
 
   .rule-grid{
@@ -93,13 +110,6 @@
   .rule-grid span:last-child{border-right:1px solid rgba(14,27,44,.045)}
   @media(max-width:900px){.rule-grid{display:none}}
 
-  .progress{
-    position:fixed;top:0;left:0;height:2px;
-    background:linear-gradient(90deg, var(--petrol), var(--sage));
-    z-index:1000;width:0;
-    transition:width .08s linear;
-  }
-
   /* ============================================================
      HEADER
      ============================================================ */
@@ -108,7 +118,7 @@
     padding:22px clamp(20px,3vw,56px);
     display:flex;justify-content:space-between;align-items:center;
     border-bottom:1px solid transparent;
-    transition:border-color .5s ease, background .5s ease, padding .4s ease, backdrop-filter .4s ease;
+    transition:border-color .5s ease, background .5s ease, padding .4s ease;
   }
   header.scrolled{
     background:rgba(247,246,242,.85);
@@ -120,10 +130,8 @@
 
   .logo{display:flex;align-items:baseline;gap:14px;text-decoration:none;color:var(--ink)}
   .logo strong{
-    font-family:'Fraunces',serif;
-    font-size:22px;font-weight:500;
-    letter-spacing:-.015em;
-    font-variation-settings:"opsz" 24;
+    font-family:'Fraunces',serif;font-size:22px;font-weight:500;
+    letter-spacing:-.015em;font-variation-settings:"opsz" 24;
   }
   .logo small{
     font-size:10px;letter-spacing:.26em;text-transform:uppercase;
@@ -170,11 +178,11 @@
   }
 
   /* ============================================================
-     HERO — CINEMATIC SCROLL SCENE
+     HERO — CINEMATIC SCROLL SCENE with VIDEO SLOT
      ============================================================ */
   .hero-scene{
     position:relative;
-    height:280vh; /* long scroll = "video" feel */
+    height:320vh;
   }
 
   .hero-pin{
@@ -185,33 +193,81 @@
     padding:0 clamp(20px,3vw,56px);
   }
 
-  /* The cinematic image panel — grows/shrinks with scroll */
+  /* Video / image panel that scales with scroll */
   .hero-panel{
     position:absolute;
     top:50%;left:50%;
     transform:translate(-50%,-50%);
-    width:38vw;
-    height:56vh;
+    width:38vw;height:56vh;
     overflow:hidden;
     background:#c8c4b8;
     z-index:1;
-    will-change:width,height,border-radius,transform;
-    box-shadow:0 40px 80px -30px rgba(14,27,44,.28);
+    will-change:width,height,transform;
+    box-shadow:0 40px 80px -30px rgba(14,27,44,.32);
   }
+  .hero-panel video,
   .hero-panel img{
     width:100%;height:100%;object-fit:cover;
-    filter:grayscale(80%) contrast(1.05) brightness(1.02);
-    transform:scale(1.15);
+    filter:grayscale(80%) contrast(1.06) brightness(1.02);
     will-change:transform,filter;
   }
-  .hero-panel::after{
-    content:"";position:absolute;inset:0;
-    background:linear-gradient(180deg, transparent 55%, rgba(14,27,44,.35));
-    pointer-events:none;opacity:0;
-    transition:opacity .8s ease;
+  .hero-panel video{
+    /* video is preferred; if you only have an image, delete the <video> tag */
+    display:block;
   }
 
-  /* Hero text — overlays the pinned scene, splits apart as we scroll */
+  /* Scan line overlay on the hero panel — cinema scanner feel */
+  .hero-scan{
+    position:absolute;inset:0;z-index:2;
+    pointer-events:none;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,.06) 0px,
+        rgba(255,255,255,.06) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+    opacity:.5;
+    mix-blend-mode:overlay;
+    animation:scanDrift 8s linear infinite;
+  }
+  @keyframes scanDrift{
+    from{background-position:0 0}
+    to{background-position:0 60px}
+  }
+
+  /* Focus point marker — like a camera reticle, cinematic */
+  .hero-reticle{
+    position:absolute;top:50%;left:50%;
+    width:60px;height:60px;
+    transform:translate(-50%,-50%);
+    z-index:3;
+    opacity:.55;
+    pointer-events:none;
+  }
+  .hero-reticle::before,
+  .hero-reticle::after{
+    content:"";position:absolute;background:rgba(255,255,255,.85);
+  }
+  .hero-reticle::before{
+    top:50%;left:0;right:0;height:1px;
+    transform:translateY(-50%);
+  }
+  .hero-reticle::after{
+    left:50%;top:0;bottom:0;width:1px;
+    transform:translateX(-50%);
+  }
+  .hero-reticle .corner{
+    position:absolute;width:10px;height:10px;
+    border:1px solid rgba(255,255,255,.9);
+  }
+  .hero-reticle .tl{top:-1px;left:-1px;border-right:none;border-bottom:none}
+  .hero-reticle .tr{top:-1px;right:-1px;border-left:none;border-bottom:none}
+  .hero-reticle .bl{bottom:-1px;left:-1px;border-right:none;border-top:none}
+  .hero-reticle .br{bottom:-1px;right:-1px;border-left:none;border-top:none}
+
+  /* Text overlay */
   .hero-text{
     position:absolute;inset:0;
     display:grid;grid-template-columns:repeat(12,1fr);
@@ -228,15 +284,11 @@
     grid-column:1/8;
     font-family:'Fraunces',serif;
     font-size:clamp(3rem,8.8vw,9rem);
-    font-weight:400;
-    line-height:.94;
-    letter-spacing:-.035em;
+    font-weight:400;line-height:.94;letter-spacing:-.035em;
     color:var(--ink);
     font-variation-settings:"opsz" 144, "SOFT" 20;
   }
-  .hero-title .line{
-    display:block;overflow:hidden;padding-bottom:.02em;
-  }
+  .hero-title .line{display:block;overflow:hidden;padding-bottom:.02em}
   .hero-title .line span{
     display:inline-block;
     transform:translateY(110%);
@@ -245,36 +297,26 @@
   .hero-title .line:nth-child(1) span{animation-delay:.2s}
   .hero-title .line:nth-child(2) span{animation-delay:.35s}
   .hero-title .line:nth-child(3) span{animation-delay:.5s}
-  .hero-title em{
-    font-style:italic;color:var(--petrol);font-weight:400;
-  }
+  .hero-title em{font-style:italic;color:var(--petrol);font-weight:400}
 
   @keyframes riseUp{to{transform:translateY(0)}}
 
   .hero-side{
-    grid-column:10/13;
-    align-self:end;
+    grid-column:10/13;align-self:end;
     padding-bottom:12vh;
     opacity:0;
     animation:fadeIn 1.2s var(--ease) forwards 1.2s;
   }
   @keyframes fadeIn{to{opacity:1}}
 
-  .hero-meta{
-    display:flex;flex-direction:column;gap:18px;
-  }
+  .hero-meta{display:flex;flex-direction:column;gap:18px}
   .hero-meta .kicker{
     font-size:10px;letter-spacing:.28em;text-transform:uppercase;
     color:var(--coral);font-weight:500;
     display:flex;align-items:center;gap:10px;
   }
-  .hero-meta .kicker::before{
-    content:"";width:20px;height:1px;background:var(--coral);
-  }
-  .hero-meta p{
-    font-size:13.5px;line-height:1.7;color:var(--ink-2);
-    max-width:32ch;
-  }
+  .hero-meta .kicker::before{content:"";width:20px;height:1px;background:var(--coral)}
+  .hero-meta p{font-size:13.5px;line-height:1.7;color:var(--ink-2);max-width:32ch}
   .hero-meta .sig{
     border-left:1px solid var(--line-2);
     padding-left:16px;
@@ -285,14 +327,12 @@
     margin-bottom:3px;letter-spacing:0;
   }
 
-  /* Scroll indicator */
   .scroll-hint{
     position:absolute;bottom:32px;left:clamp(20px,3vw,56px);
     display:flex;align-items:center;gap:14px;
     font-size:10px;letter-spacing:.28em;text-transform:uppercase;
     color:var(--ink-3);font-weight:500;
-    z-index:3;
-    opacity:0;
+    z-index:3;opacity:0;
     animation:fadeIn 1s var(--ease) forwards 1.8s;
   }
   .scroll-hint .bar{
@@ -314,14 +354,37 @@
     font-size:10px;letter-spacing:.26em;text-transform:uppercase;
     color:var(--ink-3);font-weight:500;
     display:flex;align-items:center;gap:10px;
-    z-index:3;
-    opacity:0;
+    z-index:3;opacity:0;
     animation:fadeIn 1s var(--ease) forwards 2s;
   }
   .hero-index::after{content:"";width:20px;height:1px;background:var(--ink-3)}
 
+  /* Film slate — top-left corner, like a movie clapper */
+  .film-slate{
+    position:absolute;top:110px;left:clamp(20px,3vw,56px);
+    z-index:3;
+    font-family:'Inter Tight',monospace;
+    font-size:10px;letter-spacing:.2em;
+    color:var(--ink-3);font-weight:500;
+    display:flex;flex-direction:column;gap:6px;
+    opacity:0;
+    animation:fadeIn 1s var(--ease) forwards 2.2s;
+  }
+  .film-slate .row{
+    display:flex;align-items:center;gap:10px;
+  }
+  .film-slate .row .rec{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--coral);
+    animation:rec 1.4s ease-in-out infinite;
+  }
+  @keyframes rec{
+    0%,100%{opacity:1}
+    50%{opacity:.2}
+  }
+
   /* ============================================================
-     MARQUEE / STRIP
+     MARQUEE
      ============================================================ */
   .strip{
     position:relative;z-index:2;
@@ -390,8 +453,7 @@
   }
 
   .service{
-    grid-column:span 4;
-    padding:56px 32px;
+    grid-column:span 4;padding:56px 32px;
     border-bottom:1px solid var(--line);
     border-right:1px solid var(--line);
     position:relative;overflow:hidden;cursor:none;
@@ -442,21 +504,12 @@
   .service:hover .service-arrow{width:64px}
 
   /* ============================================================
-     PINNED SPLIT (also scroll-driven)
+     SPLIT
      ============================================================ */
-  .split-scene{
-    position:relative;
-    padding:0;
-    max-width:none;
-  }
-
   .split{
     display:grid;grid-template-columns:repeat(12,1fr);
     gap:24px;align-items:start;
-    max-width:1600px;margin:0 auto;
-    padding:clamp(60px,8vh,120px) clamp(20px,3vw,56px);
   }
-
   .split-image{
     grid-column:1/7;
     position:sticky;top:100px;
@@ -473,11 +526,32 @@
     position:absolute;top:20px;left:20px;
     font-size:10px;letter-spacing:.24em;text-transform:uppercase;
     color:var(--paper);font-weight:500;
-    padding:8px 14px;background:var(--petrol);
+    padding:8px 14px;background:var(--petrol);z-index:2;
+  }
+  .split-image .scan{
+    position:absolute;inset:0;z-index:1;
+    background:repeating-linear-gradient(
+      0deg, rgba(255,255,255,.05) 0px,
+      rgba(255,255,255,.05) 1px, transparent 1px, transparent 4px);
+    opacity:.6;mix-blend-mode:overlay;pointer-events:none;
+  }
+  /* Horizontal scanning line that sweeps down */
+  .split-image .sweep{
+    position:absolute;left:0;right:0;height:2px;
+    background:linear-gradient(90deg, transparent, rgba(125,150,130,.85), transparent);
+    z-index:2;
+    box-shadow:0 0 20px rgba(125,150,130,.5);
+    animation:sweepDown 4.5s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes sweepDown{
+    0%{top:0;opacity:0}
+    10%{opacity:1}
+    90%{opacity:1}
+    100%{top:100%;opacity:0}
   }
 
   .split-content{grid-column:8/13;padding-top:20px}
-
   .split-content h3{
     font-family:'Fraunces',serif;
     font-size:clamp(1.8rem,3vw,2.8rem);
@@ -486,7 +560,6 @@
     font-variation-settings:"opsz" 60;
   }
   .split-content h3 em{font-style:italic;color:var(--petrol)}
-
   .split-content > p{
     font-size:15px;line-height:1.8;color:var(--ink-2);
     margin-bottom:48px;max-width:46ch;
@@ -513,7 +586,7 @@
   }
 
   /* ============================================================
-     STATS — animated count-up
+     STATS
      ============================================================ */
   .stats{
     display:grid;grid-template-columns:repeat(12,1fr);
@@ -521,8 +594,7 @@
     border-bottom:1px solid var(--line);
   }
   .stat{
-    grid-column:span 3;
-    padding:64px 40px 64px 0;
+    grid-column:span 3;padding:64px 40px 64px 0;
     border-right:1px solid var(--line);
   }
   .stat:last-child{border-right:none}
@@ -534,9 +606,7 @@
     font-variation-settings:"opsz" 144;
     display:flex;align-items:baseline;gap:6px;
   }
-  .stat .val .suf{
-    font-size:.5em;color:var(--petrol);font-style:italic;
-  }
+  .stat .val .suf{font-size:.5em;color:var(--petrol);font-style:italic}
   .stat .lbl{
     font-size:10px;letter-spacing:.26em;text-transform:uppercase;
     color:var(--ink-3);font-weight:500;
@@ -565,6 +635,13 @@
   .article-img::after{
     content:"";position:absolute;inset:0;
     background:linear-gradient(180deg, transparent 65%, rgba(14,27,44,.2));
+  }
+  .article-img .scan{
+    position:absolute;inset:0;z-index:1;
+    background:repeating-linear-gradient(
+      0deg, rgba(255,255,255,.04) 0px,
+      rgba(255,255,255,.04) 1px, transparent 1px, transparent 4px);
+    opacity:.5;mix-blend-mode:overlay;pointer-events:none;
   }
 
   .article-meta{
@@ -613,7 +690,6 @@
     font-size:15px;line-height:1.75;color:var(--ink-2);
     max-width:44ch;margin-bottom:40px;
   }
-
   .contact-buttons{display:flex;gap:14px;flex-wrap:wrap}
 
   .btn-primary{
@@ -642,7 +718,7 @@
     color:var(--ink);background:transparent;text-decoration:none;
     padding:18px 30px;border:1px solid var(--ink);
     position:relative;cursor:none;
-    transition:background .4s ease, color .4s ease, border-color .4s ease;
+    transition:background .4s ease, color .4s ease;
     font-family:inherit;
   }
   .btn-secondary:hover{background:var(--ink);color:var(--paper)}
@@ -705,12 +781,6 @@
   }
   .reveal-line.in span{transform:translateY(0)}
 
-  .draw-line{
-    stroke-dasharray:400;stroke-dashoffset:400;
-    transition:stroke-dashoffset 2.4s var(--ease);
-  }
-  .draw-line.in{stroke-dashoffset:0}
-
   /* ============================================================
      RESPONSIVE
      ============================================================ */
@@ -745,6 +815,7 @@
     .contact-buttons{flex-direction:column;align-items:stretch}
     .btn-primary,.btn-secondary{justify-content:center}
     footer{flex-direction:column;text-align:center}
+    #cinema{display:none}
   }
 
   @media(prefers-reduced-motion:reduce){
@@ -755,16 +826,23 @@
     .reveal{opacity:1;transform:none}
     .reveal-line span{transform:none}
     .hero-title .line span{transform:translateY(0)}
-    .hero-side,.scroll-hint,.hero-index{opacity:1}
+    .hero-side,.scroll-hint,.hero-index,.film-slate{opacity:1}
+    #cinema{display:none}
   }
 </style>
 </head>
 <body>
 
+<!-- Cinematic canvas layer (light rays, particles, scanlines, flare) -->
+<canvas id="cinema"></canvas>
+
+<!-- Letterbox bars (activate on scroll) -->
+<div class="letterbox top" id="lbTop"></div>
+<div class="letterbox bottom" id="lbBottom"></div>
+
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="progress" id="progress"></div>
-<div class="grain"></div>
 
 <div class="rule-grid" aria-hidden="true">
   <span></span><span></span><span></span><span></span><span></span><span></span>
@@ -787,14 +865,36 @@
   </a>
 </header>
 
-<!-- ============================================================
-     HERO — CINEMATIC SCROLL SCENE
-     ============================================================ -->
+<!-- HERO -->
 <div class="hero-scene" id="heroScene">
   <div class="hero-pin">
-    <!-- Cinematic panel: grows from small to full as you scroll -->
+
     <div class="hero-panel" id="heroPanel">
-      <img id="heroImg" src="https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2000&auto=format&fit=crop" alt="Ιατρικός χώρος">
+      <!--
+        ═══════════════════════════════════════════════════════════
+        VIDEO SLOT — αν έχεις .mp4 από Kling/Runway/Sora,
+        βάλε το src="images/hero.mp4" και διέγραψε το <img>.
+        Το βίντεο θα γίνει scroll-scrubbed αυτόματα.
+        ═══════════════════════════════════════════════════════════
+      -->
+      <video id="heroVideo" muted playsinline preload="auto"
+             poster="https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2000&auto=format&fit=crop">
+        <!-- <source src="images/hero.mp4" type="video/mp4"> -->
+      </video>
+
+      <!-- Fallback image (used if video has no source) -->
+      <img id="heroImg"
+           src="https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2000&auto=format&fit=crop"
+           alt="Ιατρικός χώρος">
+
+      <div class="hero-scan"></div>
+
+      <div class="hero-reticle">
+        <span class="corner tl"></span>
+        <span class="corner tr"></span>
+        <span class="corner bl"></span>
+        <span class="corner br"></span>
+      </div>
     </div>
 
     <div class="hero-text">
@@ -814,6 +914,13 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Film slate — REC, timecode, scene -->
+    <div class="film-slate">
+      <div class="row"><span class="rec"></span><span>REC</span></div>
+      <div class="row"><span id="timecode">00:00:00</span></div>
+      <div class="row"><span>SCENE 01 · TAKE 01</span></div>
     </div>
 
     <div class="scroll-hint">
@@ -915,7 +1022,7 @@
   </div>
 </section>
 
-<!-- EXPERTISE / SPLIT -->
+<!-- EXPERTISE -->
 <section id="expertise" style="padding-top:0">
   <div class="sec-head">
     <div class="sec-num reveal">02 / Εξειδίκευση</div>
@@ -927,6 +1034,8 @@
     <div class="split-image reveal" data-cursor>
       <span class="tag">Fig. 02</span>
       <img src="https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?q=80&w=1400&auto=format&fit=crop" alt="Ακτινολογικό εργαστήριο">
+      <div class="scan"></div>
+      <div class="sweep"></div>
     </div>
 
     <div class="split-content">
@@ -936,38 +1045,26 @@
       <ul class="feature-list">
         <li class="reveal" data-cursor>
           <span class="idx">01</span>
-          <div class="txt">
-            <strong>Σύγχρονος εξοπλισμός</strong>
-            <span>Ψηφιακά μηχανήματα τελευταίας γενιάς για εικόνα υψηλής ευκρίνειας.</span>
-          </div>
+          <div class="txt"><strong>Σύγχρονος εξοπλισμός</strong><span>Ψηφιακά μηχανήματα τελευταίας γενιάς για εικόνα υψηλής ευκρίνειας.</span></div>
         </li>
         <li class="reveal" data-cursor>
           <span class="idx">02</span>
-          <div class="txt">
-            <strong>Πρωτόκολλα ασφαλείας</strong>
-            <span>Αυστηρή τήρηση κανόνων αντισηψίας και παρακολούθηση κάθε βήματος.</span>
-          </div>
+          <div class="txt"><strong>Πρωτόκολλα ασφαλείας</strong><span>Αυστηρή τήρηση κανόνων αντισηψίας και παρακολούθηση κάθε βήματος.</span></div>
         </li>
         <li class="reveal" data-cursor>
           <span class="idx">03</span>
-          <div class="txt">
-            <strong>Άμεση ανταπόκριση</strong>
-            <span>Ραντεβού σε σύντομο χρόνο, με προτεραιότητα στην κλινική ανάγκη.</span>
-          </div>
+          <div class="txt"><strong>Άμεση ανταπόκριση</strong><span>Ραντεβού σε σύντομο χρόνο, με προτεραιότητα στην κλινική ανάγκη.</span></div>
         </li>
         <li class="reveal" data-cursor>
           <span class="idx">04</span>
-          <div class="txt">
-            <strong>Συνεργασία με θεράποντα</strong>
-            <span>Άμεση επικοινωνία με τον γιατρό σας για συνέχεια στη φροντίδα.</span>
-          </div>
+          <div class="txt"><strong>Συνεργασία με θεράποντα</strong><span>Άμεση επικοινωνία με τον γιατρό σας για συνέχεια στη φροντίδα.</span></div>
         </li>
       </ul>
     </div>
   </div>
 </section>
 
-<!-- STATS (animated count-up) -->
+<!-- STATS -->
 <section style="padding-top:0">
   <div class="stats">
     <div class="stat reveal">
@@ -1001,11 +1098,10 @@
     <a href="#" class="article reveal" data-cursor>
       <div class="article-img">
         <img src="https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=1200&auto=format&fit=crop" alt="Θεραπεία ώμου">
+        <div class="scan"></div>
       </div>
       <div class="article-meta">
-        <span class="cat">Τεχνική</span>
-        <span class="sep"></span>
-        <span>Δεκέμβριος 2024</span>
+        <span class="cat">Τεχνική</span><span class="sep"></span><span>Δεκέμβριος 2024</span>
       </div>
       <h3>Θεραπεία της ασβεστοποιού τενοντίτιδος του ώμου — Barbotage</h3>
       <p>Υπό τον έλεγχο υπερήχων ή αξονικής τομογραφίας εντοπίζεται η επασβέστωση και πραγματοποιείται παροχέτευσή της με στόχο την ανακούφιση του πόνου.</p>
@@ -1014,11 +1110,10 @@
     <a href="#" class="article reveal" data-cursor>
       <div class="article-img">
         <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?q=80&w=1200&auto=format&fit=crop" alt="Συνέδριο">
+        <div class="scan"></div>
       </div>
       <div class="article-meta">
-        <span class="cat">Συνέδριο</span>
-        <span class="sep"></span>
-        <span>Νοέμβριος 2024</span>
+        <span class="cat">Συνέδριο</span><span class="sep"></span><span>Νοέμβριος 2024</span>
       </div>
       <h3>Παρουσίαση σε συνέδριο επεμβατικής ακτινολογίας</h3>
       <p>Παρουσίαση περιστατικών και τεχνικών σε πανελλήνιο συνέδριο, με έμφαση στην ελάχιστη επεμβατικότητα και την ταχεία αποκατάσταση.</p>
@@ -1027,11 +1122,10 @@
     <a href="#" class="article reveal" data-cursor>
       <div class="article-img">
         <img src="https://images.unsplash.com/photo-1512678080530-7760d81faba6?q=80&w=1200&auto=format&fit=crop" alt="Απεικόνιση">
+        <div class="scan"></div>
       </div>
       <div class="article-meta">
-        <span class="cat">Απεικόνιση</span>
-        <span class="sep"></span>
-        <span>Οκτώβριος 2024</span>
+        <span class="cat">Απεικόνιση</span><span class="sep"></span><span>Οκτώβριος 2024</span>
       </div>
       <h3>Αξονική τομογραφία χαμηλής δόσης — πότε και γιατί</h3>
       <p>Επιλογή πρωτοκόλλου με βάση την κλινική ένδειξη, με στόχο τη μέγιστη διαγνωστική αξία και την ελάχιστη επιβάρυνση.</p>
@@ -1091,6 +1185,8 @@
 
 <script>
 (function(){
+  'use strict';
+
   /* ============================================================
      CUSTOM CURSOR with lerp
      ============================================================ */
@@ -1101,16 +1197,16 @@
 
   document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 
-  function loop(){
+  function cursorLoop(){
     cx += (mx - cx) * 0.4;
     cy += (my - cy) * 0.4;
     rx += (mx - rx) * 0.14;
     ry += (my - ry) * 0.14;
     cursor.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%)`;
     ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
-    requestAnimationFrame(loop);
+    requestAnimationFrame(cursorLoop);
   }
-  loop();
+  cursorLoop();
 
   document.querySelectorAll('[data-cursor], a, button').forEach(el => {
     el.addEventListener('mouseenter', () => {
@@ -1124,75 +1220,283 @@
   });
 
   /* ============================================================
-     PROGRESS BAR
+     CINEMATIC CANVAS ENGINE
+     - Volumetric light rays (volumetric-ish, additive)
+     - Depth particles (dust motes)
+     - Lens flare following the cursor
+     - Vignette
+     - Chromatic aberration on scroll
+     - Scanlines (subtle, whole page)
      ============================================================ */
-  const progress = document.getElementById('progress');
-  function updateProgress(){
+  const canvas = document.getElementById('cinema');
+  const ctx = canvas.getContext('2d', { alpha:true });
+  let W = 0, H = 0, DPR = Math.min(devicePixelRatio || 1, 2);
+
+  function resize(){
+    W = canvas.width = innerWidth * DPR;
+    H = canvas.height = innerHeight * DPR;
+    canvas.style.width = innerWidth + 'px';
+    canvas.style.height = innerHeight + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  resize();
+  addEventListener('resize', resize);
+
+  /* ---- Particles (dust motes) ---- */
+  const PARTICLES = [];
+  const PARTICLE_COUNT = Math.min(60, Math.floor(innerWidth / 28));
+  for (let i = 0; i < PARTICLE_COUNT; i++){
+    PARTICLES.push({
+      x: Math.random() * innerWidth,
+      y: Math.random() * innerHeight,
+      z: Math.random() * 0.9 + 0.1,        // depth 0.1..1
+      r: Math.random() * 1.6 + 0.3,
+      vx: (Math.random() - 0.5) * 0.16,
+      vy: (Math.random() - 0.5) * 0.12 - 0.02,
+      a: Math.random() * 0.5 + 0.15
+    });
+  }
+
+  /* ---- Light rays ---- */
+  const RAYS = [];
+  const RAY_COUNT = 5;
+  for (let i = 0; i < RAY_COUNT; i++){
+    RAYS.push({
+      angle: -Math.PI/3 + i * 0.18,
+      width: 90 + Math.random() * 120,
+      speed: 0.0006 + Math.random() * 0.0009,
+      phase: Math.random() * Math.PI * 2,
+      intensity: 0.045 + Math.random() * 0.05
+    });
+  }
+
+  /* ---- Film grain (per-frame random noise on a low-res offscreen) ---- */
+  const grainCanvas = document.createElement('canvas');
+  grainCanvas.width = 240;
+  grainCanvas.height = 140;
+  const grainCtx = grainCanvas.getContext('2d');
+  let grainImage = grainCtx.createImageData(grainCanvas.width, grainCanvas.height);
+  let grainFrame = 0;
+
+  function refreshGrain(){
+    const d = grainImage.data;
+    for (let i = 0; i < d.length; i += 4){
+      const v = Math.random() * 255 | 0;
+      d[i] = d[i+1] = d[i+2] = v;
+      d[i+3] = Math.random() * 42 | 0; // alpha 0..42
+    }
+    grainCtx.putImageData(grainImage, 0, 0);
+  }
+
+  /* ---- Time / scroll state ---- */
+  let t = 0;
+  let scrollP = 0;      // 0..1 page scroll
+  let velocity = 0;     // scroll velocity, for aberration
+
+  function updateScrollVars(){
     const h = document.documentElement;
-    const p = h.scrollTop / (h.scrollHeight - h.clientHeight);
-    progress.style.width = (p * 100) + '%';
+    scrollP = h.scrollTop / (h.scrollHeight - h.clientHeight);
   }
+  addEventListener('scroll', updateScrollVars, { passive:true });
+  updateScrollVars();
 
   /* ============================================================
-     HEADER
+     MAIN CANVAS LOOP
      ============================================================ */
-  const header = document.getElementById('header');
-  function updateHeader(){
-    if (scrollY > 40) header.classList.add('scrolled');
-    else header.classList.remove('scrolled');
+  function draw(){
+    t += 0.008;
+
+    const Wc = innerWidth, Hc = innerHeight;
+
+    // Fade trail (motion blur for particles)
+    ctx.clearRect(0, 0, Wc, Hc);
+
+    /* -------- LIGHT RAYS (volumetric) -------- */
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (const ray of RAYS){
+      const cx2 = Wc * (0.15 + 0.7 * (0.5 + 0.5 * Math.sin(ray.phase + t * ray.speed * 60)));
+      const len = Math.max(Wc, Hc) * 1.6;
+      const dx = Math.cos(ray.angle) * len;
+      const dy = Math.sin(ray.angle) * len;
+
+      const grad = ctx.createLinearGradient(cx2, -Hc*0.2, cx2 + dx*0.5, -Hc*0.2 + dy*0.5);
+      const wobble = 0.85 + 0.15 * Math.sin(t * 1.4 + ray.phase);
+      grad.addColorStop(0, `rgba(200, 220, 235, ${ray.intensity * wobble * (1 - scrollP*0.4)})`);
+      grad.addColorStop(1, 'rgba(200, 220, 235, 0)');
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.moveTo(cx2 - ray.width/2, -Hc*0.2);
+      ctx.lineTo(cx2 + ray.width/2, -Hc*0.2);
+      ctx.lineTo(cx2 + dx*0.5 + ray.width*1.4, -Hc*0.2 + dy*0.5);
+      ctx.lineTo(cx2 + dx*0.5 - ray.width*1.4, -Hc*0.2 + dy*0.5);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.restore();
+
+    /* -------- PARTICLES (dust motes, depth) -------- */
+    ctx.save();
+    for (const p of PARTICLES){
+      p.x += p.vx * (1 + velocity * 0.4);
+      p.y += p.vy * (1 + velocity * 0.4);
+      p.vx += (Math.random() - 0.5) * 0.01;
+      p.vy += (Math.random() - 0.5) * 0.01;
+
+      // wrap
+      if (p.x < -10) p.x = Wc + 10;
+      if (p.x > Wc + 10) p.x = -10;
+      if (p.y < -10) p.y = Hc + 10;
+      if (p.y > Hc + 10) p.y = -10;
+
+      const alpha = p.a * p.z * (0.5 + 0.5 * scrollP);
+      ctx.fillStyle = `rgba(31, 77, 92, ${alpha})`;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * p.z, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+
+    /* -------- LENS FLARE following cursor -------- */
+    // small warm flare at cursor + soft ghost
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    const flareX = mx;
+    const flareY = my;
+    const flareGrad = ctx.createRadialGradient(flareX, flareY, 0, flareX, flareY, 220);
+    flareGrad.addColorStop(0, 'rgba(201, 117, 90, 0.16)');
+    flareGrad.addColorStop(0.4, 'rgba(125, 150, 130, 0.07)');
+    flareGrad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = flareGrad;
+    ctx.beginPath();
+    ctx.arc(flareX, flareY, 220, 0, Math.PI * 2);
+    ctx.fill();
+
+    // ghost opposite the center
+    const gX = Wc - (flareX - Wc/2) * 1.35;
+    const gY = Hc - (flareY - Hc/2) * 1.35;
+    const ghostGrad = ctx.createRadialGradient(gX, gY, 0, gX, gY, 120);
+    ghostGrad.addColorStop(0, 'rgba(31, 77, 92, 0.06)');
+    ghostGrad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = ghostGrad;
+    ctx.beginPath();
+    ctx.arc(gX, gY, 120, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    /* -------- SCANLINES (whole page, subtle) -------- */
+    ctx.save();
+    ctx.globalAlpha = 0.06;
+    ctx.fillStyle = '#0e1b2c';
+    const slStep = 4;
+    for (let y = 0; y < Hc; y += slStep){
+      ctx.fillRect(0, y, Wc, 1);
+    }
+    ctx.restore();
+
+    /* -------- VIGNETTE -------- */
+    const vig = ctx.createRadialGradient(Wc/2, Hc/2, Math.min(Wc, Hc)*0.35, Wc/2, Hc/2, Math.max(Wc, Hc)*0.75);
+    vig.addColorStop(0, 'rgba(0,0,0,0)');
+    vig.addColorStop(1, 'rgba(14, 27, 44, 0.28)');
+    ctx.fillStyle = vig;
+    ctx.fillRect(0, 0, Wc, Hc);
+
+    /* -------- CHROMATIC ABERRATION (scroll velocity) -------- */
+    if (Math.abs(velocity) > 0.6){
+      ctx.save();
+      ctx.globalCompositeOperation = 'screen';
+      ctx.globalAlpha = Math.min(Math.abs(velocity) / 40, 0.12);
+      // red on one side
+      ctx.fillStyle = 'rgba(201, 117, 90, 1)';
+      ctx.fillRect(-velocity * 0.6, 0, Wc * 0.4, Hc);
+      // blue on the other
+      ctx.fillStyle = 'rgba(31, 77, 92, 1)';
+      ctx.fillRect(Wc * 0.6, 0, Wc * 0.4, Hc);
+      ctx.restore();
+    }
+
+    /* -------- FILM GRAIN -------- */
+    grainFrame++;
+    if (grainFrame % 2 === 0) refreshGrain();
+    ctx.save();
+    ctx.globalAlpha = 0.35;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(grainCanvas, 0, 0, Wc, Hc);
+    ctx.restore();
+
+    requestAnimationFrame(draw);
   }
+  draw();
 
   /* ============================================================
-     HERO SCROLL-DRIVEN CINEMATIC SCENE
+     VELOCITY (for aberration)
+     ============================================================ */
+  let lastScroll = scrollY;
+  let lastTime = performance.now();
+  function velocityLoop(){
+    const now = performance.now();
+    const dt = Math.max(now - lastTime, 1);
+    const dy = scrollY - lastScroll;
+    velocity = velocity * 0.85 + (dy / dt * 16) * 0.15;
+    lastScroll = scrollY;
+    lastTime = now;
+    requestAnimationFrame(velocityLoop);
+  }
+  velocityLoop();
+
+  /* ============================================================
+     HERO SCROLL-DRIVEN SCENE + VIDEO SCRUB
      ============================================================ */
   const heroScene = document.getElementById('heroScene');
   const heroPanel = document.getElementById('heroPanel');
   const heroImg = document.getElementById('heroImg');
+  const heroVideo = document.getElementById('heroVideo');
+  const hasVideo = heroVideo && heroVideo.querySelector('source');
+
+  // If video exists, hide fallback image
+  if (hasVideo){
+    heroVideo.style.display = 'block';
+    if (heroImg) heroImg.style.display = 'none';
+    heroVideo.pause();
+    heroVideo.currentTime = 0;
+  } else if (heroVideo){
+    heroVideo.style.display = 'none';
+  }
 
   function updateHero(){
     const rect = heroScene.getBoundingClientRect();
     const total = heroScene.offsetHeight - innerHeight;
-    const p = Math.min(Math.max(-rect.top / total, 0), 1); // 0..1
+    const p = Math.min(Math.max(-rect.top / total, 0), 1);
 
-    // panel grows from 38vw x 56vh → 92vw x 92vh
-    const wStart = 38, wEnd = 92;
-    const hStart = 56, hEnd = 92;
-    const w = wStart + (wEnd - wStart) * p;
-    const h = hStart + (hEnd - hStart) * p;
+    // Panel grows from 38vw×56vh → 92vw×92vh
+    const w = 38 + (92 - 38) * p;
+    const h = 56 + (92 - 56) * p;
     heroPanel.style.width = w + 'vw';
     heroPanel.style.height = h + 'vh';
+    heroPanel.style.transform = `translate(-50%,-50%) translateY(${(0.5 - p) * 4}vh)`;
 
-    // image: unzoom + desaturate removal
-    const scale = 1.15 - 0.15 * p;
-    const sat = 80 - 80 * p;      // 80% → 0%
-    const bri = 1.02 + 0.03 * p;
-    heroImg.style.transform = `scale(${scale})`;
-    heroImg.style.filter = `grayscale(${sat}%) contrast(${1.05 + 0.02*p}) brightness(${bri})`;
+    // Image reveal
+    if (heroImg && !hasVideo){
+      const scale = 1.15 - 0.15 * p;
+      const sat = 80 - 80 * p;
+      const bri = 1.02 + 0.03 * p;
+      heroImg.style.transform = `scale(${scale})`;
+      heroImg.style.filter = `grayscale(${sat}%) contrast(${1.05 + 0.02*p}) brightness(${bri})`;
+    }
 
-    // subtle parallax on the panel itself
-    heroPanel.style.transform =
-      `translate(-50%,-50%) translateY(${(0.5-p)*4}vh)`;
+    // Video scrub (if exists and ready)
+    if (hasVideo && heroVideo.readyState >= 2 && heroVideo.duration){
+      const target = Math.min(heroVideo.duration - 0.01, p * heroVideo.duration * 0.98);
+      // Only set if far enough (avoid thrashing)
+      if (Math.abs(heroVideo.currentTime - target) > 0.03){
+        try { heroVideo.currentTime = target; } catch(e){}
+      }
+    }
   }
 
   /* ============================================================
-     SCROLL LISTENER (batched)
-     ============================================================ */
-  let ticking = false;
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        updateProgress();
-        updateHeader();
-        updateHero();
-        updateSplitParallax();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }, { passive:true });
-
-  /* ============================================================
-     SPLIT IMAGE PARALLAX
+     SPLIT PARALLAX
      ============================================================ */
   const splitImg = document.querySelector('.split-image img');
   function updateSplitParallax(){
@@ -1207,22 +1511,75 @@
   }
 
   /* ============================================================
+     LETTERBOX BARS — activate between 0.15 and 0.85 scroll
+     ============================================================ */
+  const lbTop = document.getElementById('lbTop');
+  const lbBottom = document.getElementById('lbBottom');
+  function updateLetterbox(){
+    const active = scrollP > 0.10 && scrollP < 0.92;
+    lbTop.classList.toggle('active', active);
+    lbBottom.classList.toggle('active', active);
+  }
+
+  /* ============================================================
+     TIMECODE — fake film counter
+     ============================================================ */
+  const tcEl = document.getElementById('timecode');
+  let tcSeconds = 0;
+  setInterval(() => {
+    tcSeconds++;
+    const h = String(Math.floor(tcSeconds/3600)).padStart(2,'0');
+    const m = String(Math.floor((tcSeconds%3600)/60)).padStart(2,'0');
+    const s = String(tcSeconds%60).padStart(2,'0');
+    if (tcEl) tcEl.textContent = `${h}:${m}:${s}`;
+  }, 1000);
+
+  /* ============================================================
+     PROGRESS + HEADER
+     ============================================================ */
+  const progress = document.getElementById('progress');
+  const header = document.getElementById('header');
+
+  function updateChrome(){
+    progress.style.width = (scrollP * 100) + '%';
+    if (scrollY > 40) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+    updateLetterbox();
+  }
+
+  /* ============================================================
+     SCROLL LISTENER (batched with rAF)
+     ============================================================ */
+  let ticking = false;
+  addEventListener('scroll', () => {
+    if (!ticking){
+      requestAnimationFrame(() => {
+        updateScrollVars();
+        updateHero();
+        updateSplitParallax();
+        updateChrome();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive:true });
+
+  /* ============================================================
      REVEAL ON SCROLL
      ============================================================ */
   const revealEls = document.querySelectorAll('.reveal, .reveal-line');
   const io = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
+      if (entry.isIntersecting){
         setTimeout(() => entry.target.classList.add('in'), Math.min(i*70, 350));
         io.unobserve(entry.target);
       }
     });
   }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
-
   revealEls.forEach(el => io.observe(el));
 
   /* ============================================================
-     COUNT-UP NUMBERS
+     COUNT-UP
      ============================================================ */
   const counters = document.querySelectorAll('.count');
   const countIO = new IntersectionObserver((entries) => {
@@ -1232,24 +1589,18 @@
         const target = parseFloat(el.dataset.target);
         const dur = 1800;
         const t0 = performance.now();
-        const format = (v) => {
-          const n = Math.round(v);
-          return n.toLocaleString('el-GR');
-        };
         function step(t){
           const p = Math.min((t - t0) / dur, 1);
-          // easeOutExpo
           const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
-          el.textContent = format(target * eased);
+          el.textContent = Math.round(target * eased).toLocaleString('el-GR');
           if (p < 1) requestAnimationFrame(step);
-          else el.textContent = format(target);
+          else el.textContent = Math.round(target).toLocaleString('el-GR');
         }
         requestAnimationFrame(step);
         countIO.unobserve(el);
       }
     });
   }, { threshold: 0.6 });
-
   counters.forEach(el => countIO.observe(el));
 
   /* ============================================================
@@ -1268,9 +1619,9 @@
   /* ============================================================
      INITIAL
      ============================================================ */
-  updateProgress();
-  updateHeader();
   updateHero();
+  updateChrome();
+
 })();
 </script>
 </body>
