@@ -6,21 +6,28 @@
 <title>Δρεβελέγκας — Επεμβατική & Διαγνωστική Ακτινολογία</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#f6f4ef;
-    --paper-2:#efece4;
-    --ink:#141414;
-    --ink-2:#3d3a34;
-    --ink-3:#7a756c;
-    --line:#d9d4c8;
-    --line-2:#c4beb0;
-    --accent:#8b3a2a;      /* oxide red — 의료/editorial, not teal AI */
-    --accent-2:#1e3a5f;    /* deep clinical blue */
-    --radius:0px;          /* Swiss: no radius */
+    /* Medical clinical palette — clean, trustworthy, warm */
+    --paper:#f7f6f2;         /* clinical off-white */
+    --paper-2:#edebe4;       /* warm beige */
+    --paper-3:#e3e0d6;       /* deeper sand */
+    --ink:#0e1b2c;           /* deep clinical navy */
+    --ink-2:#2c3a4f;
+    --ink-3:#6a7488;
+    --ink-4:#9aa2b1;
+    --line:#dcd9d0;
+    --line-2:#c7c3b7;
+    --petrol:#1f4d5c;        /* medical petrol blue */
+    --petrol-2:#0e3540;
+    --sage:#7d9682;          /* calm medical sage */
+    --coral:#c9755a;         /* warm accent, human */
+    --paper-blue:#e8eef0;
+
     --ease:cubic-bezier(.22,1,.36,1);
     --ease-io:cubic-bezier(.65,.05,.36,1);
+    --ease-soft:cubic-bezier(.4,0,.2,1);
   }
 
   *{margin:0;padding:0;box-sizing:border-box}
@@ -29,921 +36,688 @@
   html,body{overflow-x:hidden}
 
   body{
-    font-family:'Inter',-apple-system,sans-serif;
+    font-family:'Inter Tight',-apple-system,sans-serif;
     background:var(--paper);
     color:var(--ink);
     font-size:15px;
     line-height:1.55;
     -webkit-font-smoothing:antialiased;
     cursor:none;
+    font-feature-settings:"ss01","cv11";
   }
 
   @media(hover:none){body{cursor:auto}}
 
-  /* ---------- Custom cursor ---------- */
+  /* ============================================================
+     CURSOR
+     ============================================================ */
   .cursor{
-    position:fixed;
-    top:0;left:0;
-    width:8px;height:8px;
-    border-radius:50%;
-    background:var(--accent);
-    pointer-events:none;
-    z-index:9999;
+    position:fixed;top:0;left:0;
+    width:6px;height:6px;border-radius:50%;
+    background:var(--petrol);
+    pointer-events:none;z-index:9999;
     transform:translate(-50%,-50%);
-    transition:width .35s var(--ease), height .35s var(--ease), background .35s ease, opacity .3s ease;
+    transition:width .3s var(--ease), height .3s var(--ease), background .3s ease;
     mix-blend-mode:multiply;
   }
   .cursor-ring{
-    position:fixed;
-    top:0;left:0;
-    width:36px;height:36px;
+    position:fixed;top:0;left:0;
+    width:40px;height:40px;
     border:1px solid var(--ink);
     border-radius:50%;
-    pointer-events:none;
-    z-index:9998;
+    pointer-events:none;z-index:9998;
     transform:translate(-50%,-50%);
-    transition:width .4s var(--ease), height .4s var(--ease), border-color .3s ease, opacity .3s ease;
+    transition:width .5s var(--ease), height .5s var(--ease), border-color .3s ease, opacity .3s ease;
     mix-blend-mode:multiply;
   }
   .cursor.hover{width:0;height:0}
-  .cursor-ring.hover{width:64px;height:64px;border-color:var(--accent)}
+  .cursor-ring.hover{width:76px;height:76px;border-color:var(--petrol)}
   @media(hover:none){.cursor,.cursor-ring{display:none}}
 
-  /* ---------- Paper grain ---------- */
+  /* ============================================================
+     TEXTURE + GRID
+     ============================================================ */
   .grain{
-    position:fixed;inset:0;
-    pointer-events:none;
-    z-index:900;
-    opacity:.22;
-    mix-blend-mode:multiply;
+    position:fixed;inset:0;pointer-events:none;z-index:900;
+    opacity:.2;mix-blend-mode:multiply;
     background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
   }
 
-  /* ---------- Fine grid ---------- */
   .rule-grid{
-    position:fixed;
-    inset:0;
-    z-index:0;
-    pointer-events:none;
-    display:grid;
-    grid-template-columns:repeat(12,1fr);
-    max-width:1520px;
-    margin:0 auto;
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    display:grid;grid-template-columns:repeat(12,1fr);
+    max-width:1600px;margin:0 auto;
     padding:0 clamp(20px,3vw,56px);
   }
-  .rule-grid span{border-left:1px solid rgba(20,20,20,.05);height:100%}
-  .rule-grid span:last-child{border-right:1px solid rgba(20,20,20,.05)}
+  .rule-grid span{border-left:1px solid rgba(14,27,44,.045);height:100%}
+  .rule-grid span:last-child{border-right:1px solid rgba(14,27,44,.045)}
   @media(max-width:900px){.rule-grid{display:none}}
 
-  /* ---------- Progress ---------- */
   .progress{
-    position:fixed;
-    top:0;left:0;
-    height:1px;
-    background:var(--accent);
-    z-index:1000;
-    width:0;
+    position:fixed;top:0;left:0;height:2px;
+    background:linear-gradient(90deg, var(--petrol), var(--sage));
+    z-index:1000;width:0;
+    transition:width .08s linear;
   }
 
-  /* ---------- Header ---------- */
+  /* ============================================================
+     HEADER
+     ============================================================ */
   header{
-    position:fixed;
-    top:0;left:0;right:0;
-    z-index:100;
+    position:fixed;top:0;left:0;right:0;z-index:100;
     padding:22px clamp(20px,3vw,56px);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+    display:flex;justify-content:space-between;align-items:center;
     border-bottom:1px solid transparent;
-    transition:border-color .5s ease, background .5s ease, padding .4s ease;
+    transition:border-color .5s ease, background .5s ease, padding .4s ease, backdrop-filter .4s ease;
   }
   header.scrolled{
-    background:rgba(246,244,239,.86);
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
+    background:rgba(247,246,242,.85);
+    backdrop-filter:blur(14px) saturate(1.2);
+    -webkit-backdrop-filter:blur(14px) saturate(1.2);
     border-bottom-color:var(--line);
     padding-top:16px;padding-bottom:16px;
   }
 
-  .logo{
-    display:flex;align-items:baseline;gap:14px;
-    text-decoration:none;color:var(--ink);
-  }
+  .logo{display:flex;align-items:baseline;gap:14px;text-decoration:none;color:var(--ink)}
   .logo strong{
-    font-family:'Instrument Serif',serif;
-    font-size:22px;
-    font-weight:400;
-    letter-spacing:-.01em;
+    font-family:'Fraunces',serif;
+    font-size:22px;font-weight:500;
+    letter-spacing:-.015em;
+    font-variation-settings:"opsz" 24;
   }
   .logo small{
-    font-size:10px;
-    letter-spacing:.26em;
-    text-transform:uppercase;
-    color:var(--ink-3);
-    font-weight:500;
-    padding-left:14px;
-    border-left:1px solid var(--line-2);
-  }
-  .logo sup{
-    font-family:'Inter',sans-serif;
-    font-size:10px;
-    color:var(--accent);
-    margin-left:2px;
+    font-size:10px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--ink-3);font-weight:500;
+    padding-left:14px;border-left:1px solid var(--line-2);
   }
 
   nav{display:flex;gap:34px;align-items:center}
   nav a{
-    color:var(--ink-2);
-    text-decoration:none;
-    font-size:13px;
-    font-weight:400;
-    position:relative;
-    padding:4px 0;
-    transition:color .3s ease;
+    color:var(--ink-2);text-decoration:none;font-size:13px;
+    position:relative;padding:4px 0;transition:color .3s ease;
   }
   nav a::after{
-    content:"";
-    position:absolute;
-    bottom:0;left:0;
-    width:100%;height:1px;
-    background:var(--ink);
-    transform:scaleX(0);
-    transform-origin:right;
+    content:"";position:absolute;bottom:0;left:0;width:100%;height:1px;
+    background:var(--petrol);transform:scaleX(0);transform-origin:right;
     transition:transform .5s var(--ease);
   }
-  nav a:hover{color:var(--ink)}
+  nav a:hover{color:var(--petrol)}
   nav a:hover::after{transform:scaleX(1);transform-origin:left}
 
   .header-cta{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    font-size:12px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    font-weight:500;
-    color:var(--ink);
-    text-decoration:none;
-    padding:11px 20px;
-    border:1px solid var(--ink);
-    background:transparent;
-    position:relative;
-    overflow:hidden;
-    transition:color .4s ease;
-    font-family:inherit;
-    cursor:none;
+    display:inline-flex;align-items:center;gap:10px;
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+    color:var(--paper);background:var(--petrol);
+    text-decoration:none;padding:11px 20px;
+    border:1px solid var(--petrol);
+    position:relative;overflow:hidden;
+    transition:color .4s ease;cursor:none;font-family:inherit;
   }
   .header-cta::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:var(--ink);
-    transform:translateY(100%);
-    transition:transform .5s var(--ease);
-    z-index:0;
+    content:"";position:absolute;inset:0;background:var(--coral);
+    transform:translateY(100%);transition:transform .55s var(--ease);z-index:0;
   }
   .header-cta:hover::before{transform:translateY(0)}
-  .header-cta:hover{color:var(--paper)}
   .header-cta span{position:relative;z-index:1}
   .header-cta i{
-    display:inline-block;
-    width:6px;height:6px;
-    border-radius:50%;
-    background:var(--accent);
-    position:relative;z-index:1;
-    transition:background .4s ease;
+    display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:var(--sage);position:relative;z-index:1;
+    animation:blip 2.4s ease-in-out infinite;
   }
-  .header-cta:hover i{background:var(--accent)}
+  @keyframes blip{
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:.4;transform:scale(.7)}
+  }
 
-  /* ---------- Hero ---------- */
-  .hero{
+  /* ============================================================
+     HERO — CINEMATIC SCROLL SCENE
+     ============================================================ */
+  .hero-scene{
     position:relative;
-    z-index:2;
-    min-height:100vh;
-    display:grid;
-    grid-template-columns:repeat(12,1fr);
+    height:280vh; /* long scroll = "video" feel */
+  }
+
+  .hero-pin{
+    position:sticky;top:0;
+    height:100vh;
+    overflow:hidden;
+    display:flex;align-items:center;
+    padding:0 clamp(20px,3vw,56px);
+  }
+
+  /* The cinematic image panel — grows/shrinks with scroll */
+  .hero-panel{
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    width:38vw;
+    height:56vh;
+    overflow:hidden;
+    background:#c8c4b8;
+    z-index:1;
+    will-change:width,height,border-radius,transform;
+    box-shadow:0 40px 80px -30px rgba(14,27,44,.28);
+  }
+  .hero-panel img{
+    width:100%;height:100%;object-fit:cover;
+    filter:grayscale(80%) contrast(1.05) brightness(1.02);
+    transform:scale(1.15);
+    will-change:transform,filter;
+  }
+  .hero-panel::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg, transparent 55%, rgba(14,27,44,.35));
+    pointer-events:none;opacity:0;
+    transition:opacity .8s ease;
+  }
+
+  /* Hero text — overlays the pinned scene, splits apart as we scroll */
+  .hero-text{
+    position:absolute;inset:0;
+    display:grid;grid-template-columns:repeat(12,1fr);
     gap:24px;
-    padding:160px clamp(20px,3vw,56px) 60px;
-    max-width:1520px;
-    margin:0 auto;
-    align-items:end;
-  }
-
-  .hero-left{
-    grid-column:1/8;
-    padding-bottom:40px;
-  }
-
-  .hero-meta{
-    display:flex;
+    padding:0 clamp(20px,3vw,56px);
     align-items:center;
-    gap:14px;
-    margin-bottom:40px;
-    font-size:11px;
-    letter-spacing:.22em;
-    text-transform:uppercase;
-    color:var(--ink-3);
-    font-weight:500;
-  }
-  .hero-meta .dot{
-    width:5px;height:5px;
-    background:var(--accent);
-    border-radius:50%;
+    max-width:1600px;margin:0 auto;
+    pointer-events:none;
+    z-index:2;
+    width:100%;
   }
 
-  .hero h1{
-    font-family:'Instrument Serif',serif;
-    font-size:clamp(3rem,8.5vw,8.5rem);
+  .hero-title{
+    grid-column:1/8;
+    font-family:'Fraunces',serif;
+    font-size:clamp(3rem,8.8vw,9rem);
     font-weight:400;
-    line-height:.92;
+    line-height:.94;
     letter-spacing:-.035em;
     color:var(--ink);
-    margin-bottom:40px;
+    font-variation-settings:"opsz" 144, "SOFT" 20;
   }
-  .hero h1 .line{
-    display:block;
-    overflow:hidden;
-    padding-bottom:.02em;
+  .hero-title .line{
+    display:block;overflow:hidden;padding-bottom:.02em;
   }
-  .hero h1 .line span{
+  .hero-title .line span{
     display:inline-block;
-    transform:translateY(105%);
-    animation:riseUp 1.5s var(--ease) forwards;
+    transform:translateY(110%);
+    animation:riseUp 1.4s var(--ease) forwards;
   }
-  .hero h1 .line:nth-child(1) span{animation-delay:.15s}
-  .hero h1 .line:nth-child(2) span{animation-delay:.3s}
-  .hero h1 .line:nth-child(3) span{animation-delay:.45s}
-  .hero h1 em{
-    font-style:italic;
-    color:var(--accent);
-    font-weight:400;
-  }
-  .hero h1 .amp{
-    font-family:'Inter',sans-serif;
-    font-size:.35em;
-    font-weight:300;
-    vertical-align:middle;
-    color:var(--ink-3);
-    margin:0 .2em;
-    letter-spacing:0;
+  .hero-title .line:nth-child(1) span{animation-delay:.2s}
+  .hero-title .line:nth-child(2) span{animation-delay:.35s}
+  .hero-title .line:nth-child(3) span{animation-delay:.5s}
+  .hero-title em{
+    font-style:italic;color:var(--petrol);font-weight:400;
   }
 
   @keyframes riseUp{to{transform:translateY(0)}}
 
-  .hero-body{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:32px;
-    margin-top:24px;
+  .hero-side{
+    grid-column:10/13;
+    align-self:end;
+    padding-bottom:12vh;
     opacity:0;
-    animation:fadeIn 1.2s var(--ease) forwards 1.1s;
+    animation:fadeIn 1.2s var(--ease) forwards 1.2s;
   }
-  .hero-body p{
-    font-size:15px;
-    line-height:1.7;
-    color:var(--ink-2);
-    max-width:38ch;
-  }
-  .hero-body .sig{
-    border-left:1px solid var(--line-2);
-    padding-left:20px;
-    font-size:12px;
-    letter-spacing:.05em;
-    color:var(--ink-3);
-    line-height:1.8;
-  }
-  .hero-body .sig strong{
-    display:block;
-    color:var(--ink);
-    font-weight:500;
-    font-size:13px;
-    margin-bottom:4px;
-    letter-spacing:0;
-  }
-
   @keyframes fadeIn{to{opacity:1}}
 
-  .hero-right{
-    grid-column:9/13;
-    position:relative;
-    align-self:end;
-    padding-bottom:40px;
-    opacity:0;
-    animation:fadeIn 1.4s var(--ease) forwards 1.3s;
+  .hero-meta{
+    display:flex;flex-direction:column;gap:18px;
+  }
+  .hero-meta .kicker{
+    font-size:10px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--coral);font-weight:500;
+    display:flex;align-items:center;gap:10px;
+  }
+  .hero-meta .kicker::before{
+    content:"";width:20px;height:1px;background:var(--coral);
+  }
+  .hero-meta p{
+    font-size:13.5px;line-height:1.7;color:var(--ink-2);
+    max-width:32ch;
+  }
+  .hero-meta .sig{
+    border-left:1px solid var(--line-2);
+    padding-left:16px;
+    font-size:11px;letter-spacing:.04em;color:var(--ink-3);line-height:1.8;
+  }
+  .hero-meta .sig strong{
+    display:block;color:var(--ink);font-weight:500;font-size:12px;
+    margin-bottom:3px;letter-spacing:0;
   }
 
-  .hero-image{
-    position:relative;
-    aspect-ratio:3/4;
-    overflow:hidden;
-    background:#ddd;
+  /* Scroll indicator */
+  .scroll-hint{
+    position:absolute;bottom:32px;left:clamp(20px,3vw,56px);
+    display:flex;align-items:center;gap:14px;
+    font-size:10px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--ink-3);font-weight:500;
+    z-index:3;
+    opacity:0;
+    animation:fadeIn 1s var(--ease) forwards 1.8s;
   }
-  .hero-image img{
-    width:100%;height:100%;
-    object-fit:cover;
-    filter:grayscale(100%) contrast(1.02);
-    transition:transform 2s var(--ease), filter 1s ease;
-    transform:scale(1.08);
-    animation:imgIn 1.8s var(--ease) forwards 1.3s;
+  .scroll-hint .bar{
+    width:48px;height:1px;background:var(--ink-3);
+    position:relative;overflow:hidden;
   }
-  @keyframes imgIn{to{transform:scale(1)}}
-  .hero-image:hover img{
-    filter:grayscale(0%) contrast(1.05);
-    transform:scale(1.04);
+  .scroll-hint .bar::after{
+    content:"";position:absolute;inset:0;background:var(--petrol);
+    animation:scrollBar 2.6s var(--ease) infinite;
   }
-  .hero-image::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:linear-gradient(180deg, transparent 60%, rgba(20,20,20,.25));
-    pointer-events:none;
-  }
-  .hero-image .cap{
-    position:absolute;
-    bottom:18px;left:20px;right:20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-size:10px;
-    letter-spacing:.24em;
-    text-transform:uppercase;
-    color:var(--paper);
-    z-index:1;
-    font-weight:500;
-  }
-  .hero-image .cap em{
-    font-style:normal;
-    opacity:.6;
+  @keyframes scrollBar{
+    0%{transform:translateX(-100%)}
+    50%{transform:translateX(0)}
+    100%{transform:translateX(100%)}
   }
 
   .hero-index{
-    position:absolute;
-    top:-32px;left:20px;
-    font-size:10px;
-    letter-spacing:.24em;
-    text-transform:uppercase;
-    color:var(--ink-3);
-    font-weight:500;
-    display:flex;
-    align-items:center;
-    gap:10px;
+    position:absolute;top:110px;right:clamp(20px,3vw,56px);
+    font-size:10px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--ink-3);font-weight:500;
+    display:flex;align-items:center;gap:10px;
+    z-index:3;
+    opacity:0;
+    animation:fadeIn 1s var(--ease) forwards 2s;
   }
-  .hero-index::before{
-    content:"";
-    width:20px;height:1px;
-    background:var(--ink-3);
-  }
+  .hero-index::after{content:"";width:20px;height:1px;background:var(--ink-3)}
 
-  /* ---------- Marquee strip ---------- */
+  /* ============================================================
+     MARQUEE / STRIP
+     ============================================================ */
   .strip{
-    position:relative;
-    z-index:2;
-    border-top:1px solid var(--line);
-    border-bottom:1px solid var(--line);
-    padding:24px 0;
-    overflow:hidden;
-    background:var(--paper-2);
+    position:relative;z-index:2;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    padding:26px 0;overflow:hidden;background:var(--paper-2);
   }
   .strip-track{
-    display:flex;
-    gap:64px;
-    animation:ticker 50s linear infinite;
-    width:max-content;
-    white-space:nowrap;
+    display:flex;gap:64px;width:max-content;white-space:nowrap;
+    animation:ticker 55s linear infinite;
   }
   @keyframes ticker{to{transform:translateX(-50%)}}
   .strip-item{
-    font-family:'Instrument Serif',serif;
-    font-size:22px;
-    color:var(--ink-2);
-    font-style:italic;
-    display:flex;
-    align-items:center;
-    gap:64px;
+    font-family:'Fraunces',serif;font-size:24px;
+    color:var(--ink-2);font-style:italic;
+    font-variation-settings:"opsz" 24;
+    display:flex;align-items:center;gap:64px;
   }
   .strip-item::after{
-    content:"✦";
-    font-family:'Inter',sans-serif;
-    font-size:10px;
-    color:var(--accent);
-    font-style:normal;
+    content:"◆";
+    font-family:'Inter Tight',sans-serif;font-size:8px;
+    color:var(--sage);font-style:normal;
   }
 
-  /* ---------- Section base ---------- */
+  /* ============================================================
+     SECTION BASE
+     ============================================================ */
   section{
-    position:relative;
-    z-index:2;
-    padding:clamp(80px,12vh,140px) clamp(20px,3vw,56px);
-    max-width:1520px;
-    margin:0 auto;
+    position:relative;z-index:2;
+    padding:clamp(80px,12vh,150px) clamp(20px,3vw,56px);
+    max-width:1600px;margin:0 auto;
   }
 
   .sec-head{
-    display:grid;
-    grid-template-columns:repeat(12,1fr);
-    gap:24px;
-    margin-bottom:80px;
-    align-items:end;
+    display:grid;grid-template-columns:repeat(12,1fr);
+    gap:24px;margin-bottom:80px;align-items:end;
   }
-
   .sec-num{
     grid-column:1/3;
-    font-family:'Instrument Serif',serif;
-    font-size:13px;
-    color:var(--accent);
-    letter-spacing:.05em;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding-bottom:6px;
+    font-family:'Fraunces',serif;font-size:13px;
+    color:var(--petrol);letter-spacing:.05em;
+    display:flex;align-items:center;gap:12px;padding-bottom:6px;
+    font-variation-settings:"opsz" 14;
   }
-  .sec-num::before{
-    content:"";
-    width:24px;height:1px;
-    background:var(--accent);
-  }
+  .sec-num::before{content:"";width:24px;height:1px;background:var(--petrol)}
 
   .sec-title{
     grid-column:3/10;
-    font-family:'Instrument Serif',serif;
-    font-size:clamp(2rem,4.5vw,4rem);
-    font-weight:400;
-    line-height:1.05;
-    letter-spacing:-.02em;
+    font-family:'Fraunces',serif;
+    font-size:clamp(2rem,4.5vw,4.2rem);
+    font-weight:400;line-height:1.04;letter-spacing:-.025em;
+    font-variation-settings:"opsz" 72;
   }
-  .sec-title em{
-    font-style:italic;
-    color:var(--accent);
-  }
+  .sec-title em{font-style:italic;color:var(--petrol);font-weight:400}
 
   .sec-note{
-    grid-column:10/13;
-    font-size:13px;
-    line-height:1.7;
-    color:var(--ink-3);
-    padding-bottom:8px;
+    grid-column:10/13;font-size:13.5px;line-height:1.7;
+    color:var(--ink-3);padding-bottom:8px;
   }
 
-  /* ---------- Services ---------- */
+  /* ============================================================
+     SERVICES
+     ============================================================ */
   .services{
-    display:grid;
-    grid-template-columns:repeat(12,1fr);
-    gap:0;
+    display:grid;grid-template-columns:repeat(12,1fr);gap:0;
     border-top:1px solid var(--line);
   }
 
   .service{
     grid-column:span 4;
-    padding:56px 32px 56px 0;
+    padding:56px 32px;
     border-bottom:1px solid var(--line);
     border-right:1px solid var(--line);
-    padding-left:32px;
-    position:relative;
-    overflow:hidden;
-    cursor:none;
+    position:relative;overflow:hidden;cursor:none;
   }
-  .service:nth-child(3n+1){border-left:1px solid var(--line);padding-left:32px}
+  .service:nth-child(3n+1){border-left:1px solid var(--line)}
   .service:nth-child(3n){border-right:1px solid var(--line)}
 
-  .service-inner{
-    position:relative;
-    z-index:1;
-    transition:transform .6s var(--ease);
-  }
+  .service-inner{position:relative;z-index:1;transition:transform .6s var(--ease)}
   .service:hover .service-inner{transform:translateY(-4px)}
 
   .service-bg{
-    position:absolute;
-    inset:0;
-    background:var(--ink);
-    transform:translateY(101%);
-    transition:transform .7s var(--ease);
-    z-index:0;
+    position:absolute;inset:0;background:var(--petrol-2);
+    transform:translateY(101%);transition:transform .7s var(--ease);z-index:0;
   }
   .service:hover .service-bg{transform:translateY(0)}
   .service:hover .service-num,
   .service:hover .service-title,
-  .service:hover .service-desc,
-  .service:hover .service-arrow{color:var(--paper)}
-  .service:hover .service-arrow{border-color:var(--paper)}
+  .service:hover .service-desc{color:var(--paper)}
+  .service:hover .service-arrow{background:var(--paper)}
+  .service:hover .service-arrow::after{border-color:var(--paper)}
 
   .service-num{
-    font-size:11px;
-    letter-spacing:.24em;
-    color:var(--ink-3);
-    font-weight:500;
-    margin-bottom:48px;
-    transition:color .5s ease;
-    display:block;
+    font-size:11px;letter-spacing:.24em;color:var(--ink-3);
+    font-weight:500;margin-bottom:48px;transition:color .5s ease;display:block;
   }
-
   .service-title{
-    font-family:'Instrument Serif',serif;
-    font-size:clamp(1.4rem,2.2vw,1.9rem);
-    font-weight:400;
-    line-height:1.15;
-    letter-spacing:-.01em;
-    margin-bottom:18px;
-    transition:color .5s ease;
-    color:var(--ink);
+    font-family:'Fraunces',serif;font-size:clamp(1.4rem,2.2vw,2rem);
+    font-weight:400;line-height:1.15;letter-spacing:-.015em;
+    margin-bottom:18px;transition:color .5s ease;color:var(--ink);
+    font-variation-settings:"opsz" 32;
   }
   .service-title em{font-style:italic}
-
   .service-desc{
-    font-size:13.5px;
-    line-height:1.7;
-    color:var(--ink-2);
-    max-width:34ch;
-    transition:color .5s ease;
+    font-size:13.5px;line-height:1.7;color:var(--ink-2);
+    max-width:34ch;transition:color .5s ease;
   }
-
   .service-arrow{
-    margin-top:32px;
-    width:44px;height:1px;
-    background:var(--ink);
-    position:relative;
-    transition:width .5s var(--ease), background .5s ease;
+    margin-top:32px;width:44px;height:1px;background:var(--ink);
+    position:relative;transition:width .5s var(--ease), background .5s ease;
   }
   .service-arrow::after{
-    content:"";
-    position:absolute;
-    right:0;top:50%;
+    content:"";position:absolute;right:0;top:50%;
     width:8px;height:8px;
-    border-top:1px solid var(--ink);
-    border-right:1px solid var(--ink);
+    border-top:1px solid var(--ink);border-right:1px solid var(--ink);
     transform:translateY(-50%) rotate(45deg);
     transition:border-color .5s ease;
   }
-  .service:hover .service-arrow{width:64px;background:var(--paper)}
-  .service:hover .service-arrow::after{border-color:var(--paper)}
+  .service:hover .service-arrow{width:64px}
 
-  /* ---------- Imaging / Editorial split ---------- */
+  /* ============================================================
+     PINNED SPLIT (also scroll-driven)
+     ============================================================ */
+  .split-scene{
+    position:relative;
+    padding:0;
+    max-width:none;
+  }
+
   .split{
-    display:grid;
-    grid-template-columns:repeat(12,1fr);
-    gap:24px;
-    align-items:start;
+    display:grid;grid-template-columns:repeat(12,1fr);
+    gap:24px;align-items:start;
+    max-width:1600px;margin:0 auto;
+    padding:clamp(60px,8vh,120px) clamp(20px,3vw,56px);
   }
 
   .split-image{
     grid-column:1/7;
-    position:relative;
-    aspect-ratio:4/5;
-    overflow:hidden;
-    background:#ddd;
-    position:sticky;
-    top:100px;
+    position:sticky;top:100px;
+    aspect-ratio:4/5;overflow:hidden;background:#d5d2c8;
   }
   .split-image img{
-    width:100%;height:100%;
-    object-fit:cover;
-    filter:grayscale(100%) contrast(1.05);
-    transition:transform 2.4s var(--ease), filter 1.2s ease;
-    will-change:transform;
+    width:100%;height:100%;object-fit:cover;
+    filter:grayscale(90%) contrast(1.05) brightness(1.02);
+    transition:transform 2s var(--ease), filter 1.4s ease;
+    will-change:transform,filter;
   }
-  .split-image:hover img{filter:grayscale(0%)}
+  .split-image:hover img{filter:grayscale(0%) contrast(1.06)}
   .split-image .tag{
-    position:absolute;
-    top:20px;left:20px;
-    font-size:10px;
-    letter-spacing:.24em;
-    text-transform:uppercase;
-    color:var(--paper);
-    font-weight:500;
-    padding:8px 14px;
-    background:var(--accent);
+    position:absolute;top:20px;left:20px;
+    font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--paper);font-weight:500;
+    padding:8px 14px;background:var(--petrol);
   }
 
-  .split-content{
-    grid-column:8/13;
-    padding-top:20px;
-  }
+  .split-content{grid-column:8/13;padding-top:20px}
 
   .split-content h3{
-    font-family:'Instrument Serif',serif;
-    font-size:clamp(1.8rem,3vw,2.6rem);
-    font-weight:400;
-    line-height:1.15;
-    letter-spacing:-.02em;
+    font-family:'Fraunces',serif;
+    font-size:clamp(1.8rem,3vw,2.8rem);
+    font-weight:400;line-height:1.12;letter-spacing:-.025em;
     margin-bottom:32px;
+    font-variation-settings:"opsz" 60;
   }
-  .split-content h3 em{font-style:italic;color:var(--accent)}
+  .split-content h3 em{font-style:italic;color:var(--petrol)}
 
   .split-content > p{
-    font-size:15px;
-    line-height:1.8;
-    color:var(--ink-2);
-    margin-bottom:48px;
-    max-width:44ch;
+    font-size:15px;line-height:1.8;color:var(--ink-2);
+    margin-bottom:48px;max-width:46ch;
   }
 
-  .feature-list{
-    list-style:none;
-    border-top:1px solid var(--line);
-  }
+  .feature-list{list-style:none;border-top:1px solid var(--line)}
   .feature-list li{
-    padding:22px 0;
-    border-bottom:1px solid var(--line);
-    display:grid;
-    grid-template-columns:32px 1fr;
-    gap:16px;
-    align-items:start;
-    cursor:none;
-    transition:padding-left .5s var(--ease);
+    padding:22px 0;border-bottom:1px solid var(--line);
+    display:grid;grid-template-columns:32px 1fr;gap:16px;
+    align-items:start;cursor:none;
+    transition:padding-left .5s var(--ease), background .4s ease;
   }
-  .feature-list li:hover{padding-left:12px}
+  .feature-list li:hover{padding-left:12px;background:rgba(31,77,92,.025)}
   .feature-list .idx{
-    font-family:'Instrument Serif',serif;
-    font-size:12px;
-    color:var(--accent);
-    padding-top:4px;
+    font-family:'Fraunces',serif;font-size:12px;
+    color:var(--petrol);padding-top:4px;
   }
   .feature-list .txt strong{
-    display:block;
-    font-size:15px;
-    font-weight:500;
-    color:var(--ink);
-    margin-bottom:4px;
+    display:block;font-size:15px;font-weight:500;
+    color:var(--ink);margin-bottom:4px;
   }
   .feature-list .txt span{
-    font-size:13px;
-    color:var(--ink-3);
-    line-height:1.6;
+    font-size:13px;color:var(--ink-3);line-height:1.6;
   }
 
-  /* ---------- News / Articles ---------- */
-  .articles{
-    display:grid;
-    grid-template-columns:repeat(12,1fr);
-    gap:24px;
+  /* ============================================================
+     STATS — animated count-up
+     ============================================================ */
+  .stats{
+    display:grid;grid-template-columns:repeat(12,1fr);
+    gap:0;border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .stat{
+    grid-column:span 3;
+    padding:64px 40px 64px 0;
+    border-right:1px solid var(--line);
+  }
+  .stat:last-child{border-right:none}
+  .stat .val{
+    font-family:'Fraunces',serif;
+    font-size:clamp(2.8rem,5.5vw,5rem);
+    font-weight:400;letter-spacing:-.03em;line-height:1;
+    margin-bottom:14px;color:var(--ink);
+    font-variation-settings:"opsz" 144;
+    display:flex;align-items:baseline;gap:6px;
+  }
+  .stat .val .suf{
+    font-size:.5em;color:var(--petrol);font-style:italic;
+  }
+  .stat .lbl{
+    font-size:10px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--ink-3);font-weight:500;
   }
 
+  /* ============================================================
+     ARTICLES
+     ============================================================ */
+  .articles{display:grid;grid-template-columns:repeat(12,1fr);gap:24px}
   .article{
     grid-column:span 4;
-    text-decoration:none;
-    color:var(--ink);
-    display:block;
-    cursor:none;
+    text-decoration:none;color:var(--ink);
+    display:block;cursor:none;
   }
-
   .article-img{
-    aspect-ratio:4/3;
-    overflow:hidden;
-    background:#ddd;
-    margin-bottom:24px;
-    position:relative;
+    aspect-ratio:4/3;overflow:hidden;background:#d5d2c8;
+    margin-bottom:24px;position:relative;
   }
   .article-img img{
-    width:100%;height:100%;
-    object-fit:cover;
-    filter:grayscale(100%);
-    transform:scale(1.05);
-    transition:transform 1.6s var(--ease), filter 1s ease;
+    width:100%;height:100%;object-fit:cover;
+    filter:grayscale(90%) contrast(1.05);
+    transform:scale(1.08);
+    transition:transform 1.6s var(--ease), filter 1.2s ease;
   }
-  .article:hover .article-img img{
-    transform:scale(1);
-    filter:grayscale(0%);
-  }
+  .article:hover .article-img img{transform:scale(1);filter:grayscale(0%)}
   .article-img::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:linear-gradient(180deg, transparent 65%, rgba(20,20,20,.15));
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg, transparent 65%, rgba(14,27,44,.2));
   }
 
   .article-meta{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    font-size:10px;
-    letter-spacing:.24em;
-    text-transform:uppercase;
-    color:var(--ink-3);
-    margin-bottom:16px;
-    font-weight:500;
+    display:flex;align-items:center;gap:14px;
+    font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--ink-3);margin-bottom:16px;font-weight:500;
   }
-  .article-meta .cat{
-    color:var(--accent);
-  }
-  .article-meta .sep{
-    width:14px;height:1px;
-    background:var(--line-2);
-  }
+  .article-meta .cat{color:var(--coral)}
+  .article-meta .sep{width:14px;height:1px;background:var(--line-2)}
 
   .article h3{
-    font-family:'Instrument Serif',serif;
-    font-size:1.35rem;
-    font-weight:400;
-    line-height:1.25;
-    letter-spacing:-.01em;
-    margin-bottom:14px;
+    font-family:'Fraunces',serif;
+    font-size:1.4rem;font-weight:400;line-height:1.22;
+    letter-spacing:-.015em;margin-bottom:14px;
     transition:color .4s ease;
+    font-variation-settings:"opsz" 32;
   }
-  .article:hover h3{color:var(--accent)}
+  .article:hover h3{color:var(--petrol)}
+  .article p{font-size:13.5px;line-height:1.7;color:var(--ink-3)}
 
-  .article p{
-    font-size:13.5px;
-    line-height:1.7;
-    color:var(--ink-3);
-  }
-
-  /* ---------- Contact / CTA ---------- */
+  /* ============================================================
+     CONTACT
+     ============================================================ */
   .contact-wrap{
-    position:relative;
-    z-index:2;
-    max-width:1520px;
-    margin:0 auto;
+    position:relative;z-index:2;
+    max-width:1600px;margin:0 auto;
     padding:0 clamp(20px,3vw,56px) clamp(60px,10vh,120px);
   }
-
   .contact{
     border-top:1px solid var(--line);
     border-bottom:1px solid var(--line);
-    padding:clamp(56px,8vw,100px) 0;
-    display:grid;
-    grid-template-columns:repeat(12,1fr);
-    gap:24px;
-    position:relative;
+    padding:clamp(56px,8vw,110px) 0;
+    display:grid;grid-template-columns:repeat(12,1fr);
+    gap:24px;position:relative;
   }
-
-  .contact-left{
-    grid-column:1/8;
-  }
+  .contact-left{grid-column:1/8}
   .contact-left h2{
-    font-family:'Instrument Serif',serif;
-    font-size:clamp(2.4rem,6vw,5.5rem);
-    font-weight:400;
-    line-height:.98;
-    letter-spacing:-.03em;
+    font-family:'Fraunces',serif;
+    font-size:clamp(2.4rem,6vw,5.8rem);
+    font-weight:400;line-height:.98;letter-spacing:-.035em;
     margin-bottom:40px;
+    font-variation-settings:"opsz" 144;
   }
-  .contact-left h2 em{font-style:italic;color:var(--accent)}
-
+  .contact-left h2 em{font-style:italic;color:var(--petrol)}
   .contact-left p{
-    font-size:15px;
-    line-height:1.75;
-    color:var(--ink-2);
-    max-width:44ch;
-    margin-bottom:40px;
+    font-size:15px;line-height:1.75;color:var(--ink-2);
+    max-width:44ch;margin-bottom:40px;
   }
 
-  .contact-buttons{
-    display:flex;
-    gap:14px;
-    flex-wrap:wrap;
-  }
+  .contact-buttons{display:flex;gap:14px;flex-wrap:wrap}
 
   .btn-primary{
-    display:inline-flex;
-    align-items:center;
-    gap:12px;
-    font-size:12px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    font-weight:500;
-    color:var(--paper);
-    background:var(--ink);
-    text-decoration:none;
-    padding:18px 30px;
-    border:1px solid var(--ink);
-    position:relative;
-    overflow:hidden;
-    transition:color .4s ease;
-    cursor:none;
-    font-family:inherit;
+    display:inline-flex;align-items:center;gap:12px;
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+    color:var(--paper);background:var(--petrol);
+    text-decoration:none;padding:18px 30px;
+    border:1px solid var(--petrol);
+    position:relative;overflow:hidden;
+    transition:color .4s ease;cursor:none;font-family:inherit;
   }
   .btn-primary::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:var(--accent);
-    transform:translateY(100%);
-    transition:transform .55s var(--ease);
-    z-index:0;
+    content:"";position:absolute;inset:0;background:var(--coral);
+    transform:translateY(100%);transition:transform .6s var(--ease);z-index:0;
   }
   .btn-primary:hover::before{transform:translateY(0)}
   .btn-primary span,.btn-primary i{position:relative;z-index:1}
   .btn-primary i{
-    display:inline-block;
-    width:6px;height:6px;
-    border-radius:50%;
-    background:var(--accent);
-    transition:background .4s ease;
+    display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:var(--sage);
   }
-  .btn-primary:hover i{background:var(--paper)}
 
   .btn-secondary{
-    display:inline-flex;
-    align-items:center;
-    gap:12px;
-    font-size:12px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    font-weight:500;
-    color:var(--ink);
-    background:transparent;
-    text-decoration:none;
-    padding:18px 30px;
-    border:1px solid var(--ink);
-    position:relative;
-    cursor:none;
-    transition:background .4s ease, color .4s ease;
+    display:inline-flex;align-items:center;gap:12px;
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+    color:var(--ink);background:transparent;text-decoration:none;
+    padding:18px 30px;border:1px solid var(--ink);
+    position:relative;cursor:none;
+    transition:background .4s ease, color .4s ease, border-color .4s ease;
     font-family:inherit;
   }
   .btn-secondary:hover{background:var(--ink);color:var(--paper)}
 
   .contact-right{
-    grid-column:9/13;
-    display:flex;
-    flex-direction:column;
-    gap:32px;
-    padding-top:8px;
+    grid-column:9/13;display:flex;flex-direction:column;
+    gap:32px;padding-top:8px;
   }
-
   .info-block .k{
-    font-size:10px;
-    letter-spacing:.26em;
-    text-transform:uppercase;
-    color:var(--ink-3);
-    margin-bottom:10px;
-    font-weight:500;
-    display:flex;
-    align-items:center;
-    gap:8px;
+    font-size:10px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--ink-3);margin-bottom:10px;font-weight:500;
+    display:flex;align-items:center;gap:8px;
   }
   .info-block .k::before{
-    content:"";
-    width:5px;height:5px;
-    background:var(--accent);
-    border-radius:50%;
+    content:"";width:5px;height:5px;background:var(--sage);border-radius:50%;
   }
-  .info-block .v{
-    font-size:15px;
-    line-height:1.65;
-    color:var(--ink);
-  }
+  .info-block .v{font-size:15px;line-height:1.65;color:var(--ink)}
   .info-block a{
-    color:var(--ink);
-    text-decoration:none;
+    color:var(--ink);text-decoration:none;
     border-bottom:1px solid var(--line-2);
     transition:border-color .4s ease, color .4s ease;
   }
-  .info-block a:hover{border-color:var(--accent);color:var(--accent)}
+  .info-block a:hover{border-color:var(--petrol);color:var(--petrol)}
 
-  /* ---------- Footer ---------- */
+  /* ============================================================
+     FOOTER
+     ============================================================ */
   footer{
-    position:relative;
-    z-index:2;
+    position:relative;z-index:2;
     border-top:1px solid var(--line);
     padding:36px clamp(20px,3vw,56px);
-    max-width:1520px;
-    margin:0 auto;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:20px;
-    font-size:11px;
-    letter-spacing:.12em;
-    text-transform:uppercase;
+    max-width:1600px;margin:0 auto;
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:20px;
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase;
     color:var(--ink-3);
   }
   footer .f-col{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
   footer a{color:var(--ink-3);text-decoration:none;transition:color .3s ease;cursor:none}
-  footer a:hover{color:var(--accent)}
+  footer a:hover{color:var(--petrol)}
   footer .mark{
-    font-family:'Instrument Serif',serif;
-    font-size:14px;
-    letter-spacing:0;
-    text-transform:none;
-    color:var(--ink);
-    font-style:italic;
+    font-family:'Fraunces',serif;font-size:15px;
+    letter-spacing:0;text-transform:none;
+    color:var(--ink);font-style:italic;
   }
 
-  /* ---------- Reveal ---------- */
+  /* ============================================================
+     REVEAL STATES
+     ============================================================ */
   .reveal{
-    opacity:0;
-    transform:translateY(28px);
+    opacity:0;transform:translateY(28px);
     transition:opacity 1.2s var(--ease), transform 1.2s var(--ease);
   }
   .reveal.in{opacity:1;transform:translateY(0)}
 
-  .reveal-line{
-    display:block;
-    overflow:hidden;
-  }
+  .reveal-line{display:block;overflow:hidden}
   .reveal-line span{
-    display:inline-block;
-    transform:translateY(105%);
-    transition:transform 1.3s var(--ease);
+    display:inline-block;transform:translateY(110%);
+    transition:transform 1.4s var(--ease);
   }
   .reveal-line.in span{transform:translateY(0)}
 
-  /* ---------- Responsive ---------- */
+  .draw-line{
+    stroke-dasharray:400;stroke-dashoffset:400;
+    transition:stroke-dashoffset 2.4s var(--ease);
+  }
+  .draw-line.in{stroke-dashoffset:0}
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
   @media(max-width:1100px){
-    .hero-left{grid-column:1/13}
-    .hero-right{grid-column:1/13;margin-top:60px;max-width:480px}
-    .hero-body{grid-template-columns:1fr;gap:24px}
+    .hero-title{grid-column:1/13}
+    .hero-side{grid-column:1/13;padding-bottom:8vh}
+    .hero-panel{width:70vw;height:50vh}
     .sec-num{grid-column:1/13}
     .sec-title{grid-column:1/13}
     .sec-note{grid-column:1/13;margin-top:20px}
@@ -952,6 +726,8 @@
     .service:nth-child(odd){border-left:1px solid var(--line)}
     .split-image{grid-column:1/13;position:static;aspect-ratio:16/10;max-height:60vh}
     .split-content{grid-column:1/13;margin-top:48px}
+    .stat{grid-column:span 6;padding:48px 24px 48px 0}
+    .stat:nth-child(2n){border-right:none}
     .article{grid-column:span 6}
     .contact-left{grid-column:1/13}
     .contact-right{grid-column:1/13;margin-top:48px}
@@ -961,21 +737,25 @@
     header{padding:16px 20px}
     nav{display:none}
     .logo small{display:none}
-    .hero{padding-top:120px}
-    .hero h1{font-size:clamp(2.6rem,11vw,4rem)}
+    .hero-title{font-size:clamp(2.6rem,11vw,4.4rem)}
+    .hero-panel{width:82vw;height:44vh}
     .service{grid-column:span 12;padding:40px 24px;border-left:1px solid var(--line);border-right:1px solid var(--line)}
     .article{grid-column:span 12}
+    .stat{grid-column:span 12;border-right:none;padding:40px 0}
     .contact-buttons{flex-direction:column;align-items:stretch}
     .btn-primary,.btn-secondary{justify-content:center}
     footer{flex-direction:column;text-align:center}
   }
 
   @media(prefers-reduced-motion:reduce){
-    *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      transition-duration:.01ms !important;
+    }
     .reveal{opacity:1;transform:none}
     .reveal-line span{transform:none}
-    .hero h1 .line span{transform:translateY(0)}
-    .hero-body,.hero-right{opacity:1}
+    .hero-title .line span{transform:translateY(0)}
+    .hero-side,.scroll-hint,.hero-index{opacity:1}
   }
 </style>
 </head>
@@ -993,7 +773,7 @@
 
 <header id="header">
   <a href="#" class="logo" data-cursor>
-    <strong>Δρεβελέγκας<sup>†</sup></strong>
+    <strong>Δρεβελέγκας</strong>
     <small>Ακτινολογία</small>
   </a>
   <nav>
@@ -1003,50 +783,46 @@
     <a href="#contact" data-cursor>Επικοινωνία</a>
   </nav>
   <a href="#contact" class="header-cta" data-cursor>
-    <i></i>
-    <span>Ραντεβού</span>
+    <i></i><span>Ραντεβού</span>
   </a>
 </header>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-left">
-    <div class="hero-meta">
-      <span class="dot"></span>
-      <span>Επεμβατική &amp; Διαγνωστική Ακτινολογία</span>
-      <span style="opacity:.4">—</span>
-      <span>Θεσσαλονίκη</span>
+<!-- ============================================================
+     HERO — CINEMATIC SCROLL SCENE
+     ============================================================ -->
+<div class="hero-scene" id="heroScene">
+  <div class="hero-pin">
+    <!-- Cinematic panel: grows from small to full as you scroll -->
+    <div class="hero-panel" id="heroPanel">
+      <img id="heroImg" src="https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2000&auto=format&fit=crop" alt="Ιατρικός χώρος">
     </div>
 
-    <h1>
-      <span class="line"><span>Ακρίβεια</span></span>
-      <span class="line"><span>στη <em>διάγνωση</em>,</span></span>
-      <span class="line"><span>φροντίδα <span class="amp">/</span> στην πράξη.</span></span>
-    </h1>
+    <div class="hero-text">
+      <h1 class="hero-title">
+        <span class="line"><span>Ακρίβεια</span></span>
+        <span class="line"><span>στη <em>διάγνωση</em>,</span></span>
+        <span class="line"><span>φροντίδα στην πράξη.</span></span>
+      </h1>
 
-    <div class="hero-body">
-      <p>
-        Εξειδικευμένες επεμβατικές και διαγνωστικές πράξεις με έμφαση
-        στην ασφάλεια, την τεκμηρίωση και την ανθρώπινη επαφή.
-      </p>
-      <div class="sig">
-        <strong>Αντώνιος &amp; Κωνσταντίνος Δρεβελέγκας</strong>
-        Ιατροί Ακτινολόγοι —<br>Επεμβατική &amp; Διαγνωστική Ακτινολογία
+      <div class="hero-side">
+        <div class="hero-meta">
+          <span class="kicker">Επεμβατική &amp; Διαγνωστική Ακτινολογία</span>
+          <p>Εξειδικευμένες επεμβατικές και διαγνωστικές πράξεις με έμφαση στην ασφάλεια, την τεκμηρίωση και την ανθρώπινη επαφή.</p>
+          <div class="sig">
+            <strong>Αντώνιος &amp; Κωνσταντίνος Δρεβελέγκας</strong>
+            Ιατροί Ακτινολόγοι
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="hero-right">
+    <div class="scroll-hint">
+      <span class="bar"></span>
+      Scroll
+    </div>
     <div class="hero-index">Fig. 01 — Το ιατρείο</div>
-    <div class="hero-image" data-cursor>
-      <img src="https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=1200&auto=format&fit=crop" alt="Ιατρικός χώρος">
-      <div class="cap">
-        <span>Διαγνωστική απεικόνιση</span>
-        <em>— 2025</em>
-      </div>
-    </div>
   </div>
-</section>
+</div>
 
 <!-- STRIP -->
 <div class="strip">
@@ -1073,10 +849,7 @@
   <div class="sec-head">
     <div class="sec-num reveal">01 / Υπηρεσίες</div>
     <div class="sec-title reveal-line"><span>Επεμβατικές <em>πράξεις</em> με έλεγχο εικόνας.</span></div>
-    <div class="sec-note reveal">
-      Κάθε πράξη εκτελείται κάτω από συνεχή απεικονιστικό έλεγχο, με
-      πρωτόκολλα ασφαλείας και τεκμηρίωση.
-    </div>
+    <div class="sec-note reveal">Κάθε πράξη εκτελείται κάτω από συνεχή απεικονιστικό έλεγχο, με πρωτόκολλα ασφαλείας και τεκμηρίωση.</div>
   </div>
 
   <div class="services">
@@ -1143,29 +916,22 @@
 </section>
 
 <!-- EXPERTISE / SPLIT -->
-<section id="expertise">
+<section id="expertise" style="padding-top:0">
   <div class="sec-head">
     <div class="sec-num reveal">02 / Εξειδίκευση</div>
     <div class="sec-title reveal-line"><span>Δύο ειδικότητες, <em>μία</em> προσέγγιση.</span></div>
-    <div class="sec-note reveal">
-      Η συνέργεια διαγνωστικής και επεμβατικής ακτινολογίας
-      σε ένα ενιαίο πλάνο φροντίδας.
-    </div>
+    <div class="sec-note reveal">Η συνέργεια διαγνωστικής και επεμβατικής ακτινολογίας σε ένα ενιαίο πλάνο φροντίδας.</div>
   </div>
 
   <div class="split">
     <div class="split-image reveal" data-cursor>
       <span class="tag">Fig. 02</span>
-      <img src="https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?q=80&w=1200&auto=format&fit=crop" alt="Ακτινολογικό εργαστήριο">
+      <img src="https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?q=80&w=1400&auto=format&fit=crop" alt="Ακτινολογικό εργαστήριο">
     </div>
 
     <div class="split-content">
-      <h3 class="reveal-line"><span>Από τη <em>διάγνωση</em> στην θεραπευτική πράξη.</span></h3>
-      <p class="reveal">
-        Στο ιατρείο συνδυάζουμε την ακρίβεια της διαγνωστικής απεικόνισης
-        με την άμεση δυνατότητα επέμβασης. Αυτό σημαίνει λιγότερες
-        μετακινήσεις, ταχύτερη λήψη αποφάσεων και συνέχεια στη φροντίδα.
-      </p>
+      <h3 class="reveal-line"><span>Από τη <em>διάγνωση</em> στη θεραπευτική πράξη.</span></h3>
+      <p class="reveal">Στο ιατρείο συνδυάζουμε την ακρίβεια της διαγνωστικής απεικόνισης με την άμεση δυνατότητα επέμβασης. Αυτό σημαίνει λιγότερες μετακινήσεις, ταχύτερη λήψη αποφάσεων και συνέχεια στη φροντίδα.</p>
 
       <ul class="feature-list">
         <li class="reveal" data-cursor>
@@ -1201,15 +967,34 @@
   </div>
 </section>
 
-<!-- ARTICLES / NEWS -->
-<section id="articles">
+<!-- STATS (animated count-up) -->
+<section style="padding-top:0">
+  <div class="stats">
+    <div class="stat reveal">
+      <div class="val"><span class="count" data-target="25">0</span><span class="suf">+</span></div>
+      <div class="lbl">Χρόνια εμπειρίας</div>
+    </div>
+    <div class="stat reveal">
+      <div class="val"><span class="count" data-target="8000">0</span><span class="suf">+</span></div>
+      <div class="lbl">Επεμβάσεις</div>
+    </div>
+    <div class="stat reveal">
+      <div class="val"><span class="count" data-target="2">0</span></div>
+      <div class="lbl">Ειδικότητες</div>
+    </div>
+    <div class="stat reveal">
+      <div class="val"><span class="count" data-target="100">0</span><span class="suf">%</span></div>
+      <div class="lbl">Τεκμηρίωση</div>
+    </div>
+  </div>
+</section>
+
+<!-- ARTICLES -->
+<section id="articles" style="padding-top:0">
   <div class="sec-head">
     <div class="sec-num reveal">03 / Νέα &amp; Άρθρα</div>
     <div class="sec-title reveal-line"><span>Ενημέρωση από την <em>πράξη</em>.</span></div>
-    <div class="sec-note reveal">
-      Σημειώσεις, τεχνικές και παρουσιάσεις από συνέδρια και
-      καθημερινή κλινική εμπειρία.
-    </div>
+    <div class="sec-note reveal">Σημειώσεις, τεχνικές και παρουσιάσεις από συνέδρια και καθημερινή κλινική εμπειρία.</div>
   </div>
 
   <div class="articles">
@@ -1223,15 +1008,12 @@
         <span>Δεκέμβριος 2024</span>
       </div>
       <h3>Θεραπεία της ασβεστοποιού τενοντίτιδος του ώμου — Barbotage</h3>
-      <p>
-        Υπό τον έλεγχο υπερήχων ή αξονικής τομογραφίας εντοπίζεται η επασβέστωση
-        και πραγματοποιείται παροχέτευσή της με στόχο την ανακούφιση του πόνου.
-      </p>
+      <p>Υπό τον έλεγχο υπερήχων ή αξονικής τομογραφίας εντοπίζεται η επασβέστωση και πραγματοποιείται παροχέτευσή της με στόχο την ανακούφιση του πόνου.</p>
     </a>
 
     <a href="#" class="article reveal" data-cursor>
       <div class="article-img">
-        <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?q=80&w=1200&auto=format&fit=crop" alt="Επεμβατική πράξη">
+        <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?q=80&w=1200&auto=format&fit=crop" alt="Συνέδριο">
       </div>
       <div class="article-meta">
         <span class="cat">Συνέδριο</span>
@@ -1239,10 +1021,7 @@
         <span>Νοέμβριος 2024</span>
       </div>
       <h3>Παρουσίαση σε συνέδριο επεμβατικής ακτινολογίας</h3>
-      <p>
-        Παρουσίαση περιστατικών και τεχνικών σε πανελλήνιο συνέδριο,
-        με έμφαση στην ελάχιστη επεμβατικότητα και την ταχεία αποκατάσταση.
-      </p>
+      <p>Παρουσίαση περιστατικών και τεχνικών σε πανελλήνιο συνέδριο, με έμφαση στην ελάχιστη επεμβατικότητα και την ταχεία αποκατάσταση.</p>
     </a>
 
     <a href="#" class="article reveal" data-cursor>
@@ -1255,10 +1034,7 @@
         <span>Οκτώβριος 2024</span>
       </div>
       <h3>Αξονική τομογραφία χαμηλής δόσης — πότε και γιατί</h3>
-      <p>
-        Επιλογή πρωτοκόλλου με βάση την κλινική ένδειξη, με στόχο τη μέγιστη
-        διαγνωστική αξία και την ελάχιστη επιβάρυνση.
-      </p>
+      <p>Επιλογή πρωτοκόλλου με βάση την κλινική ένδειξη, με στόχο τη μέγιστη διαγνωστική αξία και την ελάχιστη επιβάρυνση.</p>
     </a>
   </div>
 </section>
@@ -1269,14 +1045,10 @@
     <div class="contact-left">
       <div class="sec-num reveal" style="margin-bottom:32px">04 / Επικοινωνία</div>
       <h2 class="reveal-line"><span>Κλείστε <em>ραντεβού</em>.</span></h2>
-      <p class="reveal">
-        Για προγραμματισμό εξέτασης ή επέμβασης, επικοινωνήστε τηλεφωνικά.
-        Θα σας ενημερώσουμε για την προετοιμασία και τα απαραίτητα έγγραφα.
-      </p>
+      <p class="reveal">Για προγραμματισμό εξέτασης ή επέμβασης, επικοινωνήστε τηλεφωνικά. Θα σας ενημερώσουμε για την προετοιμασία και τα απαραίτητα έγγραφα.</p>
       <div class="contact-buttons reveal">
         <a href="tel:+302310000000" class="btn-primary" data-cursor>
-          <i></i>
-          <span>Τηλεφωνικό ραντεβού</span>
+          <i></i><span>Τηλεφωνικό ραντεβού</span>
         </a>
         <a href="mailto:info@drevelegas.gr" class="btn-secondary" data-cursor>
           <span>Email επικοινωνία</span>
@@ -1314,43 +1086,33 @@
     <a href="#" data-cursor>Πολιτική απορρήτου</a>
     <a href="#" data-cursor>Όροι χρήσης</a>
   </div>
-  <div class="f-col">
-    <span>© 2025</span>
-  </div>
+  <div class="f-col"><span>© 2025</span></div>
 </footer>
 
 <script>
 (function(){
-  // ---------- Custom cursor with lerp ----------
+  /* ============================================================
+     CUSTOM CURSOR with lerp
+     ============================================================ */
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
-  let mx = window.innerWidth/2, my = window.innerHeight/2;
-  let rx = mx, ry = my;
-  let cx = mx, cy = my;
+  let mx = innerWidth/2, my = innerHeight/2;
+  let cx = mx, cy = my, rx = mx, ry = my;
 
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX;
-    my = e.clientY;
-  });
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 
   function loop(){
-    // cursor: fast lerp
-    cx += (mx - cx) * 0.35;
-    cy += (my - cy) * 0.35;
-    // ring: slow lerp (smooth trailing)
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-
-    cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%,-50%)`;
-    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
-
+    cx += (mx - cx) * 0.4;
+    cy += (my - cy) * 0.4;
+    rx += (mx - rx) * 0.14;
+    ry += (my - ry) * 0.14;
+    cursor.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%)`;
+    ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
     requestAnimationFrame(loop);
   }
   loop();
 
-  // hover state for interactive elements
-  const interactive = document.querySelectorAll('[data-cursor], a, button');
-  interactive.forEach(el => {
+  document.querySelectorAll('[data-cursor], a, button').forEach(el => {
     el.addEventListener('mouseenter', () => {
       cursor.classList.add('hover');
       ring.classList.add('hover');
@@ -1361,31 +1123,97 @@
     });
   });
 
-  // ---------- Progress bar ----------
+  /* ============================================================
+     PROGRESS BAR
+     ============================================================ */
   const progress = document.getElementById('progress');
-  window.addEventListener('scroll', () => {
+  function updateProgress(){
     const h = document.documentElement;
     const p = h.scrollTop / (h.scrollHeight - h.clientHeight);
     progress.style.width = (p * 100) + '%';
-  }, { passive:true });
+  }
 
-  // ---------- Header state ----------
+  /* ============================================================
+     HEADER
+     ============================================================ */
   const header = document.getElementById('header');
-  let lastY = 0;
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    if (y > 40) header.classList.add('scrolled');
+  function updateHeader(){
+    if (scrollY > 40) header.classList.add('scrolled');
     else header.classList.remove('scrolled');
-    lastY = y;
+  }
+
+  /* ============================================================
+     HERO SCROLL-DRIVEN CINEMATIC SCENE
+     ============================================================ */
+  const heroScene = document.getElementById('heroScene');
+  const heroPanel = document.getElementById('heroPanel');
+  const heroImg = document.getElementById('heroImg');
+
+  function updateHero(){
+    const rect = heroScene.getBoundingClientRect();
+    const total = heroScene.offsetHeight - innerHeight;
+    const p = Math.min(Math.max(-rect.top / total, 0), 1); // 0..1
+
+    // panel grows from 38vw x 56vh → 92vw x 92vh
+    const wStart = 38, wEnd = 92;
+    const hStart = 56, hEnd = 92;
+    const w = wStart + (wEnd - wStart) * p;
+    const h = hStart + (hEnd - hStart) * p;
+    heroPanel.style.width = w + 'vw';
+    heroPanel.style.height = h + 'vh';
+
+    // image: unzoom + desaturate removal
+    const scale = 1.15 - 0.15 * p;
+    const sat = 80 - 80 * p;      // 80% → 0%
+    const bri = 1.02 + 0.03 * p;
+    heroImg.style.transform = `scale(${scale})`;
+    heroImg.style.filter = `grayscale(${sat}%) contrast(${1.05 + 0.02*p}) brightness(${bri})`;
+
+    // subtle parallax on the panel itself
+    heroPanel.style.transform =
+      `translate(-50%,-50%) translateY(${(0.5-p)*4}vh)`;
+  }
+
+  /* ============================================================
+     SCROLL LISTENER (batched)
+     ============================================================ */
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        updateProgress();
+        updateHeader();
+        updateHero();
+        updateSplitParallax();
+        ticking = false;
+      });
+      ticking = true;
+    }
   }, { passive:true });
 
-  // ---------- Reveal on scroll ----------
+  /* ============================================================
+     SPLIT IMAGE PARALLAX
+     ============================================================ */
+  const splitImg = document.querySelector('.split-image img');
+  function updateSplitParallax(){
+    if (!splitImg) return;
+    const r = splitImg.parentElement.getBoundingClientRect();
+    const vh = innerHeight;
+    if (r.top < vh && r.bottom > 0){
+      const prog = (vh - r.top) / (vh + r.height);
+      const shift = (prog - 0.5) * 36;
+      splitImg.style.transform = `translateY(${shift}px) scale(1.08)`;
+    }
+  }
+
+  /* ============================================================
+     REVEAL ON SCROLL
+     ============================================================ */
   const revealEls = document.querySelectorAll('.reveal, .reveal-line');
   const io = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
       if (entry.isIntersecting) {
-        const delay = Math.min(i * 70, 350);
-        setTimeout(() => entry.target.classList.add('in'), delay);
+        setTimeout(() => entry.target.classList.add('in'), Math.min(i*70, 350));
         io.unobserve(entry.target);
       }
     });
@@ -1393,40 +1221,56 @@
 
   revealEls.forEach(el => io.observe(el));
 
-  // ---------- Scroll-linked parallax for split image ----------
-  const splitImg = document.querySelector('.split-image img');
-  if (splitImg) {
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const rect = splitImg.parentElement.getBoundingClientRect();
-          const vh = window.innerHeight;
-          if (rect.top < vh && rect.bottom > 0) {
-            const progress = (vh - rect.top) / (vh + rect.height);
-            const shift = (progress - 0.5) * 40;
-            splitImg.style.transform = `translateY(${shift}px) scale(1.08)`;
-          }
-          ticking = false;
-        });
-        ticking = true;
+  /* ============================================================
+     COUNT-UP NUMBERS
+     ============================================================ */
+  const counters = document.querySelectorAll('.count');
+  const countIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting){
+        const el = entry.target;
+        const target = parseFloat(el.dataset.target);
+        const dur = 1800;
+        const t0 = performance.now();
+        const format = (v) => {
+          const n = Math.round(v);
+          return n.toLocaleString('el-GR');
+        };
+        function step(t){
+          const p = Math.min((t - t0) / dur, 1);
+          // easeOutExpo
+          const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
+          el.textContent = format(target * eased);
+          if (p < 1) requestAnimationFrame(step);
+          else el.textContent = format(target);
+        }
+        requestAnimationFrame(step);
+        countIO.unobserve(el);
       }
-    }, { passive:true });
-  }
+    });
+  }, { threshold: 0.6 });
 
-  // ---------- Magnetic subtle effect on primary buttons ----------
-  const magnets = document.querySelectorAll('.btn-primary, .header-cta');
-  magnets.forEach(btn => {
-    btn.addEventListener('mousemove', (e) => {
-      const rect = btn.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width/2;
-      const y = e.clientY - rect.top - rect.height/2;
-      btn.style.transform = `translate(${x * 0.15}px, ${y * 0.25}px)`;
+  counters.forEach(el => countIO.observe(el));
+
+  /* ============================================================
+     MAGNETIC BUTTONS
+     ============================================================ */
+  document.querySelectorAll('.btn-primary, .header-cta').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+      const r = btn.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width/2;
+      const y = e.clientY - r.top - r.height/2;
+      btn.style.transform = `translate(${x*0.15}px, ${y*0.28}px)`;
     });
-    btn.addEventListener('mouseleave', () => {
-      btn.style.transform = '';
-    });
+    btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
   });
+
+  /* ============================================================
+     INITIAL
+     ============================================================ */
+  updateProgress();
+  updateHeader();
+  updateHero();
 })();
 </script>
 </body>
