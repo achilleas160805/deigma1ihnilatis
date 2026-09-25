@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ιχνηλάτης Ονείρων — Κτήμα Κλημεντίνη</title>
+<style>
+  :root{
+    --ink:#111;
+    --paper:#f4f1ea;
+    --accent:#c4451c;
+    --accent-2:#1c5c4a;
+    --grey:#8a857c;
+    --grid: 1px solid rgba(17,17,17,.08);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+
+  html{scroll-behavior:smooth}
+
+  body{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    cursor: default;
+  }
+
+  /* ---------- Grid overlay (Swiss) ---------- */
+  .grid-lines{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:1;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    max-width:1400px;
+    margin:0 auto;
+    left:0;right:0;
+    padding:0 24px;
+  }
+  .grid-lines span{border-left:var(--grid);height:100%}
+  .grid-lines span:last-child{border-right:var(--grid)}
+
+  /* ---------- Cinematic grain + vignette ---------- */
+  .grain{
+    position:fixed;inset:-50%;
+    width:200%;height:200%;
+    pointer-events:none;
+    z-index:900;
+    opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation:grain 8s steps(10) infinite;
+  }
+  @keyframes grain{
+    0%,100%{transform:translate(0,0)}
+    10%{transform:translate(-5%,-10%)}
+    30%{transform:translate(3%,-15%)}
+    50%{transform:translate(12%,9%)}
+    70%{transform:translate(-9%,4%)}
+    90%{transform:translate(2%,7%)}
+  }
+
+  .vignette{
+    position:fixed;inset:0;
+    pointer-events:none;
+    z-index:899;
+    background:radial-gradient(ellipse at center, transparent 55%, rgba(17,17,17,.18) 100%);
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;
+    z-index:100;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:22px 32px;
+    mix-blend-mode:multiply;
+    transition:transform .6s cubic-bezier(.16,1,.3,1);
+  }
+  header.hide{transform:translateY(-100%)}
+
+  .logo{
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    line-height:1.1;
+  }
+  .logo small{
+    display:block;
+    font-weight:400;
+    letter-spacing:.28em;
+    font-size:9px;
+    color:var(--grey);
+    margin-top:4px;
+  }
+
+  nav{display:flex;gap:36px}
+  nav a{
+    color:var(--ink);
+    text-decoration:none;
+    font-size:11px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    font-weight:500;
+    position:relative;
+    padding:4px 0;
+    overflow:hidden;
+  }
+  nav a::after{
+    content:"";
+    position:absolute;bottom:0;left:0;
+    width:100%;height:1px;
+    background:var(--ink);
+    transform:scaleX(0);
+    transform-origin:right;
+    transition:transform .5s cubic-bezier(.16,1,.3,1);
+  }
+  nav a:hover::after{transform:scaleX(1);transform-origin:left}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    min-height:100vh;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    align-items:end;
+    padding:0 32px 64px;
+    position:relative;
+    gap:24px;
+  }
+
+  .hero-title{
+    grid-column:1/10;
+    position:relative;
+    z-index:2;
+  }
+
+  .hero-title h1{
+    font-size:clamp(3rem,10vw,9.5rem);
+    font-weight:700;
+    letter-spacing:-.04em;
+    line-height:.88;
+    text-transform:uppercase;
+  }
+
+  .hero-title h1 .line{
+    display:block;
+    overflow:hidden;
+  }
+  .hero-title h1 .line span{
+    display:block;
+    transform:translateY(110%);
+    animation:riseUp 1.4s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  .hero-title h1 .line:nth-child(1) span{animation-delay:.2s}
+  .hero-title h1 .line:nth-child(2) span{animation-delay:.35s;padding-left:.08em}
+
+  @keyframes riseUp{to{transform:translateY(0)}}
+
+  .hero-title h1 em{
+    font-style:normal;
+    color:var(--accent);
+    font-weight:400;
+  }
+
+  .hero-meta{
+    grid-column:10/13;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    padding-bottom:8px;
+  }
+
+  .hero-meta p{
+    font-size:12px;
+    line-height:1.7;
+    letter-spacing:.04em;
+    color:#3a3733;
+    max-width:22ch;
+  }
+
+  .hero-meta .tag{
+    font-size:10px;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    color:var(--accent-2);
+    font-weight:600;
+  }
+
+  .hero-scroll{
+    position:absolute;
+    bottom:24px;
+    left:32px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:10px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--grey);
+    z-index:3;
+  }
+  .hero-scroll .bar{
+    width:60px;height:1px;
+    background:var(--grey);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-scroll .bar::after{
+    content:"";
+    position:absolute;inset:0;
+    background:var(--ink);
+    animation:scrollBar 2.4s cubic-bezier(.16,1,.3,1) infinite;
+  }
+  @keyframes scrollBar{
+    0%{transform:translateX(-100%)}
+    50%{transform:translateX(0)}
+    100%{transform:translateX(100%)}
+  }
+
+  /* ---------- Section base ---------- */
+  section{
+    position:relative;
+    z-index:2;
+    padding:140px 32px;
+  }
+
+  .section-label{
+    font-size:10px;
+    letter-spacing:.3em;
+    text-transform:uppercase;
+    color:var(--accent-2);
+    font-weight:600;
+    margin-bottom:48px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .section-label::before{
+    content:"";
+    width:32px;height:1px;
+    background:var(--accent-2);
+  }
+
+  /* ---------- Manifesto / About ---------- */
+  .manifesto{
+    max-width:1400px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    gap:24px;
+  }
+
+  .manifesto .quote{
+    grid-column:1/9;
+    font-size:clamp(1.5rem,3.4vw,3.2rem);
+    font-weight:400;
+    line-height:1.18;
+    letter-spacing:-.02em;
+  }
+
+  .manifesto .quote strong{
+    font-weight:700;
+  }
+
+  .manifesto .quote .accent{
+    color:var(--accent);
+    font-style:italic;
+    font-weight:400;
+  }
+
+  .manifesto .side{
+    grid-column:10/13;
+    display:flex;
+    flex-direction:column;
+    gap:28px;
+    padding-top:8px;
+  }
+
+  .manifesto .side p{
+    font-size:13px;
+    line-height:1.85;
+    color:#3a3733;
+  }
+
+  .manifesto .side .num{
+    font-size:clamp(3rem,6vw,5rem);
+    font-weight:700;
+    line-height:1;
+    letter-spacing:-.03em;
+    color:var(--ink);
+  }
+  .manifesto .side .num small{
+    display:block;
+    font-size:10px;
+    font-weight:500;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--grey);
+    margin-top:8px;
+  }
+
+  /* ---------- Experiences ---------- */
+  .experiences{
+    max-width:1400px;
+    margin:0 auto;
+  }
+
+  .exp-grid{
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    gap:24px;
+    border-top:1px solid rgba(17,17,17,.15);
+  }
+
+  .exp-item{
+    grid-column:span 4;
+    padding:48px 0;
+    border-bottom:1px solid rgba(17,17,17,.15);
+    position:relative;
+    overflow:hidden;
+    cursor:pointer;
+  }
+  .exp-item::before{
+    content:"";
+    position:absolute;
+    bottom:0;left:0;
+    width:100%;height:0;
+    background:var(--ink);
+    z-index:0;
+    transition:height .7s cubic-bezier(.16,1,.3,1);
+  }
+  .exp-item:hover::before{height:100%}
+  .exp-item:hover .exp-content{color:var(--paper)}
+
+  .exp-content{position:relative;z-index:1;transition:color .5s ease, transform .6s cubic-bezier(.16,1,.3,1)}
+  .exp-item:hover .exp-content{transform:translateY(-6px)}
+
+  .exp-num{
+    font-size:10px;
+    letter-spacing:.3em;
+    text-transform:uppercase;
+    color:var(--grey);
+    margin-bottom:32px;
+    transition:color .5s ease;
+  }
+  .exp-item:hover .exp-num{color:rgba(244,241,234,.5)}
+
+  .exp-item h3{
+    font-size:clamp(1.4rem,2.6vw,2.2rem);
+    font-weight:700;
+    letter-spacing:-.02em;
+    line-height:1.05;
+    margin-bottom:16px;
+    text-transform:uppercase;
+  }
+
+  .exp-item p{
+    font-size:13px;
+    line-height:1.8;
+    color:#3a3733;
+    max-width:32ch;
+    transition:color .5s ease;
+  }
+  .exp-item:hover p{color:rgba(244,241,234,.7)}
+
+  /* ---------- Swiss buttons (no AI look) ---------- */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:14px;
+    font-size:11px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    font-weight:600;
+    color:var(--ink);
+    text-decoration:none;
+    padding:16px 0;
+    position:relative;
+    background:none;
+    border:none;
+    cursor:pointer;
+    font-family:inherit;
+    transition:color .4s ease;
+  }
+
+  .btn .arrow{
+    display:inline-block;
+    width:22px;height:1px;
+    background:currentColor;
+    position:relative;
+    transition:width .5s cubic-bezier(.16,1,.3,1);
+  }
+  .btn .arrow::after{
+    content:"";
+    position:absolute;
+    right:0;top:50%;
+    width:6px;height:6px;
+    border-top:1px solid currentColor;
+    border-right:1px solid currentColor;
+    transform:translateY(-50%) rotate(45deg);
+  }
+  .btn:hover .arrow{width:44px}
+
+  .btn-solid{
+    background:var(--ink);
+    color:var(--paper);
+    padding:18px 36px;
+    position:relative;
+    overflow:hidden;
+    transition:color .5s ease;
+  }
+  .btn-solid::before{
+    content:"";
+    position:absolute;inset:0;
+    background:var(--accent);
+    transform:translateY(101%);
+    transition:transform .6s cubic-bezier(.16,1,.3,1);
+    z-index:0;
+  }
+  .btn-solid:hover::before{transform:translateY(0)}
+  .btn-solid span{position:relative;z-index:1}
+
+  .btn-ghost{
+    border:1px solid var(--ink);
+    padding:16px 32px;
+    position:relative;
+    overflow:hidden;
+    transition:color .5s ease;
+  }
+  .btn-ghost::before{
+    content:"";
+    position:absolute;inset:0;
+    background:var(--ink);
+    transform:scaleX(0);
+    transform-origin:right;
+    transition:transform .6s cubic-bezier(.16,1,.3,1);
+    z-index:0;
+  }
+  .btn-ghost:hover::before{transform:scaleX(1);transform-origin:left}
+  .btn-ghost:hover{color:var(--paper)}
+  .btn-ghost span{position:relative;z-index:1}
+
+  /* ---------- Gallery / Cinematic ---------- */
+  .gallery{
+    max-width:1400px;
+    margin:0 auto;
+  }
+
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    gap:24px;
+  }
+
+  .g-frame{
+    position:relative;
+    overflow:hidden;
+    background:#d9d3c7;
+  }
+  .g-frame img{
+    width:100%;height:100%;
+    object-fit:cover;
+    display:block;
+    filter:grayscale(20%) contrast(1.05);
+    transition:transform 1.4s cubic-bezier(.16,1,.3,1), filter .8s ease;
+  }
+  .g-frame:hover img{
+    transform:scale(1.06);
+    filter:grayscale(0%) contrast(1.1);
+  }
+  .g-frame::after{
+    content:"";
+    position:absolute;inset:0;
+    background:linear-gradient(to top, rgba(17,17,17,.35), transparent 50%);
+    pointer-events:none;
+  }
+
+  .g-frame .cap{
+    position:absolute;
+    bottom:20px;left:20px;
+    color:var(--paper);
+    font-size:10px;
+    letter-spacing:.26em;
+    text-transform:uppercase;
+    z-index:2;
+  }
+
+  .g1{grid-column:1/8; height:70vh; min-height:420px}
+  .g2{grid-column:8/13; height:70vh; min-height:420px; margin-top:80px}
+  .g3{grid-column:1/5; height:50vh; min-height:320px}
+  .g4{grid-column:5/9; height:50vh; min-height:320px; margin-top:60px}
+  .g5{grid-column:9/13; height:50vh; min-height:320px}
+
+  /* ---------- Stats / Reviews ---------- */
+  .stats{
+    max-width:1400px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    gap:24px;
+    border-top:1px solid rgba(17,17,17,.15);
+    border-bottom:1px solid rgba(17,17,17,.15);
+  }
+
+  .stat{
+    grid-column:span 3;
+    padding:64px 0;
+    border-right:1px solid rgba(17,17,17,.15);
+  }
+  .stat:last-child{border-right:none}
+
+  .stat .val{
+    font-size:clamp(2.6rem,5vw,4.4rem);
+    font-weight:700;
+    letter-spacing:-.04em;
+    line-height:1;
+    margin-bottom:14px;
+  }
+  .stat .lbl{
+    font-size:10px;
+    letter-spacing:.26em;
+    text-transform:uppercase;
+    color:var(--grey);
+  }
+
+  .stars{
+    display:flex;
+    gap:4px;
+    margin-bottom:14px;
+  }
+  .stars i{
+    display:block;
+    width:12px;height:12px;
+    background:var(--accent);
+    clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  }
+
+  /* ---------- Contact / Footer ---------- */
+  .contact{
+    max-width:1400px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    gap:24px;
+    align-items:end;
+  }
+
+  .contact-title{
+    grid-column:1/8;
+  }
+  .contact-title h2{
+    font-size:clamp(2.4rem,6vw,5.5rem);
+    font-weight:700;
+    letter-spacing:-.04em;
+    line-height:.92;
+    text-transform:uppercase;
+  }
+  .contact-title h2 em{
+    font-style:normal;
+    color:var(--accent);
+    font-weight:400;
+  }
+
+  .contact-info{
+    grid-column:9/13;
+    display:flex;
+    flex-direction:column;
+    gap:28px;
+    padding-bottom:12px;
+  }
+
+  .info-block .k{
+    font-size:10px;
+    letter-spacing:.26em;
+    text-transform:uppercase;
+    color:var(--grey);
+    margin-bottom:8px;
+  }
+  .info-block .v{
+    font-size:15px;
+    line-height:1.6;
+    letter-spacing:.01em;
+  }
+  .info-block a{
+    color:var(--ink);
+    text-decoration:none;
+    border-bottom:1px solid rgba(17,17,17,.3);
+    transition:border-color .4s ease, color .4s ease;
+  }
+  .info-block a:hover{
+    border-color:var(--accent);
+    color:var(--accent);
+  }
+
+  .cta-row{
+    grid-column:1/13;
+    margin-top:72px;
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+
+  footer{
+    max-width:1400px;
+    margin:0 auto;
+    padding:64px 32px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:10px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--grey);
+    border-top:1px solid rgba(17,17,17,.15);
+  }
+  footer .made{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  footer .dot{
+    width:5px;height:5px;
+    border-radius:50%;
+    background:var(--accent);
+    animation:pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:.4;transform:scale(.7)}
+  }
+
+  /* ---------- Reveal on scroll ---------- */
+  .reveal{
+    opacity:0;
+    transform:translateY(40px);
+    transition:opacity 1.1s cubic-bezier(.16,1,.3,1), transform 1.1s cubic-bezier(.16,1,.3,1);
+  }
+  .reveal.in{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  /* ---------- Progress bar ---------- */
+  .progress{
+    position:fixed;
+    top:0;left:0;
+    height:2px;
+    background:var(--accent);
+    z-index:1000;
+    width:0%;
+    transition:width .1s linear;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:900px){
+    .grid-lines{display:none}
+    header{padding:18px 20px}
+    nav{gap:20px}
+    nav a{font-size:9px;letter-spacing:.16em}
+    .hero{padding:0 20px 80px}
+    .hero-title{grid-column:1/13}
+    .hero-meta{grid-column:1/13;margin-top:32px}
+    .hero-scroll{left:20px}
+    section{padding:80px 20px}
+    .manifesto .quote{grid-column:1/13}
+    .manifesto .side{grid-column:1/13;margin-top:40px}
+    .exp-item{grid-column:span 12}
+    .stat{grid-column:span 6;border-right:none}
+    .stat:nth-child(odd){border-right:1px solid rgba(17,17,17,.15)}
+    .g1,.g2,.g3,.g4,.g5{grid-column:1/13;height:50vh;margin-top:0}
+    .contact-title{grid-column:1/13}
+    .contact-info{grid-column:1/13;margin-top:40px}
+    footer{flex-direction:column;gap:16px;text-align:center;padding:48px 20px 32px}
+  }
+
+  @media(max-width:520px){
+    nav{display:none}
+    .hero-title h1{font-size:2.8rem}
+    .stat{grid-column:span 12;border-right:none;padding:40px 0}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="grain"></div>
+<div class="vignette"></div>
+
+<div class="grid-lines" aria-hidden="true">
+  <span></span><span></span><span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<header id="header">
+  <div class="logo">
+    Ιχνηλάτης Ονείρων
+    <small>Κτήμα Κλημεντίνη</small>
+  </div>
+  <nav>
+    <a href="#about">Κτήμα</a>
+    <a href="#experiences">Εμπειρίες</a>
+    <a href="#gallery">Εικόνες</a>
+    <a href="#contact">Επικοινωνία</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-title">
+    <h1>
+      <span class="line"><span>Ιχνηλάτης</span></span>
+      <span class="line"><span>Ονείρων <em>—</em></span></span>
+    </h1>
+  </div>
+
+  <div class="hero-meta">
+    <span class="tag">Κτήμα Κλημεντίνη · Βόλβη</span>
+    <p>Χώρος ιππασίας και θεραπευτικής επαφής με το άλογο, στη σκιά της Κορώνειας.</p>
+    <a href="#about" class="btn">
+      <span class="arrow"></span>
+      Ανακάλυψε
+    </a>
+  </div>
+
+  <div class="hero-scroll">
+    <span class="bar"></span>
+    Scroll
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section id="about">
+  <div class="manifesto">
+    <div class="section-label reveal">01 — Το Κτήμα</div>
+    <div class="quote reveal">
+      Ένας τόπος όπου το άλογο δεν είναι εργαλείο, αλλά <strong>συνταξιδιώτης</strong>.
+      Εδώ τα όνειρα <span class="accent">ιχνηλατούνται</span> βήμα βήμα, με σεβασμό, σιωπή και χρόνο.
+    </div>
+
+    <div class="side reveal">
+      <p>
+        Στο Κτήμα Κλημεντίνη, στη Βόλβη, η ιππασία γίνεται θεραπεία και η θεραπεία γίνεται σχέση.
+        Μια επιχείρηση χτισμένη πάνω στην εμπιστοσύνη ανθρώπου και ζώου.
+      </p>
+      <div class="num">
+        4,7
+        <small>179 Αξιολογήσεις</small>
+      </div>
+      <a href="#experiences" class="btn">
+        <span class="arrow"></span>
+        Δες τις εμπειρίες
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCES -->
+<section id="experiences">
+  <div class="experiences">
+    <div class="section-label reveal">02 — Εμπειρίες</div>
+    <div class="exp-grid">
+      <article class="exp-item reveal">
+        <div class="exp-content">
+          <div class="exp-num">01 / Ιππασία</div>
+          <h3>Βόλτα στο Κτήμα</h3>
+          <p>Καθοδηγούμενη ιππασία σε μονοπάτια της Κορώνειας, για αρχάριους και έμπειρους.</p>
+        </div>
+      </article>
+
+      <article class="exp-item reveal">
+        <div class="exp-content">
+          <div class="exp-num">02 / Θεραπεία</div>
+          <h3>Ιπποθεραπεία</h3>
+          <p>Συνεδρίες θεραπευτικής επαφής με το άλογο, σχεδιασμένες με σεβασμό στις ανάγκες σου.</p>
+        </div>
+      </article>
+
+      <article class="exp-item reveal">
+        <div class="exp-content">
+          <div class="exp-num">03 / Εκπαίδευση</div>
+          <h3>Μαθήματα Φροντίδας</h3>
+          <p>Μαθαίνεις να φροντίζεις, να κατανοείς και να επικοινωνείς με το άλογο — όχι μόνο να καβαλάς.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="gallery">
+    <div class="section-label reveal">03 — Εικόνες</div>
+    <div class="gallery-grid">
+      <div class="g-frame g1 reveal">
+        <img src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?q=80&w=1600&auto=format&fit=crop" alt="Άλογο στο κτήμα">
+        <span class="cap">Κτήμα Κλημεντίνη</span>
+      </div>
+      <div class="g-frame g2 reveal">
+        <img src="https://images.unsplash.com/photo-1534773728080-33d31da27ae5?q=80&w=1600&auto=format&fit=crop" alt="Ιππασία">
+        <span class="cap">Μονοπάτι Κορώνειας</span>
+      </div>
+      <div class="g-frame g3 reveal">
+        <img src="https://images.unsplash.com/photo-1598974357801-cbca100e65d3?q=80&w=1200&auto=format&fit=crop" alt="Φροντίδα αλόγου">
+        <span class="cap">Φροντίδα</span>
+      </div>
+      <div class="g-frame g4 reveal">
+        <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=1200&auto=format&fit=crop" alt="Θεραπευτική επαφή">
+        <span class="cap">Θεραπευτική Επαφή</span>
+      </div>
+      <div class="g-frame g5 reveal">
+        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200&auto=format&fit=crop" alt="Ηλιοβασίλεμα">
+        <span class="cap">Ηλιοβασίλεμα στη Βόλβη</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section>
+  <div class="stats">
+    <div class="stat reveal">
+      <div class="stars"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="val">4,7</div>
+      <div class="lbl">Μέση βαθμολογία</div>
+    </div>
+    <div class="stat reveal">
+      <div class="val">179</div>
+      <div class="lbl">Αξιολογήσεις</div>
+    </div>
+    <div class="stat reveal">
+      <div class="val">100%</div>
+      <div class="lbl">Σεβασμός στο ζώο</div>
+    </div>
+    <div class="stat reveal">
+      <div class="val">Βόλβη</div>
+      <div class="lbl">ΕΟ Θεσσαλονίκης — Καβάλας</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact">
+    <div class="section-label reveal">04 — Επικοινωνία</div>
+    <div class="contact-title reveal">
+      <h2>Έλα να <em>ιχνηλατήσεις</em> το όνειρό σου.</h2>
+    </div>
+
+    <div class="contact-info reveal">
+      <div class="info-block">
+        <div class="k">Διεύθυνση</div>
+        <div class="v">ΕΟ Θεσσαλονίκης Καβάλας,<br>Βόλβη 572 00</div>
+      </div>
+      <div class="info-block">
+        <div class="k">Τηλέφωνο</div>
+        <div class="v"><a href="tel:+306907740545">690 774 0545</a></div>
+      </div>
+      <div class="info-block">
+        <div class="k">Ιστοσελίδα</div>
+        <div class="v"><a href="https://ixnilatistherapy.gr" target="_blank" rel="noopener">ixnilatistherapy.gr</a></div>
+      </div>
+      <div class="info-block">
+        <div class="k">Plus Code</div>
+        <div class="v">M3FQ+CF Κορώνεια</div>
+      </div>
+    </div>
+
+    <div class="cta-row reveal">
+      <a href="tel:+306907740545" class="btn-solid">
+        <span>Κάλεσε τώρα</span>
+      </a>
+      <a href="https://ixnilatistherapy.gr" target="_blank" rel="noopener" class="btn-ghost">
+        <span>Επίσκεψη site</span>
+      </a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Ιχνηλάτης+Ονείρων+Κτήμα+Κλημεντίνη" target="_blank" rel="noopener" class="btn">
+        <span class="arrow"></span>
+        Οδηγίες χάρτη
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>Ιχνηλάτης Ονείρων — Κτήμα Κλημεντίνη</div>
+  <div class="made">
+    <span class="dot"></span>
+    Φτιαγμένο με σεβασμό στο ζώο
+  </div>
+  <div>© 2025</div>
+</footer>
+
+<script>
+  // ---------- Scroll progress ----------
+  const progress = document.getElementById('progress');
+  const header = document.getElementById('header');
+  let lastY = 0;
+
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight);
+    progress.style.width = (scrolled * 100) + '%';
+
+    const y = window.scrollY;
+    if (y > 120 && y > lastY) {
+      header.classList.add('hide');
+    } else {
+      header.classList.remove('hide');
+    }
+    lastY = y;
+  }, { passive: true });
+
+  // ---------- Reveal on scroll ----------
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('in'), i * 90);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+  reveals.forEach(el => io.observe(el));
+
+  // ---------- Cinematic parallax on gallery ----------
+  const frames = document.querySelectorAll('.g-frame img');
+  window.addEventListener('scroll', () => {
+    const vh = window.innerHeight;
+    frames.forEach(img => {
+      const rect = img.parentElement.getBoundingClientRect();
+      if (rect.top < vh && rect.bottom > 0) {
+        const speed = (rect.top / vh) * 18;
+        img.style.transform = `translateY(${speed}px) scale(1.08)`;
+      }
+    });
+  }, { passive: true });
+
+  // ---------- Magnetic 
