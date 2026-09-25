@@ -3,1626 +3,782 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Δρεβελέγκας — Επεμβατική & Διαγνωστική Ακτινολογία</title>
+<title>Ιχνηλάτης Ονείρων — Θεραπευτική & Εκπαιδευτική Ιππασία | Βόλβη, Θεσσαλονίκη</title>
+<meta name="description" content="Ιχνηλάτης Ονείρων — Θεραπευτική & Εκπαιδευτική Ιππασία, Vaulting, τμήματα ενηλίκων. Κτήμα Κλημεντίνη, Βόλβη Θεσσαλονίκης.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232F4A3C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 20c2-4 5-6 9-6 4 0 6-2 6-5 0-2-1-4-3-5 0 3-2 4-4 4H8c-2 0-4 2-4 5 0 2 0 4-1 7z'/><circle cx='17' cy='6' r='1'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --paper:#f7f6f2;
-    --paper-2:#edebe4;
-    --ink:#0e1b2c;
-    --ink-2:#2c3a4f;
-    --ink-3:#6a7488;
-    --line:#dcd9d0;
-    --line-2:#c7c3b7;
-    --petrol:#1f4d5c;
-    --petrol-2:#0e3540;
-    --sage:#7d9682;
-    --coral:#c9755a;
-    --ease:cubic-bezier(.22,1,.36,1);
-    --ease-io:cubic-bezier(.65,.05,.36,1);
-  }
+:root{
+  --forest:#2f4a3c;
+  --forest-d:#1e3329;
+  --forest-l:#456b57;
+  --sand:#f6efe4;
+  --sand-d:#ece2d0;
+  --cream:#fbf7f0;
+  --clay:#b8674b;
+  --clay-d:#8f4c35;
+  --gold:#c9a24b;
+  --gold-l:#e0c17e;
+  --ink:#1a2620;
+  --mute:#5a6a5f;
+  --line:rgba(26,38,32,.12);
+  --serif:'Fraunces',Georgia,serif;
+  --sans:'Manrope',system-ui,sans-serif;
+  --ease:cubic-bezier(.4,0,.2,1);
+  --bounce:cubic-bezier(.34,1.56,.64,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:100px}
+body{background:var(--cream);color:var(--ink);font:400 16.5px/1.75 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+img{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--forest);outline-offset:3px}
 
-  *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  html,body{overflow-x:hidden}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+.s{padding:120px 0;position:relative;overflow:hidden}
+.sand{background:var(--sand)}
+.dark{background:var(--forest);color:var(--sand)}
 
-  body{
-    font-family:'Inter Tight',-apple-system,sans-serif;
-    background:var(--paper);
-    color:var(--ink);
-    font-size:15px;
-    line-height:1.55;
-    -webkit-font-smoothing:antialiased;
-    cursor:none;
-  }
-  @media(hover:none){body{cursor:auto}}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:400;line-height:1.1;letter-spacing:-.02em}
+h1{font-size:clamp(44px,6.4vw,88px);font-weight:300}
+h2{font-size:clamp(32px,4.4vw,54px);font-weight:300}
+h3{font-size:clamp(22px,2.2vw,30px)}
+p{color:var(--mute)}
+.dark p{color:rgba(246,239,228,.78)}
 
-  /* ============================================================
-     CINEMATIC CANVAS LAYER
-     ============================================================ */
-  #cinema{
-    position:fixed;
-    inset:0;
-    width:100%;height:100%;
-    z-index:500;
-    pointer-events:none;
-    mix-blend-mode:multiply;
-  }
+.tag{display:inline-flex;align-items:center;gap:10px;font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);margin-bottom:20px}
+.tag::before{content:"";width:32px;height:1px;background:var(--gold)}
+.dark .tag{color:var(--gold-l)}
+.dark .tag::before{background:var(--gold)}
 
-  /* Letterbox bars — cinematic aspect */
-  .letterbox{
-    position:fixed;
-    left:0;right:0;
-    height:0;
-    background:#050810;
-    z-index:800;
-    pointer-events:none;
-    transition:height .6s var(--ease);
-  }
-  .letterbox.top{top:0}
-  .letterbox.bottom{bottom:0}
-  .letterbox.active{height:6vh}
+.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
-  /* ============================================================
-     CUSTOM CURSOR
-     ============================================================ */
-  .cursor{
-    position:fixed;top:0;left:0;
-    width:6px;height:6px;border-radius:50%;
-    background:var(--petrol);
-    pointer-events:none;z-index:9999;
-    transform:translate(-50%,-50%);
-    transition:width .3s var(--ease), height .3s var(--ease), background .3s ease;
-    mix-blend-mode:multiply;
-  }
-  .cursor-ring{
-    position:fixed;top:0;left:0;
-    width:40px;height:40px;
-    border:1px solid var(--ink);
-    border-radius:50%;
-    pointer-events:none;z-index:9998;
-    transform:translate(-50%,-50%);
-    transition:width .5s var(--ease), height .5s var(--ease), border-color .3s ease;
-    mix-blend-mode:multiply;
-  }
-  .cursor.hover{width:0;height:0}
-  .cursor-ring.hover{width:76px;height:76px;border-color:var(--petrol)}
-  @media(hover:none){.cursor,.cursor-ring{display:none}}
+/* ============ BUTTONS ============ */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;border-radius:999px;background:var(--forest);color:var(--sand);font-size:14.5px;font-weight:600;letter-spacing:.02em;border:1px solid var(--forest);transition:background .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease),transform .4s var(--bounce),box-shadow .4s var(--ease);position:relative;overflow:hidden;isolation:isolate;cursor:pointer}
+.btn:hover{background:var(--forest-d);border-color:var(--forest-d);transform:translateY(-3px) scale(1.02);box-shadow:0 18px 36px -12px rgba(47,74,60,.55)}
+.btn::before{content:"";position:absolute;top:0;left:-130%;width:80%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);transition:left .8s ease;z-index:-1}
+.btn:hover::before{left:140%}
+.btn .i{transition:transform .4s var(--ease)}
+.btn:hover .i{transform:translateX(3px)}
+.btn.clay{background:var(--clay);border-color:var(--clay)}
+.btn.clay:hover{background:var(--clay-d);border-color:var(--clay-d);box-shadow:0 18px 36px -12px rgba(184,103,75,.55)}
+.btn.ghost{background:transparent;color:var(--forest);border-color:rgba(47,74,60,.35)}
+.btn.ghost:hover{background:var(--forest);color:var(--sand);border-color:var(--forest)}
+.dark .btn.ghost{color:var(--sand);border-color:rgba(246,239,228,.4)}
+.dark .btn.ghost:hover{background:var(--sand);color:var(--forest);border-color:var(--sand)}
 
-  /* ============================================================
-     PROGRESS + GRID
-     ============================================================ */
-  .progress{
-    position:fixed;top:0;left:0;height:2px;
-    background:linear-gradient(90deg, var(--petrol), var(--sage));
-    z-index:1000;width:0;
-  }
+/* ============ TOP BAR ============ */
+.top{background:var(--forest-d);color:rgba(246,239,228,.85);font-size:13px;letter-spacing:.02em}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;gap:8px 32px;flex-wrap:wrap;padding:10px 32px}
+.top div{display:flex;gap:26px;flex-wrap:wrap}
+.top a{display:inline-flex;align-items:center;gap:8px;transition:color .3s var(--ease)}
+.top a:hover{color:var(--gold-l)}
 
-  .rule-grid{
-    position:fixed;inset:0;z-index:0;pointer-events:none;
-    display:grid;grid-template-columns:repeat(12,1fr);
-    max-width:1600px;margin:0 auto;
-    padding:0 clamp(20px,3vw,56px);
-  }
-  .rule-grid span{border-left:1px solid rgba(14,27,44,.045);height:100%}
-  .rule-grid span:last-child{border-right:1px solid rgba(14,27,44,.045)}
-  @media(max-width:900px){.rule-grid{display:none}}
+/* ============ HEADER ============ */
+header{position:sticky;top:0;z-index:50;background:rgba(251,247,240,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);transition:box-shadow .35s var(--ease),background .35s var(--ease)}
+header.scrolled{box-shadow:0 8px 32px -12px rgba(26,38,32,.18);background:rgba(251,247,240,.97)}
+header .wrap{height:88px;display:flex;align-items:center;justify-content:space-between;gap:24px;transition:height .35s var(--ease)}
+header.scrolled .wrap{height:72px}
+.brand{display:flex;align-items:center;gap:14px;transition:transform .35s var(--ease)}
+.brand:hover{transform:translateY(-2px)}
+.mark{width:46px;height:46px;border-radius:50%;background:var(--forest);color:var(--gold-l);display:grid;place-items:center;position:relative;transition:transform .5s var(--bounce),box-shadow .35s var(--ease)}
+.mark::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--gold);animation:pulseRing 2.8s ease-out infinite;pointer-events:none}
+@keyframes pulseRing{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.65);opacity:0}}
+.brand:hover .mark{transform:rotate(-8deg) scale(1.08);box-shadow:0 10px 24px -8px rgba(47,74,60,.5)}
+.mark .i{width:22px;height:22px}
+.brand b{display:block;font:500 20px/1.15 var(--serif);letter-spacing:-.01em}
+.brand small{display:block;font-size:12px;color:var(--mute);margin-top:2px;letter-spacing:.05em}
+nav{display:flex;gap:36px;font-size:14.5px;font-weight:500}
+nav a{color:var(--mute);padding:6px 0;position:relative;transition:color .3s var(--ease)}
+nav a::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1.5px;background:var(--gold);transition:width .4s var(--ease)}
+nav a:hover{color:var(--ink)}
+nav a:hover::after{width:100%}
 
-  /* ============================================================
-     HEADER
-     ============================================================ */
-  header{
-    position:fixed;top:0;left:0;right:0;z-index:100;
-    padding:22px clamp(20px,3vw,56px);
-    display:flex;justify-content:space-between;align-items:center;
-    border-bottom:1px solid transparent;
-    transition:border-color .5s ease, background .5s ease, padding .4s ease;
-  }
-  header.scrolled{
-    background:rgba(247,246,242,.85);
-    backdrop-filter:blur(14px) saturate(1.2);
-    -webkit-backdrop-filter:blur(14px) saturate(1.2);
-    border-bottom-color:var(--line);
-    padding-top:16px;padding-bottom:16px;
-  }
+.burger{display:none;width:44px;height:44px;border-radius:50%;background:transparent;border:1px solid var(--line);cursor:pointer;position:relative;transition:background .3s var(--ease)}
+.burger:hover{background:var(--sand)}
+.burger span{position:absolute;left:12px;right:12px;height:1.5px;background:var(--ink);transition:transform .35s var(--ease),opacity .3s var(--ease),top .35s var(--ease)}
+.burger span:nth-child(1){top:17px}
+.burger span:nth-child(2){top:22px}
+.burger span:nth-child(3){top:27px}
+.burger.open span:nth-child(1){top:22px;transform:rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){top:22px;transform:rotate(-45deg)}
 
-  .logo{display:flex;align-items:baseline;gap:14px;text-decoration:none;color:var(--ink)}
-  .logo strong{
-    font-family:'Fraunces',serif;font-size:22px;font-weight:500;
-    letter-spacing:-.015em;font-variation-settings:"opsz" 24;
-  }
-  .logo small{
-    font-size:10px;letter-spacing:.26em;text-transform:uppercase;
-    color:var(--ink-3);font-weight:500;
-    padding-left:14px;border-left:1px solid var(--line-2);
-  }
+.mnav{position:fixed;inset:0;background:var(--forest-d);color:var(--sand);z-index:49;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;opacity:0;pointer-events:none;transition:opacity .4s var(--ease)}
+.mnav.open{opacity:1;pointer-events:auto}
+.mnav a{font:300 32px/1.4 var(--serif);padding:10px 0;opacity:0;transform:translateY(20px);transition:opacity .5s var(--ease),transform .5s var(--ease),color .3s}
+.mnav.open a{opacity:1;transform:translateY(0)}
+.mnav.open a:nth-child(1){transition-delay:.1s}
+.mnav.open a:nth-child(2){transition-delay:.15s}
+.mnav.open a:nth-child(3){transition-delay:.2s}
+.mnav.open a:nth-child(4){transition-delay:.25s}
+.mnav.open a:nth-child(5){transition-delay:.3s}
+.mnav.open a:nth-child(6){transition-delay:.35s}
+.mnav a:hover{color:var(--gold-l)}
 
-  nav{display:flex;gap:34px;align-items:center}
-  nav a{
-    color:var(--ink-2);text-decoration:none;font-size:13px;
-    position:relative;padding:4px 0;transition:color .3s ease;
-  }
-  nav a::after{
-    content:"";position:absolute;bottom:0;left:0;width:100%;height:1px;
-    background:var(--petrol);transform:scaleX(0);transform-origin:right;
-    transition:transform .5s var(--ease);
-  }
-  nav a:hover{color:var(--petrol)}
-  nav a:hover::after{transform:scaleX(1);transform-origin:left}
+/* ============ HERO — VIDEO BACKGROUND ============ */
+.hero{
+  position:relative;min-height:100vh;display:flex;align-items:center;
+  padding:120px 0 80px;overflow:hidden;
+  /* Fallback εικόνας (αν το video αργήσει ή δεν φορτώσει) */
+  background:url('https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=2000&q=80') center/cover no-repeat;
+  background-color:var(--forest-d);
+}
 
-  .header-cta{
-    display:inline-flex;align-items:center;gap:10px;
-    font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
-    color:var(--paper);background:var(--petrol);
-    text-decoration:none;padding:11px 20px;
-    border:1px solid var(--petrol);
-    position:relative;overflow:hidden;
-    transition:color .4s ease;cursor:none;font-family:inherit;
-  }
-  .header-cta::before{
-    content:"";position:absolute;inset:0;background:var(--coral);
-    transform:translateY(100%);transition:transform .55s var(--ease);z-index:0;
-  }
-  .header-cta:hover::before{transform:translateY(0)}
-  .header-cta span{position:relative;z-index:1}
-  .header-cta i{
-    display:inline-block;width:6px;height:6px;border-radius:50%;
-    background:var(--sage);position:relative;z-index:1;
-    animation:blip 2.4s ease-in-out infinite;
-  }
-  @keyframes blip{
-    0%,100%{opacity:1;transform:scale(1)}
-    50%{opacity:.4;transform:scale(.7)}
-  }
+/* VIDEO */
+.hero-video{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  z-index:0;pointer-events:none;
+  opacity:0;
+  filter:saturate(1.1) contrast(1.05);
+  animation:videoFadeIn 2s .3s var(--ease) forwards;
+}
+@keyframes videoFadeIn{
+  from{opacity:0;transform:scale(1.06)}
+  to{opacity:.7;transform:scale(1)}
+}
 
-  /* ============================================================
-     HERO — CINEMATIC SCROLL SCENE with VIDEO SLOT
-     ============================================================ */
-  .hero-scene{
-    position:relative;
-    height:320vh;
-  }
+/* OVERLAY πάνω από το video */
+.hero-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:
+    linear-gradient(105deg,rgba(30,51,41,.82) 0%,rgba(30,51,41,.5) 45%,rgba(30,51,41,.15) 100%),
+    radial-gradient(circle at 15% 85%,rgba(201,162,75,.12),transparent 55%);
+  animation:overlayBreath 10s ease-in-out infinite;
+}
+@keyframes overlayBreath{0%,100%{opacity:1}50%{opacity:.9}}
 
-  .hero-pin{
-    position:sticky;top:0;
-    height:100vh;
-    overflow:hidden;
-    display:flex;align-items:center;
-    padding:0 clamp(20px,3vw,56px);
-  }
+.hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.3fr 1fr;gap:80px;align-items:center;color:var(--sand)}
 
-  /* Video / image panel that scales with scroll */
-  .hero-panel{
-    position:absolute;
-    top:50%;left:50%;
-    transform:translate(-50%,-50%);
-    width:38vw;height:56vh;
-    overflow:hidden;
-    background:#c8c4b8;
-    z-index:1;
-    will-change:width,height,transform;
-    box-shadow:0 40px 80px -30px rgba(14,27,44,.32);
-  }
-  .hero-panel video,
-  .hero-panel img{
-    width:100%;height:100%;object-fit:cover;
-    filter:grayscale(80%) contrast(1.06) brightness(1.02);
-    will-change:transform,filter;
-  }
-  .hero-panel video{
-    /* video is preferred; if you only have an image, delete the <video> tag */
-    display:block;
-  }
+.hero-badge{display:inline-flex;align-items:center;gap:12px;font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-l);margin-bottom:32px;padding:9px 20px;border:1px solid rgba(224,193,126,.4);border-radius:999px;background:rgba(224,193,126,.08);backdrop-filter:blur(8px);opacity:0;animation:fadeUp .9s .1s var(--ease) forwards}
+.hero-badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold-l);animation:pulseDot 2s ease-in-out infinite}
+@keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
 
-  /* Scan line overlay on the hero panel — cinema scanner feel */
-  .hero-scan{
-    position:absolute;inset:0;z-index:2;
-    pointer-events:none;
-    background:
-      repeating-linear-gradient(
-        0deg,
-        rgba(255,255,255,.06) 0px,
-        rgba(255,255,255,.06) 1px,
-        transparent 1px,
-        transparent 3px
-      );
-    opacity:.5;
-    mix-blend-mode:overlay;
-    animation:scanDrift 8s linear infinite;
-  }
-  @keyframes scanDrift{
-    from{background-position:0 0}
-    to{background-position:0 60px}
-  }
+.hero h1{color:var(--sand);margin-bottom:28px;text-shadow:0 2px 30px rgba(0,0,0,.35);opacity:0;animation:fadeUp 1s .28s var(--ease) forwards}
+.hero h1 em{font-style:italic;color:var(--gold-l);position:relative;display:inline-block}
+.hero h1 em::after{content:"";position:absolute;left:0;bottom:-6px;width:100%;height:2px;background:linear-gradient(90deg,var(--gold-l),transparent);transform-origin:left;animation:drawLine 1.4s 1.4s var(--ease) both}
+@keyframes drawLine{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hero p.lead{color:rgba(246,239,228,.9);font-size:18px;max-width:560px;text-shadow:0 1px 20px rgba(0,0,0,.3);opacity:0;animation:fadeUp 1s .45s var(--ease) forwards}
+.hero .acts{display:flex;gap:14px;flex-wrap:wrap;margin-top:40px;opacity:0;animation:fadeUp 1s .62s var(--ease) forwards}
+.hero .btn{background:var(--clay);border-color:var(--clay)}
+.hero .btn:hover{background:var(--clay-d);border-color:var(--clay-d)}
+.hero .btn.ghost{color:var(--sand);border-color:rgba(246,239,228,.5);backdrop-filter:blur(8px);background:rgba(246,239,228,.06)}
+.hero .btn.ghost:hover{background:var(--sand);color:var(--forest);border-color:var(--sand)}
 
-  /* Focus point marker — like a camera reticle, cinematic */
-  .hero-reticle{
-    position:absolute;top:50%;left:50%;
-    width:60px;height:60px;
-    transform:translate(-50%,-50%);
-    z-index:3;
-    opacity:.55;
-    pointer-events:none;
-  }
-  .hero-reticle::before,
-  .hero-reticle::after{
-    content:"";position:absolute;background:rgba(255,255,255,.85);
-  }
-  .hero-reticle::before{
-    top:50%;left:0;right:0;height:1px;
-    transform:translateY(-50%);
-  }
-  .hero-reticle::after{
-    left:50%;top:0;bottom:0;width:1px;
-    transform:translateX(-50%);
-  }
-  .hero-reticle .corner{
-    position:absolute;width:10px;height:10px;
-    border:1px solid rgba(255,255,255,.9);
-  }
-  .hero-reticle .tl{top:-1px;left:-1px;border-right:none;border-bottom:none}
-  .hero-reticle .tr{top:-1px;right:-1px;border-left:none;border-bottom:none}
-  .hero-reticle .bl{bottom:-1px;left:-1px;border-right:none;border-top:none}
-  .hero-reticle .br{bottom:-1px;right:-1px;border-left:none;border-top:none}
+.hero-side{opacity:0;animation:fadeInScale 1.2s .5s var(--ease) forwards}
+.hero-card{background:rgba(30,51,41,.4);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(246,239,228,.2);border-radius:28px;padding:40px 36px;color:var(--sand);position:relative;overflow:hidden;transition:transform .6s var(--bounce),border-color .4s,background .4s}
+.hero-card:hover{transform:translateY(-8px);border-color:rgba(224,193,126,.5);background:rgba(30,51,41,.5)}
+.hero-card::before{content:"";position:absolute;top:-60%;right:-40%;width:280px;height:280px;background:radial-gradient(circle,rgba(224,193,126,.22),transparent 70%);pointer-events:none}
+.hero-card h3{font-size:26px;color:var(--sand);margin-bottom:22px;font-weight:300}
+.hero-card dl>div{padding:16px 0;border-top:1px solid rgba(246,239,228,.15);transition:padding-left .35s var(--ease)}
+.hero-card dl>div:hover{padding-left:8px}
+.hero-card dt{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-l);margin-bottom:4px;font-weight:600}
+.hero-card dd{font-size:15px;color:rgba(246,239,228,.88);line-height:1.5}
 
-  /* Text overlay */
-  .hero-text{
-    position:absolute;inset:0;
-    display:grid;grid-template-columns:repeat(12,1fr);
-    gap:24px;
-    padding:0 clamp(20px,3vw,56px);
-    align-items:center;
-    max-width:1600px;margin:0 auto;
-    pointer-events:none;
-    z-index:2;
-    width:100%;
-  }
+@keyframes fadeUp{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInScale{from{opacity:0;transform:translateY(40px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
 
-  .hero-title{
-    grid-column:1/8;
-    font-family:'Fraunces',serif;
-    font-size:clamp(3rem,8.8vw,9rem);
-    font-weight:400;line-height:.94;letter-spacing:-.035em;
-    color:var(--ink);
-    font-variation-settings:"opsz" 144, "SOFT" 20;
-  }
-  .hero-title .line{display:block;overflow:hidden;padding-bottom:.02em}
-  .hero-title .line span{
-    display:inline-block;
-    transform:translateY(110%);
-    animation:riseUp 1.4s var(--ease) forwards;
-  }
-  .hero-title .line:nth-child(1) span{animation-delay:.2s}
-  .hero-title .line:nth-child(2) span{animation-delay:.35s}
-  .hero-title .line:nth-child(3) span{animation-delay:.5s}
-  .hero-title em{font-style:italic;color:var(--petrol);font-weight:400}
+.scroll-hint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);color:rgba(246,239,228,.55);font-size:11.5px;letter-spacing:.3em;text-transform:uppercase;z-index:3;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fadeUp 1s 1.6s var(--ease) forwards}
+.scroll-hint::after{content:"";width:1px;height:40px;background:linear-gradient(180deg,rgba(246,239,228,.6),transparent);animation:scrollLine 2.2s ease-in-out infinite}
+@keyframes scrollLine{0%,100%{transform:scaleY(.4);transform-origin:top;opacity:.4}50%{transform:scaleY(1);opacity:1}}
 
-  @keyframes riseUp{to{transform:translateY(0)}}
+/* ============ REVEALS ============ */
+.reveal,.revealL,.revealR,.revealS{opacity:0;transition:opacity 1.1s var(--ease),transform 1.1s var(--ease)}
+.reveal{transform:translateY(48px)}
+.revealL{transform:translateX(-70px)}
+.revealR{transform:translateX(70px)}
+.revealS{transform:scale(.9)}
+.reveal.in,.revealL.in,.revealR.in,.revealS.in{opacity:1;transform:none}
+.d1{transition-delay:.12s!important}
+.d2{transition-delay:.24s!important}
+.d3{transition-delay:.36s!important}
+.d4{transition-delay:.48s!important}
+.d5{transition-delay:.6s!important}
 
-  .hero-side{
-    grid-column:10/13;align-self:end;
-    padding-bottom:12vh;
-    opacity:0;
-    animation:fadeIn 1.2s var(--ease) forwards 1.2s;
-  }
-  @keyframes fadeIn{to{opacity:1}}
+/* ============ ABOUT ============ */
+.about .wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:100px;align-items:center}
+.about-img{position:relative;border-radius:32px;overflow:hidden;aspect-ratio:4/5;box-shadow:0 40px 80px -40px rgba(26,38,32,.4)}
+.about-img img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.about-img:hover img{transform:scale(1.06)}
+.about-img::after{content:"";position:absolute;inset:20px -20px -20px 20px;border-radius:32px;border:2px solid var(--gold);z-index:-1;transition:transform .6s var(--bounce)}
+.about-img:hover::after{transform:translate(10px,10px)}
+.about-txt h2{margin-bottom:24px}
+.about-txt p{margin-bottom:18px}
+.about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:44px;padding-top:36px;border-top:1px solid var(--line)}
+.about-stats b{font:300 44px/1 var(--serif);color:var(--forest);display:block;margin-bottom:6px}
+.about-stats span{font-size:12.5px;font-weight:600;letter-spacing:.06em;color:var(--mute);text-transform:uppercase}
 
-  .hero-meta{display:flex;flex-direction:column;gap:18px}
-  .hero-meta .kicker{
-    font-size:10px;letter-spacing:.28em;text-transform:uppercase;
-    color:var(--coral);font-weight:500;
-    display:flex;align-items:center;gap:10px;
-  }
-  .hero-meta .kicker::before{content:"";width:20px;height:1px;background:var(--coral)}
-  .hero-meta p{font-size:13.5px;line-height:1.7;color:var(--ink-2);max-width:32ch}
-  .hero-meta .sig{
-    border-left:1px solid var(--line-2);
-    padding-left:16px;
-    font-size:11px;letter-spacing:.04em;color:var(--ink-3);line-height:1.8;
-  }
-  .hero-meta .sig strong{
-    display:block;color:var(--ink);font-weight:500;font-size:12px;
-    margin-bottom:3px;letter-spacing:0;
-  }
+/* ============ SERVICES ============ */
+.head{max-width:760px;margin-bottom:70px}
+.head h2{margin-top:6px}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.svc{background:var(--cream);border-radius:24px;padding:40px 32px;border:1px solid var(--line);position:relative;overflow:hidden;transition:transform .55s var(--bounce),box-shadow .5s var(--ease),border-color .4s}
+.sand .svc{background:var(--cream)}
+.svc::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--forest),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease)}
+.svc:hover::before{transform:scaleX(1)}
+.svc:hover{transform:translateY(-10px);box-shadow:0 32px 60px -30px rgba(26,38,32,.28);border-color:transparent}
+.svc-ic{width:64px;height:64px;border-radius:20px;background:var(--sand);color:var(--forest);display:grid;place-items:center;margin-bottom:26px;transition:transform .55s var(--bounce),background .4s,color .4s}
+.svc:hover .svc-ic{transform:rotate(-8deg) scale(1.1);background:var(--forest);color:var(--gold-l)}
+.svc-ic .i{width:30px;height:30px}
+.svc h3{margin-bottom:14px;transition:color .3s}
+.svc:hover h3{color:var(--forest)}
+.svc p{font-size:15.5px}
 
-  .scroll-hint{
-    position:absolute;bottom:32px;left:clamp(20px,3vw,56px);
-    display:flex;align-items:center;gap:14px;
-    font-size:10px;letter-spacing:.28em;text-transform:uppercase;
-    color:var(--ink-3);font-weight:500;
-    z-index:3;opacity:0;
-    animation:fadeIn 1s var(--ease) forwards 1.8s;
-  }
-  .scroll-hint .bar{
-    width:48px;height:1px;background:var(--ink-3);
-    position:relative;overflow:hidden;
-  }
-  .scroll-hint .bar::after{
-    content:"";position:absolute;inset:0;background:var(--petrol);
-    animation:scrollBar 2.6s var(--ease) infinite;
-  }
-  @keyframes scrollBar{
-    0%{transform:translateX(-100%)}
-    50%{transform:translateX(0)}
-    100%{transform:translateX(100%)}
-  }
+/* ============ VAULTING ============ */
+.vaulting{background:var(--forest);color:var(--sand);position:relative;overflow:hidden}
+.vaulting::before{content:"";position:absolute;top:-150px;right:-150px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(201,162,75,.15),transparent 70%);pointer-events:none}
+.vaulting .wrap{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;position:relative;z-index:2}
+.vaulting h2{color:var(--sand);margin-bottom:26px}
+.vaulting h2 em{font-style:italic;color:var(--gold-l)}
+.vaulting p{color:rgba(246,239,228,.78);margin-bottom:18px}
+.vaulting-media{position:relative;border-radius:32px;overflow:hidden;aspect-ratio:5/6;box-shadow:0 40px 80px -40px rgba(0,0,0,.6)}
+.vaulting-media img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.vaulting-media:hover img{transform:scale(1.06)}
+.vaulting-media::after{content:"";position:absolute;inset:20px;border:2px solid rgba(224,193,126,.4);border-radius:24px;pointer-events:none;transition:inset .5s var(--ease)}
+.vaulting-media:hover::after{inset:12px}
+.vaulting-features{display:flex;gap:20px;flex-wrap:wrap;margin-top:36px}
+.vf{padding:14px 22px;border:1px solid rgba(224,193,126,.35);border-radius:999px;font-size:13px;letter-spacing:.05em;transition:background .35s var(--ease),color .35s var(--ease),transform .4s var(--bounce)}
+.vf:hover{background:var(--gold);color:var(--forest-d);border-color:var(--gold);transform:translateY(-3px)}
 
-  .hero-index{
-    position:absolute;top:110px;right:clamp(20px,3vw,56px);
-    font-size:10px;letter-spacing:.26em;text-transform:uppercase;
-    color:var(--ink-3);font-weight:500;
-    display:flex;align-items:center;gap:10px;
-    z-index:3;opacity:0;
-    animation:fadeIn 1s var(--ease) forwards 2s;
-  }
-  .hero-index::after{content:"";width:20px;height:1px;background:var(--ink-3)}
+/* ============ TEAM ============ */
+.team-card{display:grid;grid-template-columns:1fr 1.4fr;gap:70px;align-items:center;background:var(--cream);border-radius:36px;padding:60px;box-shadow:0 40px 80px -50px rgba(26,38,32,.3)}
+.team-photo{aspect-ratio:1;border-radius:50%;overflow:hidden;position:relative;max-width:340px;justify-self:center}
+.team-photo img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.team-photo::after{content:"";position:absolute;inset:-10px;border-radius:50%;border:1.5px solid var(--gold);opacity:.6;animation:rotateRing 22s linear infinite}
+@keyframes rotateRing{from{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(1.03)}to{transform:rotate(360deg) scale(1)}}
+.team-photo:hover img{transform:scale(1.08)}
+.team-card h2{margin-bottom:14px}
+.team-card .role{font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--clay);font-weight:600;margin-bottom:24px}
+.team-card p{margin-bottom:14px;font-size:15.5px}
+.team-meta{display:flex;gap:24px;margin-top:30px;flex-wrap:wrap}
+.team-meta span{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;color:var(--forest);font-weight:600}
 
-  /* Film slate — top-left corner, like a movie clapper */
-  .film-slate{
-    position:absolute;top:110px;left:clamp(20px,3vw,56px);
-    z-index:3;
-    font-family:'Inter Tight',monospace;
-    font-size:10px;letter-spacing:.2em;
-    color:var(--ink-3);font-weight:500;
-    display:flex;flex-direction:column;gap:6px;
-    opacity:0;
-    animation:fadeIn 1s var(--ease) forwards 2.2s;
-  }
-  .film-slate .row{
-    display:flex;align-items:center;gap:10px;
-  }
-  .film-slate .row .rec{
-    width:8px;height:8px;border-radius:50%;
-    background:var(--coral);
-    animation:rec 1.4s ease-in-out infinite;
-  }
-  @keyframes rec{
-    0%,100%{opacity:1}
-    50%{opacity:.2}
-  }
+/* ============ REVIEWS ============ */
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.q{background:var(--cream);border-radius:24px;padding:36px 32px;border:1px solid var(--line);position:relative;overflow:hidden;transition:transform .55s var(--bounce),box-shadow .5s var(--ease),border-color .4s}
+.q::before{content:"“";position:absolute;top:-40px;right:16px;font:700 180px/1 var(--serif);color:rgba(201,162,75,.14);pointer-events:none;transition:transform .6s,color .4s}
+.q:hover{transform:translateY(-10px) rotate(-.4deg);box-shadow:0 32px 60px -30px rgba(26,38,32,.25);border-color:var(--gold)}
+.q:hover::before{transform:translateY(6px) scale(1.06);color:rgba(184,103,75,.18)}
+.q .stars{color:var(--gold);letter-spacing:3px;font-size:14px;display:inline-block;margin-bottom:18px;transition:transform .4s var(--bounce)}
+.q:hover .stars{transform:scale(1.12) rotate(-3deg)}
+.q p{font:italic 300 18px/1.7 var(--serif);color:var(--ink);margin-bottom:24px}
+.q cite{display:block;font-style:normal;font-size:14px;font-weight:700;color:var(--forest);padding-top:18px;border-top:1px solid var(--line)}
+.q cite small{display:block;font-weight:500;color:var(--mute);font-size:12.5px;margin-top:2px}
+.q:hover cite{border-color:var(--gold)}
 
-  /* ============================================================
-     MARQUEE
-     ============================================================ */
-  .strip{
-    position:relative;z-index:2;
-    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-    padding:26px 0;overflow:hidden;background:var(--paper-2);
-  }
-  .strip-track{
-    display:flex;gap:64px;width:max-content;white-space:nowrap;
-    animation:ticker 55s linear infinite;
-  }
-  @keyframes ticker{to{transform:translateX(-50%)}}
-  .strip-item{
-    font-family:'Fraunces',serif;font-size:24px;
-    color:var(--ink-2);font-style:italic;
-    font-variation-settings:"opsz" 24;
-    display:flex;align-items:center;gap:64px;
-  }
-  .strip-item::after{
-    content:"◆";
-    font-family:'Inter Tight',sans-serif;font-size:8px;
-    color:var(--sage);font-style:normal;
-  }
+/* ============ CONTACT ============ */
+.contact{background:var(--sand)}
+.contact .wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:80px;align-items:start}
+.contact h2{margin-bottom:24px}
+.contact .info{margin-top:36px}
+.contact .info>div{display:flex;gap:20px;padding:22px 0;border-top:1px solid var(--line);transition:transform .4s var(--ease),padding .4s var(--ease)}
+.contact .info>div:hover{transform:translateX(6px)}
+.contact .info>div:last-child{border-bottom:1px solid var(--line)}
+.ic-circle{width:52px;height:52px;border-radius:50%;background:var(--cream);color:var(--forest);display:grid;place-items:center;flex:none;transition:transform .55s var(--bounce),background .35s,color .35s,box-shadow .35s}
+.contact .info>div:hover .ic-circle{transform:scale(1.12) rotate(-8deg);background:var(--forest);color:var(--gold-l);box-shadow:0 12px 26px -10px rgba(47,74,60,.5)}
+.contact .info h4{font-family:var(--sans);font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--forest);margin-bottom:6px}
+.contact .info p,.contact .info a{font-size:15.5px;color:var(--mute);display:block;transition:color .3s}
+.contact .info a:hover{color:var(--clay)}
+.contact .info .n{color:var(--forest);font-weight:700;font-size:17px}
 
-  /* ============================================================
-     SECTION BASE
-     ============================================================ */
-  section{
-    position:relative;z-index:2;
-    padding:clamp(80px,12vh,150px) clamp(20px,3vw,56px);
-    max-width:1600px;margin:0 auto;
-  }
+.map{border-radius:28px;overflow:hidden;height:540px;background:var(--cream);border:1px solid var(--line);position:relative;transition:transform .5s var(--bounce),box-shadow .5s}
+.map::after{content:"";position:absolute;inset:0;border-radius:28px;box-shadow:inset 0 0 0 0 var(--gold);transition:box-shadow .5s;pointer-events:none}
+.map:hover{transform:translateY(-8px) scale(1.01);box-shadow:0 40px 70px -35px rgba(26,38,32,.35)}
+.map:hover::after{box-shadow:inset 0 0 0 3px var(--gold)}
+.map iframe{width:100%;height:100%;border:0;filter:grayscale(.85) sepia(.15);transition:filter .7s}
+.map:hover iframe{filter:none}
 
-  .sec-head{
-    display:grid;grid-template-columns:repeat(12,1fr);
-    gap:24px;margin-bottom:80px;align-items:end;
-  }
-  .sec-num{
-    grid-column:1/3;
-    font-family:'Fraunces',serif;font-size:13px;
-    color:var(--petrol);letter-spacing:.05em;
-    display:flex;align-items:center;gap:12px;padding-bottom:6px;
-    font-variation-settings:"opsz" 14;
-  }
-  .sec-num::before{content:"";width:24px;height:1px;background:var(--petrol)}
+/* ============ CTA ============ */
+.cta-strip{padding:100px 0;background:var(--forest);position:relative;overflow:hidden;text-align:center;color:var(--sand)}
+.cta-strip::before{content:"";position:absolute;top:-50%;left:-10%;width:120%;height:200%;background:radial-gradient(ellipse at center,rgba(201,162,75,.18),transparent 60%);animation:pulseGlow 8s ease-in-out infinite}
+@keyframes pulseGlow{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+.cta-strip h2{color:var(--sand);margin-bottom:20px;position:relative;z-index:2}
+.cta-strip p{color:rgba(246,239,228,.78);max-width:640px;margin:0 auto 36px;position:relative;z-index:2;font-size:17px}
+.cta-strip .btn{position:relative;z-index:2;background:var(--gold);border-color:var(--gold);color:var(--forest-d)}
+.cta-strip .btn:hover{background:var(--gold-l);border-color:var(--gold-l);box-shadow:0 18px 36px -12px rgba(201,162,75,.6)}
 
-  .sec-title{
-    grid-column:3/10;
-    font-family:'Fraunces',serif;
-    font-size:clamp(2rem,4.5vw,4.2rem);
-    font-weight:400;line-height:1.04;letter-spacing:-.025em;
-    font-variation-settings:"opsz" 72;
-  }
-  .sec-title em{font-style:italic;color:var(--petrol);font-weight:400}
+/* ============ FOOTER ============ */
+footer{background:var(--forest-d);color:rgba(246,239,228,.7);padding:70px 0 30px;font-size:14px;position:relative;overflow:hidden}
+footer::before{content:"";position:absolute;top:0;left:0;width:200%;height:100%;background:linear-gradient(90deg,transparent,rgba(201,162,75,.08),transparent);animation:shine 8s linear infinite;pointer-events:none}
+@keyframes shine{0%{transform:translateX(-50%)}100%{transform:translateX(0)}}
+footer .fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:60px;position:relative;z-index:1;margin-bottom:50px}
+footer h4{font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-l);margin-bottom:20px}
+footer ul li{margin-bottom:10px}
+footer ul a{transition:color .3s,padding-left .3s}
+footer ul a:hover{color:var(--gold-l);padding-left:4px}
+footer .fbrand b{font:400 24px/1.2 var(--serif);color:var(--sand);display:block;margin-bottom:14px}
+footer .fbrand p{font-size:14px;line-height:1.7}
+footer .copy{border-top:1px solid rgba(246,239,228,.12);padding-top:24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:13px;position:relative;z-index:1}
 
-  .sec-note{
-    grid-column:10/13;font-size:13.5px;line-height:1.7;
-    color:var(--ink-3);padding-bottom:8px;
-  }
+/* ============ MISC ============ */
+.scroll-progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--forest),var(--gold),var(--clay));background-size:200% 100%;z-index:100;transition:width .1s linear;animation:progGrad 4s linear infinite}
+@keyframes progGrad{0%{background-position:0% 50%}100%{background-position:200% 50%}}
 
-  /* ============================================================
-     SERVICES
-     ============================================================ */
-  .services{
-    display:grid;grid-template-columns:repeat(12,1fr);gap:0;
-    border-top:1px solid var(--line);
-  }
+.toTop{position:fixed;bottom:28px;right:28px;width:54px;height:54px;border-radius:50%;background:var(--forest);color:var(--gold-l);display:grid;place-items:center;border:0;cursor:pointer;box-shadow:0 14px 32px -10px rgba(47,74,60,.6);opacity:0;transform:translateY(20px) scale(.8);pointer-events:none;transition:opacity .4s,transform .5s var(--bounce),background .35s;z-index:60}
+.toTop.show{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.toTop:hover{background:var(--clay);transform:translateY(-4px) scale(1.08)}
+.toTop .i{width:22px;height:22px;stroke-width:2}
 
-  .service{
-    grid-column:span 4;padding:56px 32px;
-    border-bottom:1px solid var(--line);
-    border-right:1px solid var(--line);
-    position:relative;overflow:hidden;cursor:none;
-  }
-  .service:nth-child(3n+1){border-left:1px solid var(--line)}
-  .service:nth-child(3n){border-right:1px solid var(--line)}
-
-  .service-inner{position:relative;z-index:1;transition:transform .6s var(--ease)}
-  .service:hover .service-inner{transform:translateY(-4px)}
-
-  .service-bg{
-    position:absolute;inset:0;background:var(--petrol-2);
-    transform:translateY(101%);transition:transform .7s var(--ease);z-index:0;
-  }
-  .service:hover .service-bg{transform:translateY(0)}
-  .service:hover .service-num,
-  .service:hover .service-title,
-  .service:hover .service-desc{color:var(--paper)}
-  .service:hover .service-arrow{background:var(--paper)}
-  .service:hover .service-arrow::after{border-color:var(--paper)}
-
-  .service-num{
-    font-size:11px;letter-spacing:.24em;color:var(--ink-3);
-    font-weight:500;margin-bottom:48px;transition:color .5s ease;display:block;
-  }
-  .service-title{
-    font-family:'Fraunces',serif;font-size:clamp(1.4rem,2.2vw,2rem);
-    font-weight:400;line-height:1.15;letter-spacing:-.015em;
-    margin-bottom:18px;transition:color .5s ease;color:var(--ink);
-    font-variation-settings:"opsz" 32;
-  }
-  .service-title em{font-style:italic}
-  .service-desc{
-    font-size:13.5px;line-height:1.7;color:var(--ink-2);
-    max-width:34ch;transition:color .5s ease;
-  }
-  .service-arrow{
-    margin-top:32px;width:44px;height:1px;background:var(--ink);
-    position:relative;transition:width .5s var(--ease), background .5s ease;
-  }
-  .service-arrow::after{
-    content:"";position:absolute;right:0;top:50%;
-    width:8px;height:8px;
-    border-top:1px solid var(--ink);border-right:1px solid var(--ink);
-    transform:translateY(-50%) rotate(45deg);
-    transition:border-color .5s ease;
-  }
-  .service:hover .service-arrow{width:64px}
-
-  /* ============================================================
-     SPLIT
-     ============================================================ */
-  .split{
-    display:grid;grid-template-columns:repeat(12,1fr);
-    gap:24px;align-items:start;
-  }
-  .split-image{
-    grid-column:1/7;
-    position:sticky;top:100px;
-    aspect-ratio:4/5;overflow:hidden;background:#d5d2c8;
-  }
-  .split-image img{
-    width:100%;height:100%;object-fit:cover;
-    filter:grayscale(90%) contrast(1.05) brightness(1.02);
-    transition:transform 2s var(--ease), filter 1.4s ease;
-    will-change:transform,filter;
-  }
-  .split-image:hover img{filter:grayscale(0%) contrast(1.06)}
-  .split-image .tag{
-    position:absolute;top:20px;left:20px;
-    font-size:10px;letter-spacing:.24em;text-transform:uppercase;
-    color:var(--paper);font-weight:500;
-    padding:8px 14px;background:var(--petrol);z-index:2;
-  }
-  .split-image .scan{
-    position:absolute;inset:0;z-index:1;
-    background:repeating-linear-gradient(
-      0deg, rgba(255,255,255,.05) 0px,
-      rgba(255,255,255,.05) 1px, transparent 1px, transparent 4px);
-    opacity:.6;mix-blend-mode:overlay;pointer-events:none;
-  }
-  /* Horizontal scanning line that sweeps down */
-  .split-image .sweep{
-    position:absolute;left:0;right:0;height:2px;
-    background:linear-gradient(90deg, transparent, rgba(125,150,130,.85), transparent);
-    z-index:2;
-    box-shadow:0 0 20px rgba(125,150,130,.5);
-    animation:sweepDown 4.5s ease-in-out infinite;
-    pointer-events:none;
-  }
-  @keyframes sweepDown{
-    0%{top:0;opacity:0}
-    10%{opacity:1}
-    90%{opacity:1}
-    100%{top:100%;opacity:0}
-  }
-
-  .split-content{grid-column:8/13;padding-top:20px}
-  .split-content h3{
-    font-family:'Fraunces',serif;
-    font-size:clamp(1.8rem,3vw,2.8rem);
-    font-weight:400;line-height:1.12;letter-spacing:-.025em;
-    margin-bottom:32px;
-    font-variation-settings:"opsz" 60;
-  }
-  .split-content h3 em{font-style:italic;color:var(--petrol)}
-  .split-content > p{
-    font-size:15px;line-height:1.8;color:var(--ink-2);
-    margin-bottom:48px;max-width:46ch;
-  }
-
-  .feature-list{list-style:none;border-top:1px solid var(--line)}
-  .feature-list li{
-    padding:22px 0;border-bottom:1px solid var(--line);
-    display:grid;grid-template-columns:32px 1fr;gap:16px;
-    align-items:start;cursor:none;
-    transition:padding-left .5s var(--ease), background .4s ease;
-  }
-  .feature-list li:hover{padding-left:12px;background:rgba(31,77,92,.025)}
-  .feature-list .idx{
-    font-family:'Fraunces',serif;font-size:12px;
-    color:var(--petrol);padding-top:4px;
-  }
-  .feature-list .txt strong{
-    display:block;font-size:15px;font-weight:500;
-    color:var(--ink);margin-bottom:4px;
-  }
-  .feature-list .txt span{
-    font-size:13px;color:var(--ink-3);line-height:1.6;
-  }
-
-  /* ============================================================
-     STATS
-     ============================================================ */
-  .stats{
-    display:grid;grid-template-columns:repeat(12,1fr);
-    gap:0;border-top:1px solid var(--line);
-    border-bottom:1px solid var(--line);
-  }
-  .stat{
-    grid-column:span 3;padding:64px 40px 64px 0;
-    border-right:1px solid var(--line);
-  }
-  .stat:last-child{border-right:none}
-  .stat .val{
-    font-family:'Fraunces',serif;
-    font-size:clamp(2.8rem,5.5vw,5rem);
-    font-weight:400;letter-spacing:-.03em;line-height:1;
-    margin-bottom:14px;color:var(--ink);
-    font-variation-settings:"opsz" 144;
-    display:flex;align-items:baseline;gap:6px;
-  }
-  .stat .val .suf{font-size:.5em;color:var(--petrol);font-style:italic}
-  .stat .lbl{
-    font-size:10px;letter-spacing:.26em;text-transform:uppercase;
-    color:var(--ink-3);font-weight:500;
-  }
-
-  /* ============================================================
-     ARTICLES
-     ============================================================ */
-  .articles{display:grid;grid-template-columns:repeat(12,1fr);gap:24px}
-  .article{
-    grid-column:span 4;
-    text-decoration:none;color:var(--ink);
-    display:block;cursor:none;
-  }
-  .article-img{
-    aspect-ratio:4/3;overflow:hidden;background:#d5d2c8;
-    margin-bottom:24px;position:relative;
-  }
-  .article-img img{
-    width:100%;height:100%;object-fit:cover;
-    filter:grayscale(90%) contrast(1.05);
-    transform:scale(1.08);
-    transition:transform 1.6s var(--ease), filter 1.2s ease;
-  }
-  .article:hover .article-img img{transform:scale(1);filter:grayscale(0%)}
-  .article-img::after{
-    content:"";position:absolute;inset:0;
-    background:linear-gradient(180deg, transparent 65%, rgba(14,27,44,.2));
-  }
-  .article-img .scan{
-    position:absolute;inset:0;z-index:1;
-    background:repeating-linear-gradient(
-      0deg, rgba(255,255,255,.04) 0px,
-      rgba(255,255,255,.04) 1px, transparent 1px, transparent 4px);
-    opacity:.5;mix-blend-mode:overlay;pointer-events:none;
-  }
-
-  .article-meta{
-    display:flex;align-items:center;gap:14px;
-    font-size:10px;letter-spacing:.24em;text-transform:uppercase;
-    color:var(--ink-3);margin-bottom:16px;font-weight:500;
-  }
-  .article-meta .cat{color:var(--coral)}
-  .article-meta .sep{width:14px;height:1px;background:var(--line-2)}
-
-  .article h3{
-    font-family:'Fraunces',serif;
-    font-size:1.4rem;font-weight:400;line-height:1.22;
-    letter-spacing:-.015em;margin-bottom:14px;
-    transition:color .4s ease;
-    font-variation-settings:"opsz" 32;
-  }
-  .article:hover h3{color:var(--petrol)}
-  .article p{font-size:13.5px;line-height:1.7;color:var(--ink-3)}
-
-  /* ============================================================
-     CONTACT
-     ============================================================ */
-  .contact-wrap{
-    position:relative;z-index:2;
-    max-width:1600px;margin:0 auto;
-    padding:0 clamp(20px,3vw,56px) clamp(60px,10vh,120px);
-  }
-  .contact{
-    border-top:1px solid var(--line);
-    border-bottom:1px solid var(--line);
-    padding:clamp(56px,8vw,110px) 0;
-    display:grid;grid-template-columns:repeat(12,1fr);
-    gap:24px;position:relative;
-  }
-  .contact-left{grid-column:1/8}
-  .contact-left h2{
-    font-family:'Fraunces',serif;
-    font-size:clamp(2.4rem,6vw,5.8rem);
-    font-weight:400;line-height:.98;letter-spacing:-.035em;
-    margin-bottom:40px;
-    font-variation-settings:"opsz" 144;
-  }
-  .contact-left h2 em{font-style:italic;color:var(--petrol)}
-  .contact-left p{
-    font-size:15px;line-height:1.75;color:var(--ink-2);
-    max-width:44ch;margin-bottom:40px;
-  }
-  .contact-buttons{display:flex;gap:14px;flex-wrap:wrap}
-
-  .btn-primary{
-    display:inline-flex;align-items:center;gap:12px;
-    font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
-    color:var(--paper);background:var(--petrol);
-    text-decoration:none;padding:18px 30px;
-    border:1px solid var(--petrol);
-    position:relative;overflow:hidden;
-    transition:color .4s ease;cursor:none;font-family:inherit;
-  }
-  .btn-primary::before{
-    content:"";position:absolute;inset:0;background:var(--coral);
-    transform:translateY(100%);transition:transform .6s var(--ease);z-index:0;
-  }
-  .btn-primary:hover::before{transform:translateY(0)}
-  .btn-primary span,.btn-primary i{position:relative;z-index:1}
-  .btn-primary i{
-    display:inline-block;width:6px;height:6px;border-radius:50%;
-    background:var(--sage);
-  }
-
-  .btn-secondary{
-    display:inline-flex;align-items:center;gap:12px;
-    font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
-    color:var(--ink);background:transparent;text-decoration:none;
-    padding:18px 30px;border:1px solid var(--ink);
-    position:relative;cursor:none;
-    transition:background .4s ease, color .4s ease;
-    font-family:inherit;
-  }
-  .btn-secondary:hover{background:var(--ink);color:var(--paper)}
-
-  .contact-right{
-    grid-column:9/13;display:flex;flex-direction:column;
-    gap:32px;padding-top:8px;
-  }
-  .info-block .k{
-    font-size:10px;letter-spacing:.26em;text-transform:uppercase;
-    color:var(--ink-3);margin-bottom:10px;font-weight:500;
-    display:flex;align-items:center;gap:8px;
-  }
-  .info-block .k::before{
-    content:"";width:5px;height:5px;background:var(--sage);border-radius:50%;
-  }
-  .info-block .v{font-size:15px;line-height:1.65;color:var(--ink)}
-  .info-block a{
-    color:var(--ink);text-decoration:none;
-    border-bottom:1px solid var(--line-2);
-    transition:border-color .4s ease, color .4s ease;
-  }
-  .info-block a:hover{border-color:var(--petrol);color:var(--petrol)}
-
-  /* ============================================================
-     FOOTER
-     ============================================================ */
-  footer{
-    position:relative;z-index:2;
-    border-top:1px solid var(--line);
-    padding:36px clamp(20px,3vw,56px);
-    max-width:1600px;margin:0 auto;
-    display:flex;justify-content:space-between;align-items:center;
-    flex-wrap:wrap;gap:20px;
-    font-size:11px;letter-spacing:.12em;text-transform:uppercase;
-    color:var(--ink-3);
-  }
-  footer .f-col{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-  footer a{color:var(--ink-3);text-decoration:none;transition:color .3s ease;cursor:none}
-  footer a:hover{color:var(--petrol)}
-  footer .mark{
-    font-family:'Fraunces',serif;font-size:15px;
-    letter-spacing:0;text-transform:none;
-    color:var(--ink);font-style:italic;
-  }
-
-  /* ============================================================
-     REVEAL STATES
-     ============================================================ */
-  .reveal{
-    opacity:0;transform:translateY(28px);
-    transition:opacity 1.2s var(--ease), transform 1.2s var(--ease);
-  }
-  .reveal.in{opacity:1;transform:translateY(0)}
-
-  .reveal-line{display:block;overflow:hidden}
-  .reveal-line span{
-    display:inline-block;transform:translateY(110%);
-    transition:transform 1.4s var(--ease);
-  }
-  .reveal-line.in span{transform:translateY(0)}
-
-  /* ============================================================
-     RESPONSIVE
-     ============================================================ */
-  @media(max-width:1100px){
-    .hero-title{grid-column:1/13}
-    .hero-side{grid-column:1/13;padding-bottom:8vh}
-    .hero-panel{width:70vw;height:50vh}
-    .sec-num{grid-column:1/13}
-    .sec-title{grid-column:1/13}
-    .sec-note{grid-column:1/13;margin-top:20px}
-    .service{grid-column:span 6}
-    .service:nth-child(3n+1){border-left:none}
-    .service:nth-child(odd){border-left:1px solid var(--line)}
-    .split-image{grid-column:1/13;position:static;aspect-ratio:16/10;max-height:60vh}
-    .split-content{grid-column:1/13;margin-top:48px}
-    .stat{grid-column:span 6;padding:48px 24px 48px 0}
-    .stat:nth-child(2n){border-right:none}
-    .article{grid-column:span 6}
-    .contact-left{grid-column:1/13}
-    .contact-right{grid-column:1/13;margin-top:48px}
-  }
-
-  @media(max-width:700px){
-    header{padding:16px 20px}
-    nav{display:none}
-    .logo small{display:none}
-    .hero-title{font-size:clamp(2.6rem,11vw,4.4rem)}
-    .hero-panel{width:82vw;height:44vh}
-    .service{grid-column:span 12;padding:40px 24px;border-left:1px solid var(--line);border-right:1px solid var(--line)}
-    .article{grid-column:span 12}
-    .stat{grid-column:span 12;border-right:none;padding:40px 0}
-    .contact-buttons{flex-direction:column;align-items:stretch}
-    .btn-primary,.btn-secondary{justify-content:center}
-    footer{flex-direction:column;text-align:center}
-    #cinema{display:none}
-  }
-
-  @media(prefers-reduced-motion:reduce){
-    *,*::before,*::after{
-      animation-duration:.01ms !important;
-      transition-duration:.01ms !important;
-    }
-    .reveal{opacity:1;transform:none}
-    .reveal-line span{transform:none}
-    .hero-title .line span{transform:translateY(0)}
-    .hero-side,.scroll-hint,.hero-index,.film-slate{opacity:1}
-    #cinema{display:none}
-  }
+/* ============ RESPONSIVE ============ */
+@media(max-width:1040px){
+  nav{display:none}
+  .burger{display:block}
+  .hero .wrap{grid-template-columns:1fr;gap:56px}
+  .hero-side{max-width:520px}
+  .about .wrap,.vaulting .wrap,.contact .wrap{grid-template-columns:1fr;gap:56px}
+  .svc-grid{grid-template-columns:1fr 1fr}
+  .quotes{grid-template-columns:1fr}
+  .team-card{grid-template-columns:1fr;padding:44px 32px;gap:40px}
+  footer .fgrid{grid-template-columns:1fr 1fr;gap:40px}
+}
+@media(max-width:680px){
+  .wrap{padding:0 22px}
+  .s{padding:80px 0}
+  header .btn{display:none}
+  .svc-grid{grid-template-columns:1fr}
+  .about-stats{grid-template-columns:1fr;gap:22px}
+  .hero{min-height:auto;padding:90px 0 60px}
+  .hero-badge{font-size:11.5px;padding:8px 16px}
+  .top{font-size:12px}
+  .top .wrap{padding:8px 22px}
+  .hero-card{padding:32px 26px}
+  .cta-strip{padding:70px 0}
+  footer .fgrid{grid-template-columns:1fr}
+  .toTop{bottom:18px;right:18px;width:48px;height:48px}
+  .scroll-hint{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .reveal,.revealL,.revealR,.revealS{opacity:1!important;transform:none!important}
+  .hero-video{opacity:.7;animation:none}
+}
 </style>
 </head>
 <body>
 
-<!-- Cinematic canvas layer (light rays, particles, scanlines, flare) -->
-<canvas id="cinema"></canvas>
+<div class="scroll-progress" id="progress" aria-hidden="true"></div>
 
-<!-- Letterbox bars (activate on scroll) -->
-<div class="letterbox top" id="lbTop"></div>
-<div class="letterbox bottom" id="lbBottom"></div>
+<!-- SVG icons -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="horseshoe" viewBox="0 0 24 24"><path d="M8 4c-2 2-3 5-3 8s1 6 3 8"/><path d="M16 4c2 2 3 5 3 8s-1 6-3 8"/><path d="M8 4h2m4 0h2M8 20h2m4 0h2"/><circle cx="12" cy="9" r="1.5"/></symbol>
+  <symbol id="pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5a7 7 0 0 0-14 0C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+  <symbol id="ph" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+  <symbol id="mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+  <symbol id="cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4m8-4v4M3 11h18"/></symbol>
+  <symbol id="arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="up" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+  <symbol id="heart" viewBox="0 0 24 24"><path d="M12 21s-8-4.5-8-11a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 6.5-8 11-8 11z"/></symbol>
+  <symbol id="kid" viewBox="0 0 24 24"><circle cx="12" cy="6" r="3"/><path d="M6 21v-3a6 6 0 0 1 12 0v3M9 12l3 3 3-3"/></symbol>
+  <symbol id="adult" viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><path d="M5 22v-6a7 7 0 0 1 14 0v6"/></symbol>
+  <symbol id="star" viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></symbol>
+  <symbol id="leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 4 13c0-5 4-9 9-9 3 0 5 1 7 2-2 0-4 1-5 3M11 20c4 0 9-3 9-11 0-1 0-2-1-3"/></symbol>
+  <symbol id="users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 21v-2a5 5 0 0 1 10 0v2"/><circle cx="17" cy="8" r="3"/><path d="M14 15a5 5 0 0 1 7 5"/></symbol>
+</svg>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-<div class="progress" id="progress"></div>
-
-<div class="rule-grid" aria-hidden="true">
-  <span></span><span></span><span></span><span></span><span></span><span></span>
-  <span></span><span></span><span></span><span></span><span></span><span></span>
+<!-- TOP BAR -->
+<div class="top">
+  <div class="wrap">
+    <span>Κτήμα Κλημεντίνη — Βόλβη Θεσσαλονίκης</span>
+    <div>
+      <a href="tel:+306907290348"><svg class="i"><use href="#ph"/></svg>690 729 0348</a>
+      <a href="mailto:info@ixnilatistherapy.gr"><svg class="i"><use href="#mail"/></svg>info@ixnilatistherapy.gr</a>
+    </div>
+  </div>
 </div>
 
-<header id="header">
-  <a href="#" class="logo" data-cursor>
-    <strong>Δρεβελέγκας</strong>
-    <small>Ακτινολογία</small>
-  </a>
-  <nav>
-    <a href="#services" data-cursor>Υπηρεσίες</a>
-    <a href="#expertise" data-cursor>Εξειδίκευση</a>
-    <a href="#articles" data-cursor>Άρθρα</a>
-    <a href="#contact" data-cursor>Επικοινωνία</a>
-  </nav>
-  <a href="#contact" class="header-cta" data-cursor>
-    <i></i><span>Ραντεβού</span>
-  </a>
+<!-- HEADER -->
+<header id="siteHeader">
+  <div class="wrap">
+    <a href="#" class="brand">
+      <span class="mark"><svg class="i"><use href="#horseshoe"/></svg></span>
+      <span><b>Ιχνηλάτης Ονείρων</b><small>Θεραπευτική Ιππασία · Βόλβη</small></span>
+    </a>
+    <nav>
+      <a href="#about">Η Ομάδα</a>
+      <a href="#services">Υπηρεσίες</a>
+      <a href="#vaulting">Vaulting</a>
+      <a href="#reviews">Εμπειρίες</a>
+      <a href="#contact">Επικοινωνία</a>
+    </nav>
+    <a href="#contact" class="btn">Κλείστε Ραντεβού <svg class="i"><use href="#arrow"/></svg></a>
+    <button class="burger" id="burger" aria-label="Μενού"><span></span><span></span><span></span></button>
+  </div>
 </header>
 
-<!-- HERO -->
-<div class="hero-scene" id="heroScene">
-  <div class="hero-pin">
+<!-- MOBILE NAV -->
+<div class="mnav" id="mnav">
+  <a href="#about">Η Ομάδα</a>
+  <a href="#services">Υπηρεσίες</a>
+  <a href="#vaulting">Vaulting</a>
+  <a href="#team">Η Φωτεινή</a>
+  <a href="#reviews">Εμπειρίες</a>
+  <a href="#contact">Επικοινωνία</a>
+</div>
 
-    <div class="hero-panel" id="heroPanel">
-      <!--
-        ═══════════════════════════════════════════════════════════
-        VIDEO SLOT — αν έχεις .mp4 από Kling/Runway/Sora,
-        βάλε το src="images/hero.mp4" και διέγραψε το <img>.
-        Το βίντεο θα γίνει scroll-scrubbed αυτόματα.
-        ═══════════════════════════════════════════════════════════
-      -->
-      <video id="heroVideo" muted playsinline preload="auto"
-             poster="https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2000&auto=format&fit=crop">
-        <!-- <source src="images/hero.mp4" type="video/mp4"> -->
-      </video>
+<!-- HERO με VIDEO -->
+<section class="hero">
+  <!-- VIDEO BACKGROUND -->
+  <video class="hero-video" autoplay muted loop playsinline preload="auto"
+         poster="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=2000&q=80"
+         aria-hidden="true">
+    <source src="hero-video.mp4" type="video/mp4">
+    <!-- Αν έχεις και WebM, ξεσχολίασέ το:
+    <source src="hero-video.webm" type="video/webm">
+    -->
+  </video>
+  <div class="hero-overlay" aria-hidden="true"></div>
 
-      <!-- Fallback image (used if video has no source) -->
-      <img id="heroImg"
-           src="https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2000&auto=format&fit=crop"
-           alt="Ιατρικός χώρος">
-
-      <div class="hero-scan"></div>
-
-      <div class="hero-reticle">
-        <span class="corner tl"></span>
-        <span class="corner tr"></span>
-        <span class="corner bl"></span>
-        <span class="corner br"></span>
+  <div class="wrap">
+    <div>
+      <span class="hero-badge">Θεραπευτική & Εκπαιδευτική Ιππασία</span>
+      <h1>Εκεί που τα <em>όνειρα</em><br>συναντούν τα άλογα.</h1>
+      <p class="lead">Στον Ιχνηλάτη Ονείρων πιστεύουμε στη δύναμη της σχέσης ανθρώπου–αλόγου. Μέσα από τη θεραπευτική και εκπαιδευτική ιππασία, δημιουργούμε έναν χώρο ανάπτυξης, χαράς και ψυχοσυναισθηματικής στήριξης για παιδιά και ενήλικες.</p>
+      <div class="acts">
+        <a href="#contact" class="btn">Κλείστε μια επίσκεψη <svg class="i"><use href="#arrow"/></svg></a>
+        <a href="#services" class="btn ghost">Οι υπηρεσίες μας <svg class="i"><use href="#arrow"/></svg></a>
       </div>
     </div>
+    <div class="hero-side">
+      <div class="hero-card">
+        <h3>Τμήματα</h3>
+        <dl>
+          <div><dt>Θεραπευτική Ιππασία</dt><dd>Για παιδιά & ενήλικες με ψυχοσυναισθηματικές ή σωματικές ανάγκες</dd></div>
+          <div><dt>Εκπαιδευτική Ιππασία</dt><dd>Πρόγραμμα εξοικείωσης & εκμάθησης με το άλογο</dd></div>
+          <div><dt>Τμήματα Ενηλίκων</dt><dd>Ιππασία για όλα τα επίπεδα, με εκδρομές όλο τον χρόνο</dd></div>
+          <div><dt>Vaulting</dt><dd>Χορός, ενόργανη γυμναστική & ιππασία σε ένα</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">Κύλισε</div>
+</section>
 
-    <div class="hero-text">
-      <h1 class="hero-title">
-        <span class="line"><span>Ακρίβεια</span></span>
-        <span class="line"><span>στη <em>διάγνωση</em>,</span></span>
-        <span class="line"><span>φροντίδα στην πράξη.</span></span>
-      </h1>
+<!-- ABOUT -->
+<section id="about" class="s about">
+  <div class="wrap">
+    <div class="about-img revealL">
+      <img src="https://images.unsplash.com/photo-1568300623803-5b47b284cbdc?w=1200&q=80" alt="Θεραπευτική ιππασία στη φύση">
+    </div>
+    <div class="about-txt revealR">
+      <span class="tag">Ποιοι Είμαστε</span>
+      <h2>Μια ομάδα που αγαπάει τα άλογα & τους ανθρώπους.</h2>
+      <p>Ο <strong>Ιχνηλάτης Ονείρων</strong> είναι μια ομάδα που ασχολείται με την Εκπαιδευτική Ιππασία και το Εκπαιδευτικό παιχνίδι με το άλογο, καθώς και με τη Θεραπευτική Ιππασία. Στεγάζεται στο Κτήμα Κλημεντίνη, στη Βόλβη Θεσσαλονίκης.</p>
+      <p>Δίπλα στο άλογο και τον αναβάτη βρίσκονται πάντα <strong>πλαϊνοί εκπαιδευτές (side walkers)</strong> και ο <strong>οδηγός του αλόγου</strong> — για ασφάλεια, σωστή στάση και ουσιαστική εκπαίδευση σε κάθε βήμα.</p>
+      <div class="about-stats">
+        <div><b data-count="12">0</b><span>Χρόνια εμπειρίας</span></div>
+        <div><b data-count="100" data-suffix="+">0+</b><span>Μαθητές</span></div>
+        <div><b data-count="4">0</b><span>Τμήματα</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-      <div class="hero-side">
-        <div class="hero-meta">
-          <span class="kicker">Επεμβατική &amp; Διαγνωστική Ακτινολογία</span>
-          <p>Εξειδικευμένες επεμβατικές και διαγνωστικές πράξεις με έμφαση στην ασφάλεια, την τεκμηρίωση και την ανθρώπινη επαφή.</p>
-          <div class="sig">
-            <strong>Αντώνιος &amp; Κωνσταντίνος Δρεβελέγκας</strong>
-            Ιατροί Ακτινολόγοι
-          </div>
+<!-- SERVICES -->
+<section id="services" class="s sand">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="tag">Οι Υπηρεσίες μας</span>
+      <h2>Προγράμματα σχεδιασμένα<br>για κάθε ηλικία & ανάγκη.</h2>
+    </div>
+    <div class="svc-grid">
+      <article class="svc reveal">
+        <div class="svc-ic"><svg class="i"><use href="#heart"/></svg></div>
+        <h3>Θεραπευτική Ιππασία</h3>
+        <p>Εξατομικευμένα προγράμματα που αξιοποιούν την κίνηση του αλόγου ως θεραπευτικό μέσο, ενισχύοντας τον συντονισμό, τη συγκέντρωση και τη συναισθηματική ισορροπία.</p>
+      </article>
+      <article class="svc reveal d1">
+        <div class="svc-ic"><svg class="i"><use href="#kid"/></svg></div>
+        <h3>Εκπαιδευτική Ιππασία & Παιχνίδι</h3>
+        <p>Δημιουργική απασχόληση με το άλογο, καλλιέργεια δεξιοτήτων και εκπαιδευτικό παιχνίδι στη φύση, σε ένα ασφαλές και υποστηρικτικό περιβάλλον.</p>
+      </article>
+      <article class="svc reveal d2">
+        <div class="svc-ic"><svg class="i"><use href="#adult"/></svg></div>
+        <h3>Τμήματα Ενηλίκων</h3>
+        <p>Ιππασία για ενήλικες όλων των επιπέδων — από την πρώτη επαφή με το άλογο έως οργανωμένες εκδρομές και δράσεις καθ' όλη τη διάρκεια του χρόνου.</p>
+      </article>
+      <article class="svc reveal">
+        <div class="svc-ic"><svg class="i"><use href="#star"/></svg></div>
+        <h3>Vaulting</h3>
+        <p>Πρωτοποριακό τμήμα για τα ελληνικά δεδομένα: συνδυασμός ενόργανης γυμναστικής, χορού και ιππασίας — μια μοναδική εμπειρία πάνω στο άλογο.</p>
+      </article>
+      <article class="svc reveal d1">
+        <div class="svc-ic"><svg class="i"><use href="#users"/></svg></div>
+        <h3>Δράσεις για Σχολεία & Φορείς</h3>
+        <p>Οργανωμένα προγράμματα για σχολικές ομάδες, φορείς εκπαίδευσης και οικογένειες, με σεβασμό στο παιδί και στο φυσικό περιβάλλον.</p>
+      </article>
+      <article class="svc reveal d2">
+        <div class="svc-ic"><svg class="i"><use href="#leaf"/></svg></div>
+        <h3>Ημέρες Οικογένειας</h3>
+        <p>Επισκέψεις στο κτήμα, επαφή με τα ζώα, φύτευση, παιχνίδια στη φύση και εμπειρίες που μένουν αξέχαστες σε μικρούς και μεγάλους.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- VAULTING FEATURE -->
+<section id="vaulting" class="s vaulting">
+  <div class="wrap">
+    <div class="revealL">
+      <span class="tag">Νέο Πρόγραμμα</span>
+      <h2>Γνωρίστε το <em>Vaulting</em> —<br>χορός πάνω στο άλογο.</h2>
+      <p>Ο Ιχνηλάτης Ονείρων φέρνει κάτι καινούργιο για τα ελληνικά δεδομένα. Ένας μοναδικός συνδυασμός χορού, ενόργανης γυμναστικής και ιππασίας πάνω στο άλογο που αξίζει να δοκιμάσετε.</p>
+      <p>Η εξάσκηση ξεκινάει στο έδαφος, σε ειδικά διαμορφωμένη αίθουσα με στρώματα, ενώ παράλληλα γνωριζόμαστε και εξοικειωνόμαστε με το άλογο — με ασφάλεια, ρυθμό και πολλή χαρά.</p>
+      <div class="vaulting-features">
+        <span class="vf">Ισορροπία</span>
+        <span class="vf">Χορογραφία</span>
+        <span class="vf">Ενόργανη</span>
+        <span class="vf">Ομαδικότητα</span>
+        <span class="vf">Αυτοπεποίθηση</span>
+      </div>
+    </div>
+    <div class="vaulting-media revealR">
+      <img src="https://images.unsplash.com/photo-1598974357801-cbca100e65d3?w=1200&q=80" alt="Vaulting — χορός πάνω στο άλογο">
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team" class="s">
+  <div class="wrap">
+    <div class="team-card reveal">
+      <div class="team-photo revealS">
+        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80" alt="Φωτεινή Κεδρά, ιδρύτρια">
+      </div>
+      <div>
+        <span class="tag">Η Ιδρύτρια</span>
+        <h2>Φωτεινή Κεδρά</h2>
+        <p class="role">Παιδαγωγός · Εκπαιδεύτρια Θεραπευτικής Ιππασίας (PATH Intl.)</p>
+        <p>Απόφοιτη του τμήματος <strong>Προσχολικής Αγωγής & Εκπαίδευσης</strong> του Αριστοτελείου Πανεπιστημίου Θεσσαλονίκης (2010), με κατεύθυνση στην Ειδική Αγωγή. Μετεκπαιδεύτηκε στον αυτισμό (TEACCH, MAKATON) και στις μαθησιακές δυσκολίες.</p>
+        <p>Ήρθε σε επαφή με τη θεραπευτική ιππασία το 2012 ως εθελόντρια στο κέντρο «Ιπποστήριξη» στον Λαγκαδά. Το <strong>2015</strong> έλαβε πιστοποίηση εκπαιδεύτριας θεραπευτικής ιππασίας από την <strong>PATH Intl.</strong> (Pennsylvania Council on Therapeutic Horsemanship).</p>
+        <div class="team-meta">
+          <span><svg class="i"><use href="#cal"/></svg>ΑΠΘ · 2010</span>
+          <span><svg class="i"><use href="#star"/></svg>PATH Intl. · 2015</span>
         </div>
       </div>
     </div>
-
-    <!-- Film slate — REC, timecode, scene -->
-    <div class="film-slate">
-      <div class="row"><span class="rec"></span><span>REC</span></div>
-      <div class="row"><span id="timecode">00:00:00</span></div>
-      <div class="row"><span>SCENE 01 · TAKE 01</span></div>
-    </div>
-
-    <div class="scroll-hint">
-      <span class="bar"></span>
-      Scroll
-    </div>
-    <div class="hero-index">Fig. 01 — Το ιατρείο</div>
   </div>
-</div>
+</section>
 
-<!-- STRIP -->
-<div class="strip">
-  <div class="strip-track">
-    <div class="strip-item">Υπέρηχοι</div>
-    <div class="strip-item">Βιοψίες</div>
-    <div class="strip-item">Παροχετεύσεις</div>
-    <div class="strip-item">Εμβολισμοί</div>
-    <div class="strip-item">Θεραπεία πόνου</div>
-    <div class="strip-item">Αξονική τομογραφία</div>
-    <div class="strip-item">Barbotage</div>
-    <div class="strip-item">Υπέρηχοι</div>
-    <div class="strip-item">Βιοψίες</div>
-    <div class="strip-item">Παροχετεύσεις</div>
-    <div class="strip-item">Εμβολισμοί</div>
-    <div class="strip-item">Θεραπεία πόνου</div>
-    <div class="strip-item">Αξονική τομογραφία</div>
-    <div class="strip-item">Barbotage</div>
-  </div>
-</div>
-
-<!-- SERVICES -->
-<section id="services">
-  <div class="sec-head">
-    <div class="sec-num reveal">01 / Υπηρεσίες</div>
-    <div class="sec-title reveal-line"><span>Επεμβατικές <em>πράξεις</em> με έλεγχο εικόνας.</span></div>
-    <div class="sec-note reveal">Κάθε πράξη εκτελείται κάτω από συνεχή απεικονιστικό έλεγχο, με πρωτόκολλα ασφαλείας και τεκμηρίωση.</div>
-  </div>
-
-  <div class="services">
-    <div class="service reveal" data-cursor>
-      <div class="service-bg"></div>
-      <div class="service-inner">
-        <span class="service-num">01 / Διάγνωση</span>
-        <h3 class="service-title">Υπερηχοτομογραφία <em>&amp; Doppler</em></h3>
-        <p class="service-desc">Λεπτομερής απεικόνιση μαλακών μορίων, αγγείων και οργάνων με άμεση αξιολόγηση.</p>
-        <div class="service-arrow"></div>
-      </div>
+<!-- REVIEWS -->
+<section id="reviews" class="s sand">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="tag">Είπαν για εμάς</span>
+      <h2>Αληθινές εμπειρίες<br>από τις οικογένειες μας.</h2>
     </div>
-
-    <div class="service reveal" data-cursor>
-      <div class="service-bg"></div>
-      <div class="service-inner">
-        <span class="service-num">02 / Επέμβαση</span>
-        <h3 class="service-title">Βιοψίες <em>καθοδηγούμενες</em></h3>
-        <p class="service-desc">Λήψη ιστοτεμαχίων με ακρίβεια χιλιοστού, υπό υπερηχογραφικό ή αξονικό έλεγχο.</p>
-        <div class="service-arrow"></div>
-      </div>
-    </div>
-
-    <div class="service reveal" data-cursor>
-      <div class="service-bg"></div>
-      <div class="service-inner">
-        <span class="service-num">03 / Θεραπεία</span>
-        <h3 class="service-title">Θεραπεία πόνου <em>&amp; αρθρώσεων</em></h3>
-        <p class="service-desc">Στοχευμένες εγχύσεις, Barbotage και επεμβατικές τεχνικές για χρόνιο πόνο.</p>
-        <div class="service-arrow"></div>
-      </div>
-    </div>
-
-    <div class="service reveal" data-cursor>
-      <div class="service-bg"></div>
-      <div class="service-inner">
-        <span class="service-num">04 / Αγγεία</span>
-        <h3 class="service-title">Εμβολισμοί <em>&amp; επεμβάσεις</em></h3>
-        <p class="service-desc">Ενδαγγειακές επεμβάσεις ελάχιστης επεμβατικότητας με στόχο την ταχεία αποκατάσταση.</p>
-        <div class="service-arrow"></div>
-      </div>
-    </div>
-
-    <div class="service reveal" data-cursor>
-      <div class="service-bg"></div>
-      <div class="service-inner">
-        <span class="service-num">05 / Παροχέτευση</span>
-        <h3 class="service-title">Παροχετεύσεις <em>&amp; τοποθέτηση</em></h3>
-        <p class="service-desc">Τοποθέτηση καθετήρων και παροχετευτικών σωλήνων με απεικονιστική καθοδήγηση.</p>
-        <div class="service-arrow"></div>
-      </div>
-    </div>
-
-    <div class="service reveal" data-cursor>
-      <div class="service-bg"></div>
-      <div class="service-inner">
-        <span class="service-num">06 / Απεικόνιση</span>
-        <h3 class="service-title">Αξονική <em>τομογραφία</em></h3>
-        <p class="service-desc">Υψηλής ευκρίνειας αξονικές εξετάσεις με πρωτόκολλα χαμηλής δόσης ακτινοβολίας.</p>
-        <div class="service-arrow"></div>
-      </div>
+    <div class="quotes">
+      <figure class="q reveal">
+        <span class="stars" aria-label="5 στα 5">★★★★★</span>
+        <p>«Περάσαμε υπέροχα! Ειδικά τα παιδιά το ευχαριστήθηκαν στο έπακρο! Ήρθαν σε επαφή με τη φύση μέσα σε ένα όμορφο περιβάλλον. Τα ζώα ήταν όλα πολύ φιλικά — η Πέρλα, ο Έλβις, ο Ιβανόης και ο Σπίριτ μας έμειναν αξέχαστοι.»</p>
+        <cite>Rodi Kazantzoglou<small>Google Review</small></cite>
+      </figure>
+      <figure class="q reveal d1">
+        <span class="stars" aria-label="5 στα 5">★★★★★</span>
+        <p>«Όποιος δεν το έχει επισκεφτεί, ό,τι κι αν γράψω δεν θα καταλάβει. Η Φένια με τον Γιάννη και τη μικρή Κλημεντίνη θα σε μαγέψουν με την πρώτη επαφή. Όταν έρθεις σε επαφή με τα υπέροχα άλογα, θα γίνεις κι εσύ κομμάτι της παρέας.»</p>
+        <cite>Αναστασία Στεργίου<small>Google Review</small></cite>
+      </figure>
+      <figure class="q reveal d2">
+        <span class="stars" aria-label="5 στα 5">★★★★★</span>
+        <p>«Ένας παράδεισος. Εξαιρετική επιλογή για παιδιά που αγαπούν τη φύση. Ταΐσαμε τα ζωάκια, φυτέψαμε και ο μικρός περιποιήθηκε και ίππευσε την υπέροχη Πέρλα. Έξτρα μπόνους: φάγαμε βατόμουρα!»</p>
+        <cite>Sofia Merm<small>Google Review</small></cite>
+      </figure>
     </div>
   </div>
 </section>
 
-<!-- EXPERTISE -->
-<section id="expertise" style="padding-top:0">
-  <div class="sec-head">
-    <div class="sec-num reveal">02 / Εξειδίκευση</div>
-    <div class="sec-title reveal-line"><span>Δύο ειδικότητες, <em>μία</em> προσέγγιση.</span></div>
-    <div class="sec-note reveal">Η συνέργεια διαγνωστικής και επεμβατικής ακτινολογίας σε ένα ενιαίο πλάνο φροντίδας.</div>
-  </div>
-
-  <div class="split">
-    <div class="split-image reveal" data-cursor>
-      <span class="tag">Fig. 02</span>
-      <img src="https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?q=80&w=1400&auto=format&fit=crop" alt="Ακτινολογικό εργαστήριο">
-      <div class="scan"></div>
-      <div class="sweep"></div>
-    </div>
-
-    <div class="split-content">
-      <h3 class="reveal-line"><span>Από τη <em>διάγνωση</em> στη θεραπευτική πράξη.</span></h3>
-      <p class="reveal">Στο ιατρείο συνδυάζουμε την ακρίβεια της διαγνωστικής απεικόνισης με την άμεση δυνατότητα επέμβασης. Αυτό σημαίνει λιγότερες μετακινήσεις, ταχύτερη λήψη αποφάσεων και συνέχεια στη φροντίδα.</p>
-
-      <ul class="feature-list">
-        <li class="reveal" data-cursor>
-          <span class="idx">01</span>
-          <div class="txt"><strong>Σύγχρονος εξοπλισμός</strong><span>Ψηφιακά μηχανήματα τελευταίας γενιάς για εικόνα υψηλής ευκρίνειας.</span></div>
-        </li>
-        <li class="reveal" data-cursor>
-          <span class="idx">02</span>
-          <div class="txt"><strong>Πρωτόκολλα ασφαλείας</strong><span>Αυστηρή τήρηση κανόνων αντισηψίας και παρακολούθηση κάθε βήματος.</span></div>
-        </li>
-        <li class="reveal" data-cursor>
-          <span class="idx">03</span>
-          <div class="txt"><strong>Άμεση ανταπόκριση</strong><span>Ραντεβού σε σύντομο χρόνο, με προτεραιότητα στην κλινική ανάγκη.</span></div>
-        </li>
-        <li class="reveal" data-cursor>
-          <span class="idx">04</span>
-          <div class="txt"><strong>Συνεργασία με θεράποντα</strong><span>Άμεση επικοινωνία με τον γιατρό σας για συνέχεια στη φροντίδα.</span></div>
-        </li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- STATS -->
-<section style="padding-top:0">
-  <div class="stats">
-    <div class="stat reveal">
-      <div class="val"><span class="count" data-target="25">0</span><span class="suf">+</span></div>
-      <div class="lbl">Χρόνια εμπειρίας</div>
-    </div>
-    <div class="stat reveal">
-      <div class="val"><span class="count" data-target="8000">0</span><span class="suf">+</span></div>
-      <div class="lbl">Επεμβάσεις</div>
-    </div>
-    <div class="stat reveal">
-      <div class="val"><span class="count" data-target="2">0</span></div>
-      <div class="lbl">Ειδικότητες</div>
-    </div>
-    <div class="stat reveal">
-      <div class="val"><span class="count" data-target="100">0</span><span class="suf">%</span></div>
-      <div class="lbl">Τεκμηρίωση</div>
-    </div>
-  </div>
-</section>
-
-<!-- ARTICLES -->
-<section id="articles" style="padding-top:0">
-  <div class="sec-head">
-    <div class="sec-num reveal">03 / Νέα &amp; Άρθρα</div>
-    <div class="sec-title reveal-line"><span>Ενημέρωση από την <em>πράξη</em>.</span></div>
-    <div class="sec-note reveal">Σημειώσεις, τεχνικές και παρουσιάσεις από συνέδρια και καθημερινή κλινική εμπειρία.</div>
-  </div>
-
-  <div class="articles">
-    <a href="#" class="article reveal" data-cursor>
-      <div class="article-img">
-        <img src="https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=1200&auto=format&fit=crop" alt="Θεραπεία ώμου">
-        <div class="scan"></div>
-      </div>
-      <div class="article-meta">
-        <span class="cat">Τεχνική</span><span class="sep"></span><span>Δεκέμβριος 2024</span>
-      </div>
-      <h3>Θεραπεία της ασβεστοποιού τενοντίτιδος του ώμου — Barbotage</h3>
-      <p>Υπό τον έλεγχο υπερήχων ή αξονικής τομογραφίας εντοπίζεται η επασβέστωση και πραγματοποιείται παροχέτευσή της με στόχο την ανακούφιση του πόνου.</p>
-    </a>
-
-    <a href="#" class="article reveal" data-cursor>
-      <div class="article-img">
-        <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?q=80&w=1200&auto=format&fit=crop" alt="Συνέδριο">
-        <div class="scan"></div>
-      </div>
-      <div class="article-meta">
-        <span class="cat">Συνέδριο</span><span class="sep"></span><span>Νοέμβριος 2024</span>
-      </div>
-      <h3>Παρουσίαση σε συνέδριο επεμβατικής ακτινολογίας</h3>
-      <p>Παρουσίαση περιστατικών και τεχνικών σε πανελλήνιο συνέδριο, με έμφαση στην ελάχιστη επεμβατικότητα και την ταχεία αποκατάσταση.</p>
-    </a>
-
-    <a href="#" class="article reveal" data-cursor>
-      <div class="article-img">
-        <img src="https://images.unsplash.com/photo-1512678080530-7760d81faba6?q=80&w=1200&auto=format&fit=crop" alt="Απεικόνιση">
-        <div class="scan"></div>
-      </div>
-      <div class="article-meta">
-        <span class="cat">Απεικόνιση</span><span class="sep"></span><span>Οκτώβριος 2024</span>
-      </div>
-      <h3>Αξονική τομογραφία χαμηλής δόσης — πότε και γιατί</h3>
-      <p>Επιλογή πρωτοκόλλου με βάση την κλινική ένδειξη, με στόχο τη μέγιστη διαγνωστική αξία και την ελάχιστη επιβάρυνση.</p>
-    </a>
+<!-- CTA STRIP -->
+<section class="cta-strip">
+  <div class="wrap">
+    <span class="tag" style="justify-content:center;display:flex">Ελάτε να μας γνωρίσετε</span>
+    <h2>Η εμπειρία ξεκινά με ένα βήμα.</h2>
+    <p>Καλέστε μας για να κανονίσουμε μια επίσκεψη στο Κτήμα Κλημεντίνη, ή στείλτε μας ένα email με τις ερωτήσεις σας — θα χαρούμε να σας γνωρίσουμε.</p>
+    <a href="#contact" class="btn">Επικοινωνία <svg class="i"><use href="#arrow"/></svg></a>
   </div>
 </section>
 
 <!-- CONTACT -->
-<div class="contact-wrap" id="contact">
-  <div class="contact">
-    <div class="contact-left">
-      <div class="sec-num reveal" style="margin-bottom:32px">04 / Επικοινωνία</div>
-      <h2 class="reveal-line"><span>Κλείστε <em>ραντεβού</em>.</span></h2>
-      <p class="reveal">Για προγραμματισμό εξέτασης ή επέμβασης, επικοινωνήστε τηλεφωνικά. Θα σας ενημερώσουμε για την προετοιμασία και τα απαραίτητα έγγραφα.</p>
-      <div class="contact-buttons reveal">
-        <a href="tel:+302310000000" class="btn-primary" data-cursor>
-          <i></i><span>Τηλεφωνικό ραντεβού</span>
-        </a>
-        <a href="mailto:info@drevelegas.gr" class="btn-secondary" data-cursor>
-          <span>Email επικοινωνία</span>
-        </a>
+<section id="contact" class="s contact">
+  <div class="wrap">
+    <div class="revealL">
+      <span class="tag">Επικοινωνία</span>
+      <h2>Ελάτε στο κτήμα.</h2>
+      <p>Θα χαρούμε να σας υποδεχτούμε στο Κτήμα Κλημεντίνη στη Βόλβη. Επικοινωνήστε μαζί μας για ραντεβού, πληροφορίες ή για να κλείσετε μια δοκιμαστική επίσκεψη.</p>
+      <div class="info">
+        <div>
+          <span class="ic-circle"><svg class="i"><use href="#pin"/></svg></span>
+          <div>
+            <h4>Τοποθεσία</h4>
+            <p>Κτήμα Κλημεντίνη, Βόλβη Θεσσαλονίκης</p>
+          </div>
+        </div>
+        <div>
+          <span class="ic-circle"><svg class="i"><use href="#ph"/></svg></span>
+          <div>
+            <h4>Τηλέφωνο</h4>
+            <a class="n" href="tel:+306907290348">690 729 0348</a>
+          </div>
+        </div>
+        <div>
+          <span class="ic-circle"><svg class="i"><use href="#mail"/></svg></span>
+          <div>
+            <h4>Email</h4>
+            <a href="mailto:info@ixnilatistherapy.gr">info@ixnilatistherapy.gr</a>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="contact-right">
-      <div class="info-block reveal">
-        <div class="k">Διεύθυνση</div>
-        <div class="v">Θεσσαλονίκη<br><span style="color:var(--ink-3);font-size:13px">Κατόπιν ραντεβού</span></div>
-      </div>
-      <div class="info-block reveal">
-        <div class="k">Τηλέφωνο</div>
-        <div class="v"><a href="tel:+302310000000">+30 2310 000 000</a></div>
-      </div>
-      <div class="info-block reveal">
-        <div class="k">Email</div>
-        <div class="v"><a href="mailto:info@drevelegas.gr">info@drevelegas.gr</a></div>
-      </div>
-      <div class="info-block reveal">
-        <div class="k">Ώρες</div>
-        <div class="v">Δευτέρα — Παρασκευή<br><span style="color:var(--ink-3);font-size:13px">09:00 — 20:00</span></div>
-      </div>
+    <div class="map revealR">
+      <iframe title="Χάρτης — Κτήμα Κλημεντίνη, Βόλβη" src="https://www.google.com/maps?q=Κτήμα+Κλημεντίνη,+Βόλβη+Θεσσαλονίκη&output=embed" allowfullscreen loading="lazy"></iframe>
     </div>
   </div>
-</div>
+</section>
 
+<!-- FOOTER -->
 <footer>
-  <div class="f-col">
-    <span class="mark">Δρεβελέγκας</span>
-    <span>Επεμβατική &amp; Διαγνωστική Ακτινολογία</span>
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="fbrand">
+        <b>Ιχνηλάτης Ονείρων</b>
+        <p>Θεραπευτική & Εκπαιδευτική Ιππασία, Vaulting, τμήματα ενηλίκων. Στο Κτήμα Κλημεντίνη, στη Βόλβη Θεσσαλονίκης.</p>
+      </div>
+      <div>
+        <h4>Πλοήγηση</h4>
+        <ul>
+          <li><a href="#about">Η Ομάδα</a></li>
+          <li><a href="#services">Υπηρεσίες</a></li>
+          <li><a href="#vaulting">Vaulting</a></li>
+          <li><a href="#reviews">Εμπειρίες</a></li>
+          <li><a href="#contact">Επικοινωνία</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Επικοινωνία</h4>
+        <ul>
+          <li><a href="tel:+306907290348">690 729 0348</a></li>
+          <li><a href="mailto:info@ixnilatistherapy.gr">info@ixnilatistherapy.gr</a></li>
+          <li>Κτήμα Κλημεντίνη, Βόλβη</li>
+        </ul>
+      </div>
+    </div>
+    <div class="copy">
+      <span>© <span id="year"></span> Ιχνηλάτης Ονείρων. All rights reserved.</span>
+      <span>Σχεδιασμός με σεβασμό στη φύση & στα άλογα 🌿</span>
+    </div>
   </div>
-  <div class="f-col">
-    <a href="#" data-cursor>Πολιτική απορρήτου</a>
-    <a href="#" data-cursor>Όροι χρήσης</a>
-  </div>
-  <div class="f-col"><span>© 2025</span></div>
 </footer>
 
+<button class="toTop" id="toTop" aria-label="Επιστροφή στην κορυφή"><svg class="i"><use href="#up"/></svg></button>
+
 <script>
-(function(){
-  'use strict';
+/* -------- Burger menu -------- */
+const burger=document.getElementById('burger');
+const mnav=document.getElementById('mnav');
+burger?.addEventListener('click',()=>{
+  burger.classList.toggle('open');
+  mnav.classList.toggle('open');
+  document.body.style.overflow=mnav.classList.contains('open')?'hidden':'';
+});
+mnav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+  burger.classList.remove('open');
+  mnav.classList.remove('open');
+  document.body.style.overflow='';
+}));
 
-  /* ============================================================
-     CUSTOM CURSOR with lerp
-     ============================================================ */
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
-  let mx = innerWidth/2, my = innerHeight/2;
-  let cx = mx, cy = my, rx = mx, ry = my;
-
-  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-
-  function cursorLoop(){
-    cx += (mx - cx) * 0.4;
-    cy += (my - cy) * 0.4;
-    rx += (mx - rx) * 0.14;
-    ry += (my - ry) * 0.14;
-    cursor.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%)`;
-    ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
-    requestAnimationFrame(cursorLoop);
-  }
-  cursorLoop();
-
-  document.querySelectorAll('[data-cursor], a, button').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.classList.add('hover');
-      ring.classList.add('hover');
-    });
-    el.addEventListener('mouseleave', () => {
-      cursor.classList.remove('hover');
-      ring.classList.remove('hover');
-    });
+/* -------- Scroll reveal -------- */
+const revealEls=document.querySelectorAll('.reveal,.revealL,.revealR,.revealS');
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
   });
+},{threshold:.14,rootMargin:'0px 0px -60px 0px'});
+revealEls.forEach(el=>io.observe(el));
 
-  /* ============================================================
-     CINEMATIC CANVAS ENGINE
-     - Volumetric light rays (volumetric-ish, additive)
-     - Depth particles (dust motes)
-     - Lens flare following the cursor
-     - Vignette
-     - Chromatic aberration on scroll
-     - Scanlines (subtle, whole page)
-     ============================================================ */
-  const canvas = document.getElementById('cinema');
-  const ctx = canvas.getContext('2d', { alpha:true });
-  let W = 0, H = 0, DPR = Math.min(devicePixelRatio || 1, 2);
-
-  function resize(){
-    W = canvas.width = innerWidth * DPR;
-    H = canvas.height = innerHeight * DPR;
-    canvas.style.width = innerWidth + 'px';
-    canvas.style.height = innerHeight + 'px';
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  }
-  resize();
-  addEventListener('resize', resize);
-
-  /* ---- Particles (dust motes) ---- */
-  const PARTICLES = [];
-  const PARTICLE_COUNT = Math.min(60, Math.floor(innerWidth / 28));
-  for (let i = 0; i < PARTICLE_COUNT; i++){
-    PARTICLES.push({
-      x: Math.random() * innerWidth,
-      y: Math.random() * innerHeight,
-      z: Math.random() * 0.9 + 0.1,        // depth 0.1..1
-      r: Math.random() * 1.6 + 0.3,
-      vx: (Math.random() - 0.5) * 0.16,
-      vy: (Math.random() - 0.5) * 0.12 - 0.02,
-      a: Math.random() * 0.5 + 0.15
-    });
-  }
-
-  /* ---- Light rays ---- */
-  const RAYS = [];
-  const RAY_COUNT = 5;
-  for (let i = 0; i < RAY_COUNT; i++){
-    RAYS.push({
-      angle: -Math.PI/3 + i * 0.18,
-      width: 90 + Math.random() * 120,
-      speed: 0.0006 + Math.random() * 0.0009,
-      phase: Math.random() * Math.PI * 2,
-      intensity: 0.045 + Math.random() * 0.05
-    });
-  }
-
-  /* ---- Film grain (per-frame random noise on a low-res offscreen) ---- */
-  const grainCanvas = document.createElement('canvas');
-  grainCanvas.width = 240;
-  grainCanvas.height = 140;
-  const grainCtx = grainCanvas.getContext('2d');
-  let grainImage = grainCtx.createImageData(grainCanvas.width, grainCanvas.height);
-  let grainFrame = 0;
-
-  function refreshGrain(){
-    const d = grainImage.data;
-    for (let i = 0; i < d.length; i += 4){
-      const v = Math.random() * 255 | 0;
-      d[i] = d[i+1] = d[i+2] = v;
-      d[i+3] = Math.random() * 42 | 0; // alpha 0..42
+/* -------- Animated counters -------- */
+const counters=document.querySelectorAll('[data-count]');
+const cIo=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const el=e.target;
+    const target=+el.dataset.count;
+    const suffix=el.dataset.suffix||'';
+    const dur=1800;
+    const t0=performance.now();
+    function tick(now){
+      const p=Math.min((now-t0)/dur,1);
+      const eased=1-Math.pow(1-p,3);
+      el.textContent=Math.round(target*eased)+suffix;
+      if(p<1)requestAnimationFrame(tick);
     }
-    grainCtx.putImageData(grainImage, 0, 0);
-  }
+    requestAnimationFrame(tick);
+    cIo.unobserve(el);
+  });
+},{threshold:.5});
+counters.forEach(c=>cIo.observe(c));
 
-  /* ---- Time / scroll state ---- */
-  let t = 0;
-  let scrollP = 0;      // 0..1 page scroll
-  let velocity = 0;     // scroll velocity, for aberration
+/* -------- Header, progress, back to top -------- */
+const header=document.getElementById('siteHeader');
+const progress=document.getElementById('progress');
+const toTop=document.getElementById('toTop');
+function onScroll(){
+  const y=window.scrollY;
+  header.classList.toggle('scrolled',y>10);
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  progress.style.width=(h>0?(y/h)*100:0)+'%';
+  toTop.classList.toggle('show',y>700);
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+onScroll();
+toTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 
-  function updateScrollVars(){
-    const h = document.documentElement;
-    scrollP = h.scrollTop / (h.scrollHeight - h.clientHeight);
-  }
-  addEventListener('scroll', updateScrollVars, { passive:true });
-  updateScrollVars();
+/* -------- VIDEO BACKGROUND — Performance & Fallbacks -------- */
+const heroVideo=document.querySelector('.hero-video');
 
-  /* ============================================================
-     MAIN CANVAS LOOP
-     ============================================================ */
-  function draw(){
-    t += 0.008;
-
-    const Wc = innerWidth, Hc = innerHeight;
-
-    // Fade trail (motion blur for particles)
-    ctx.clearRect(0, 0, Wc, Hc);
-
-    /* -------- LIGHT RAYS (volumetric) -------- */
-    ctx.save();
-    ctx.globalCompositeOperation = 'lighter';
-    for (const ray of RAYS){
-      const cx2 = Wc * (0.15 + 0.7 * (0.5 + 0.5 * Math.sin(ray.phase + t * ray.speed * 60)));
-      const len = Math.max(Wc, Hc) * 1.6;
-      const dx = Math.cos(ray.angle) * len;
-      const dy = Math.sin(ray.angle) * len;
-
-      const grad = ctx.createLinearGradient(cx2, -Hc*0.2, cx2 + dx*0.5, -Hc*0.2 + dy*0.5);
-      const wobble = 0.85 + 0.15 * Math.sin(t * 1.4 + ray.phase);
-      grad.addColorStop(0, `rgba(200, 220, 235, ${ray.intensity * wobble * (1 - scrollP*0.4)})`);
-      grad.addColorStop(1, 'rgba(200, 220, 235, 0)');
-
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.moveTo(cx2 - ray.width/2, -Hc*0.2);
-      ctx.lineTo(cx2 + ray.width/2, -Hc*0.2);
-      ctx.lineTo(cx2 + dx*0.5 + ray.width*1.4, -Hc*0.2 + dy*0.5);
-      ctx.lineTo(cx2 + dx*0.5 - ray.width*1.4, -Hc*0.2 + dy*0.5);
-      ctx.closePath();
-      ctx.fill();
-    }
-    ctx.restore();
-
-    /* -------- PARTICLES (dust motes, depth) -------- */
-    ctx.save();
-    for (const p of PARTICLES){
-      p.x += p.vx * (1 + velocity * 0.4);
-      p.y += p.vy * (1 + velocity * 0.4);
-      p.vx += (Math.random() - 0.5) * 0.01;
-      p.vy += (Math.random() - 0.5) * 0.01;
-
-      // wrap
-      if (p.x < -10) p.x = Wc + 10;
-      if (p.x > Wc + 10) p.x = -10;
-      if (p.y < -10) p.y = Hc + 10;
-      if (p.y > Hc + 10) p.y = -10;
-
-      const alpha = p.a * p.z * (0.5 + 0.5 * scrollP);
-      ctx.fillStyle = `rgba(31, 77, 92, ${alpha})`;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r * p.z, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.restore();
-
-    /* -------- LENS FLARE following cursor -------- */
-    // small warm flare at cursor + soft ghost
-    ctx.save();
-    ctx.globalCompositeOperation = 'screen';
-    const flareX = mx;
-    const flareY = my;
-    const flareGrad = ctx.createRadialGradient(flareX, flareY, 0, flareX, flareY, 220);
-    flareGrad.addColorStop(0, 'rgba(201, 117, 90, 0.16)');
-    flareGrad.addColorStop(0.4, 'rgba(125, 150, 130, 0.07)');
-    flareGrad.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = flareGrad;
-    ctx.beginPath();
-    ctx.arc(flareX, flareY, 220, 0, Math.PI * 2);
-    ctx.fill();
-
-    // ghost opposite the center
-    const gX = Wc - (flareX - Wc/2) * 1.35;
-    const gY = Hc - (flareY - Hc/2) * 1.35;
-    const ghostGrad = ctx.createRadialGradient(gX, gY, 0, gX, gY, 120);
-    ghostGrad.addColorStop(0, 'rgba(31, 77, 92, 0.06)');
-    ghostGrad.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = ghostGrad;
-    ctx.beginPath();
-    ctx.arc(gX, gY, 120, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-
-    /* -------- SCANLINES (whole page, subtle) -------- */
-    ctx.save();
-    ctx.globalAlpha = 0.06;
-    ctx.fillStyle = '#0e1b2c';
-    const slStep = 4;
-    for (let y = 0; y < Hc; y += slStep){
-      ctx.fillRect(0, y, Wc, 1);
-    }
-    ctx.restore();
-
-    /* -------- VIGNETTE -------- */
-    const vig = ctx.createRadialGradient(Wc/2, Hc/2, Math.min(Wc, Hc)*0.35, Wc/2, Hc/2, Math.max(Wc, Hc)*0.75);
-    vig.addColorStop(0, 'rgba(0,0,0,0)');
-    vig.addColorStop(1, 'rgba(14, 27, 44, 0.28)');
-    ctx.fillStyle = vig;
-    ctx.fillRect(0, 0, Wc, Hc);
-
-    /* -------- CHROMATIC ABERRATION (scroll velocity) -------- */
-    if (Math.abs(velocity) > 0.6){
-      ctx.save();
-      ctx.globalCompositeOperation = 'screen';
-      ctx.globalAlpha = Math.min(Math.abs(velocity) / 40, 0.12);
-      // red on one side
-      ctx.fillStyle = 'rgba(201, 117, 90, 1)';
-      ctx.fillRect(-velocity * 0.6, 0, Wc * 0.4, Hc);
-      // blue on the other
-      ctx.fillStyle = 'rgba(31, 77, 92, 1)';
-      ctx.fillRect(Wc * 0.6, 0, Wc * 0.4, Hc);
-      ctx.restore();
-    }
-
-    /* -------- FILM GRAIN -------- */
-    grainFrame++;
-    if (grainFrame % 2 === 0) refreshGrain();
-    ctx.save();
-    ctx.globalAlpha = 0.35;
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(grainCanvas, 0, 0, Wc, Hc);
-    ctx.restore();
-
-    requestAnimationFrame(draw);
-  }
-  draw();
-
-  /* ============================================================
-     VELOCITY (for aberration)
-     ============================================================ */
-  let lastScroll = scrollY;
-  let lastTime = performance.now();
-  function velocityLoop(){
-    const now = performance.now();
-    const dt = Math.max(now - lastTime, 1);
-    const dy = scrollY - lastScroll;
-    velocity = velocity * 0.85 + (dy / dt * 16) * 0.15;
-    lastScroll = scrollY;
-    lastTime = now;
-    requestAnimationFrame(velocityLoop);
-  }
-  velocityLoop();
-
-  /* ============================================================
-     HERO SCROLL-DRIVEN SCENE + VIDEO SCRUB
-     ============================================================ */
-  const heroScene = document.getElementById('heroScene');
-  const heroPanel = document.getElementById('heroPanel');
-  const heroImg = document.getElementById('heroImg');
-  const heroVideo = document.getElementById('heroVideo');
-  const hasVideo = heroVideo && heroVideo.querySelector('source');
-
-  // If video exists, hide fallback image
-  if (hasVideo){
-    heroVideo.style.display = 'block';
-    if (heroImg) heroImg.style.display = 'none';
+if(heroVideo){
+  /* 1) Σεβασμός στο prefers-reduced-motion: pause το video */
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
     heroVideo.pause();
-    heroVideo.currentTime = 0;
-  } else if (heroVideo){
-    heroVideo.style.display = 'none';
+    heroVideo.removeAttribute('autoplay');
   }
 
-  function updateHero(){
-    const rect = heroScene.getBoundingClientRect();
-    const total = heroScene.offsetHeight - innerHeight;
-    const p = Math.min(Math.max(-rect.top / total, 0), 1);
-
-    // Panel grows from 38vw×56vh → 92vw×92vh
-    const w = 38 + (92 - 38) * p;
-    const h = 56 + (92 - 56) * p;
-    heroPanel.style.width = w + 'vw';
-    heroPanel.style.height = h + 'vh';
-    heroPanel.style.transform = `translate(-50%,-50%) translateY(${(0.5 - p) * 4}vh)`;
-
-    // Image reveal
-    if (heroImg && !hasVideo){
-      const scale = 1.15 - 0.15 * p;
-      const sat = 80 - 80 * p;
-      const bri = 1.02 + 0.03 * p;
-      heroImg.style.transform = `scale(${scale})`;
-      heroImg.style.filter = `grayscale(${sat}%) contrast(${1.05 + 0.02*p}) brightness(${bri})`;
-    }
-
-    // Video scrub (if exists and ready)
-    if (hasVideo && heroVideo.readyState >= 2 && heroVideo.duration){
-      const target = Math.min(heroVideo.duration - 0.01, p * heroVideo.duration * 0.98);
-      // Only set if far enough (avoid thrashing)
-      if (Math.abs(heroVideo.currentTime - target) > 0.03){
-        try { heroVideo.currentTime = target; } catch(e){}
-      }
-    }
-  }
-
-  /* ============================================================
-     SPLIT PARALLAX
-     ============================================================ */
-  const splitImg = document.querySelector('.split-image img');
-  function updateSplitParallax(){
-    if (!splitImg) return;
-    const r = splitImg.parentElement.getBoundingClientRect();
-    const vh = innerHeight;
-    if (r.top < vh && r.bottom > 0){
-      const prog = (vh - r.top) / (vh + r.height);
-      const shift = (prog - 0.5) * 36;
-      splitImg.style.transform = `translateY(${shift}px) scale(1.08)`;
-    }
-  }
-
-  /* ============================================================
-     LETTERBOX BARS — activate between 0.15 and 0.85 scroll
-     ============================================================ */
-  const lbTop = document.getElementById('lbTop');
-  const lbBottom = document.getElementById('lbBottom');
-  function updateLetterbox(){
-    const active = scrollP > 0.10 && scrollP < 0.92;
-    lbTop.classList.toggle('active', active);
-    lbBottom.classList.toggle('active', active);
-  }
-
-  /* ============================================================
-     TIMECODE — fake film counter
-     ============================================================ */
-  const tcEl = document.getElementById('timecode');
-  let tcSeconds = 0;
-  setInterval(() => {
-    tcSeconds++;
-    const h = String(Math.floor(tcSeconds/3600)).padStart(2,'0');
-    const m = String(Math.floor((tcSeconds%3600)/60)).padStart(2,'0');
-    const s = String(tcSeconds%60).padStart(2,'0');
-    if (tcEl) tcEl.textContent = `${h}:${m}:${s}`;
-  }, 1000);
-
-  /* ============================================================
-     PROGRESS + HEADER
-     ============================================================ */
-  const progress = document.getElementById('progress');
-  const header = document.getElementById('header');
-
-  function updateChrome(){
-    progress.style.width = (scrollP * 100) + '%';
-    if (scrollY > 40) header.classList.add('scrolled');
-    else header.classList.remove('scrolled');
-    updateLetterbox();
-  }
-
-  /* ============================================================
-     SCROLL LISTENER (batched with rAF)
-     ============================================================ */
-  let ticking = false;
-  addEventListener('scroll', () => {
-    if (!ticking){
-      requestAnimationFrame(() => {
-        updateScrollVars();
-        updateHero();
-        updateSplitParallax();
-        updateChrome();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }, { passive:true });
-
-  /* ============================================================
-     REVEAL ON SCROLL
-     ============================================================ */
-  const revealEls = document.querySelectorAll('.reveal, .reveal-line');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting){
-        setTimeout(() => entry.target.classList.add('in'), Math.min(i*70, 350));
-        io.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
-  revealEls.forEach(el => io.observe(el));
-
-  /* ============================================================
-     COUNT-UP
-     ============================================================ */
-  const counters = document.querySelectorAll('.count');
-  const countIO = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting){
-        const el = entry.target;
-        const target = parseFloat(el.dataset.target);
-        const dur = 1800;
-        const t0 = performance.now();
-        function step(t){
-          const p = Math.min((t - t0) / dur, 1);
-          const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
-          el.textContent = Math.round(target * eased).toLocaleString('el-GR');
-          if (p < 1) requestAnimationFrame(step);
-          else el.textContent = Math.round(target).toLocaleString('el-GR');
+  /* 2) Pause όταν το video δεν είναι ορατό (performance / battery) */
+  if('IntersectionObserver' in window){
+    const vIo=new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          const playPromise=heroVideo.play();
+          if(playPromise && typeof playPromise.catch==='function'){
+            playPromise.catch(()=>{ /* autoplay blocked — αγνόησέ το */ });
+          }
+        } else {
+          heroVideo.pause();
         }
-        requestAnimationFrame(step);
-        countIO.unobserve(el);
-      }
-    });
-  }, { threshold: 0.6 });
-  counters.forEach(el => countIO.observe(el));
+      });
+    },{threshold:.1});
+    vIo.observe(heroVideo);
+  }
 
-  /* ============================================================
-     MAGNETIC BUTTONS
-     ============================================================ */
-  document.querySelectorAll('.btn-primary, .header-cta').forEach(btn => {
-    btn.addEventListener('mousemove', e => {
-      const r = btn.getBoundingClientRect();
-      const x = e.clientX - r.left - r.width/2;
-      const y = e.clientY - r.top - r.height/2;
-      btn.style.transform = `translate(${x*0.15}px, ${y*0.28}px)`;
-    });
-    btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+  /* 3) Fallback: αν το video αποτύχει να φορτώσει, κρύψτο (φαίνεται η εικόνα του .hero) */
+  heroVideo.addEventListener('error',()=>{
+    heroVideo.style.display='none';
+  },true);
+  heroVideo.querySelectorAll('source').forEach(src=>{
+    src.addEventListener('error',()=>{ heroVideo.style.display='none'; });
   });
 
-  /* ============================================================
-     INITIAL
-     ============================================================ */
-  updateHero();
-  updateChrome();
+  /* 4) Όταν ξεκινήσει το video, αφαίρεσε το poster για smooth εμπειρία */
+  heroVideo.addEventListener('playing',()=>{
+    heroVideo.classList.add('playing');
+  },{once:true});
+}
 
-})();
+/* -------- Year -------- */
+document.getElementById('year').textContent=new Date().getFullYear();
 </script>
 </body>
 </html>
